@@ -10,11 +10,56 @@ function yen(n: number) {
 
 type Product = (typeof products6)[number];
 
-type ProductDetailModalProps = {
-  product: Product;
+type ReviewInfoProps = {
+  show: boolean;
+  rating?: number;
+  reviewCount?: number;
 };
 
-function ProductDetailModal({ product }: ProductDetailModalProps) {
+function renderStars(rating: number) {
+  const fullStars = Math.floor(rating);
+  const hasHalf = rating - fullStars >= 0.5;
+
+  return Array.from({ length: 5 }, (_, i) => {
+    if (i < fullStars) return "★";
+    if (i === fullStars && hasHalf) return "☆";
+    return "☆";
+  }).join("");
+}
+
+function ReviewInfo({ show, rating, reviewCount }: ReviewInfoProps) {
+  return (
+    <div className="h-11 overflow-hidden">
+      {show ? (
+        <div className="flex h-full items-center rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
+          <p className="line-clamp-1">
+            <span className="font-semibold">{renderStars(rating ?? 4.0)}</span>
+            <span className="ml-2">{(rating ?? 4.0).toFixed(1)}</span>
+            <span className="ml-2 text-amber-600">
+              （{reviewCount ?? 0}件）
+            </span>
+          </p>
+        </div>
+      ) : (
+        <div className="h-full w-full" aria-hidden="true" />
+      )}
+    </div>
+  );
+}
+
+type ProductDetailModalProps = {
+  product: Product;
+  showReview: boolean;
+  rating?: number;
+  reviewCount?: number;
+};
+
+function ProductDetailModal({
+  product,
+  showReview,
+  rating,
+  reviewCount,
+}: ProductDetailModalProps) {
   const dialogId = useId();
 
   return (
@@ -56,15 +101,13 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
           <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
             {/* 左カラム */}
             <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              {/* 商品画像領域 */}
               <section className="rounded-xl border-2 border-gray-300 bg-gray-100 p-4">
                 <div className="flex h-full items-center justify-center text-sm text-gray-400">
                   画像エリア
                 </div>
               </section>
 
-              {/* 商品説明領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h3 className="mb-3 text-sm font-semibold text-gray-900">
                     商品説明
@@ -78,8 +121,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 仕様・補足領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h3 className="mb-3 text-sm font-semibold text-gray-900">
                     仕様・補足
@@ -95,9 +137,22 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
 
             {/* 右カラム */}
             <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              {/* 商品名・価格領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col justify-start">
+                  {showReview ? (
+                    <div className="mb-3 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                      <span className="font-semibold">
+                        {renderStars(rating ?? 4.0)}
+                      </span>
+                      <span className="ml-2">{(rating ?? 4.0).toFixed(1)}</span>
+                      <span className="ml-2 text-amber-600">
+                        （{reviewCount ?? 0}件）
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="mb-3 h-[40px]" aria-hidden="true" />
+                  )}
+
                   <h3 className="text-2xl font-bold leading-tight text-gray-900">
                     {product.name}
                   </h3>
@@ -108,8 +163,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 購入前の確認領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h4 className="mb-3 text-sm font-semibold text-gray-900">
                     購入前の確認
@@ -121,8 +175,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 配送に関わる領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h4 className="mb-3 text-sm font-semibold text-gray-900">
                     配送に関わる情報
@@ -134,11 +187,10 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 商品選択ボタン領域 */}
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial3/checkout?productId=${product.id}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -152,11 +204,24 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
     </>
   );
 }
-function ProductCard({ product }: { product: Product }) {
+
+type ProductCardProps = {
+  product: Product;
+  showReview: boolean;
+  rating?: number;
+  reviewCount?: number;
+};
+
+function ProductCard({
+  product,
+  showReview,
+  rating,
+  reviewCount,
+}: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
-        {/* 画像 */}
+        {/* 商品画像 */}
         <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像エリア
         </div>
@@ -166,24 +231,30 @@ function ProductCard({ product }: { product: Product }) {
           <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">
             {product.name}
           </h2>
-
           <p className="text-base font-medium leading-5 text-gray-800">
             ¥{yen(product.priceYen)}
           </p>
         </div>
 
-        {/* 情報挿入予定エリア（空） */}
-        <div className="h-11 overflow-hidden">
-          {/* ここにレビュー / viewerText などが入る予定 */}
-        </div>
+        {/* レビュー固定領域 */}
+        <ReviewInfo
+          show={showReview}
+          rating={rating}
+          reviewCount={reviewCount}
+        />
 
         {/* ボタン */}
         <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal product={product} />
+          <ProductDetailModal
+            product={product}
+            showReview={showReview}
+            rating={rating}
+            reviewCount={reviewCount}
+          />
 
           <Link
-            href={`/trials/a1/trial1/checkout?productId=${product.id}`}
-            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
+            href={`/trials/a1/trial3/checkout?productId=${product.id}`}
+            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
           </Link>
@@ -193,7 +264,12 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ProductPageA1Trial1() {
+export default function ProductPageA1Trial3() {
+  const reviewRatings = [4.8, 4.7, 4.5, 4.1, 3.9, 3.8];
+  const reviewCounts = [328, 254, 186, 42, 18, 11];
+
+  const showReviewFlags = [true, true, true, false, false, false];
+
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -206,13 +282,16 @@ export default function ProductPageA1Trial1() {
           <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
         </header>
 
-        <section className="grid flex-1 grid-cols-3 gap-8">
-          <ProductCard product={products6[0]} />
-          <ProductCard product={products6[1]} />
-          <ProductCard product={products6[2]} />
-          <ProductCard product={products6[3]} />
-          <ProductCard product={products6[4]} />
-          <ProductCard product={products6[5]} />
+        <section className="grid flex-1 grid-cols-3 items-start gap-8">
+          {products6.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              showReview={showReviewFlags[index]}
+              rating={reviewRatings[index]}
+              reviewCount={reviewCounts[index]}
+            />
+          ))}
         </section>
       </div>
     </main>
