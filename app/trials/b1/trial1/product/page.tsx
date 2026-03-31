@@ -138,7 +138,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+                    href={`/trials/b1/trial1/checkout?productId=${product.id}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -182,7 +182,7 @@ function ProductCard({ product }: { product: Product }) {
           <ProductDetailModal product={product} />
 
           <Link
-            href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+            href={`/trials/b1/trial1/checkout?productId=${product.id}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
@@ -193,7 +193,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ProductPageA1Trial1() {
+export default function ProductPageB1Trial1() {
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">

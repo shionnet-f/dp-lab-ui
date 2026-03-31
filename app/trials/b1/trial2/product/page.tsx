@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useId } from "react";
+import { useId, useState } from "react";
 import { products6 } from "@/config/products";
 
 function yen(n: number) {
@@ -16,6 +16,7 @@ type ProductDetailModalProps = {
 
 function ProductDetailModal({ product }: ProductDetailModalProps) {
   const dialogId = useId();
+  const [isExtraOpen, setIsExtraOpen] = useState(false);
 
   return (
     <>
@@ -35,6 +36,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
       <dialog
         id={dialogId}
         className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
+        onClose={() => setIsExtraOpen(false)}
       >
         <div className="mx-auto rounded-2xl bg-white">
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
@@ -56,15 +58,13 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
           <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
             {/* 左カラム */}
             <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              {/* 商品画像領域 */}
               <section className="rounded-xl border-2 border-gray-300 bg-gray-100 p-4">
                 <div className="flex h-full items-center justify-center text-sm text-gray-400">
                   画像エリア
                 </div>
               </section>
 
-              {/* 商品説明領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h3 className="mb-3 text-sm font-semibold text-gray-900">
                     商品説明
@@ -78,16 +78,45 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 仕様・補足領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
-                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                    仕様・補足
-                  </h3>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div>内容量：500ml × 24本</div>
-                    <div>ケース単位での販売です</div>
-                    <div>保存方法：高温・直射日光を避けて保管してください</div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-gray-900">
+                      さらに詳細
+                    </h3>
+                    <button
+                      type="button"
+                      className="text-xs text-gray-500 underline underline-offset-2"
+                      onClick={() => setIsExtraOpen((prev) => !prev)}
+                    >
+                      {isExtraOpen ? "閉じる" : "さらに詳細を見る"}
+                    </button>
+                  </div>
+
+                  <div className="mt-3 h-[92px]">
+                    {isExtraOpen ? (
+                      <div className="h-full overflow-y-auto rounded-md border border-gray-200 p-2">
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <div>内容量：500ml × 24本</div>
+                          <div>ケース単位での販売です</div>
+                          <div>
+                            保存方法：高温・直射日光を避けて保管してください
+                          </div>
+                          <div>
+                            地域や時期により配送条件が異なる場合があります
+                          </div>
+                          <div>購入前に配送条件をご確認ください</div>
+                          <div>
+                            一部地域では到着まで日数がかかる場合があります
+                          </div>
+                          <div>
+                            天候や交通状況により配送が遅れる場合があります
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
                   </div>
                 </div>
               </section>
@@ -95,9 +124,10 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
 
             {/* 右カラム */}
             <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              {/* 商品名・価格領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col justify-start">
+                  <div className="mb-3 h-[40px]" aria-hidden="true" />
+
                   <h3 className="text-2xl font-bold leading-tight text-gray-900">
                     {product.name}
                   </h3>
@@ -108,8 +138,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 購入前の確認領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h4 className="mb-3 text-sm font-semibold text-gray-900">
                     購入前の確認
@@ -121,8 +150,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 配送に関わる領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h4 className="mb-3 text-sm font-semibold text-gray-900">
                     配送に関わる情報
@@ -134,11 +162,10 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 商品選択ボタン領域 */}
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+                    href={`/trials/b1/trial2/checkout?productId=${product.id}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -152,6 +179,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
     </>
   );
 }
+
 function ProductCard({ product }: { product: Product }) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -173,16 +201,14 @@ function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* 情報挿入予定エリア（空） */}
-        <div className="h-11 overflow-hidden">
-          {/* ここにレビュー / viewerText などが入る予定 */}
-        </div>
+        <div className="h-11 overflow-hidden" />
 
         {/* ボタン */}
         <div className="grid h-10 grid-cols-2 gap-2">
           <ProductDetailModal product={product} />
 
           <Link
-            href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+            href={`/trials/b1/trial2/checkout?productId=${product.id}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
@@ -193,7 +219,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ProductPageA1Trial1() {
+export default function ProductPageB1Trial1() {
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">

@@ -10,12 +10,106 @@ function yen(n: number) {
 
 type Product = (typeof products6)[number];
 
-type ProductDetailModalProps = {
-  product: Product;
+type TrialDetail = {
+  waterTypeLabel: string;
+  isNaturalWater: boolean;
+  packLabel: string;
+  is500x24: boolean;
+  hardnessLabel: string;
+  isSoftWater: boolean;
+  descriptionText: string;
+  specText: string;
+  cautionText: string;
 };
 
-function ProductDetailModal({ product }: ProductDetailModalProps) {
+const trial10Details: TrialDetail[] = [
+  {
+    waterTypeLabel: "天然水",
+    isNaturalWater: true,
+    packLabel: "500ml × 24本",
+    is500x24: true,
+    hardnessLabel: "軟水",
+    isSoftWater: true,
+    descriptionText:
+      "採水地由来のミネラルバランスを活かした天然水です。日常使いしやすい定番タイプです。",
+    specText: "内容量は500ml × 24本です。ケース単位での販売です。",
+    cautionText: "飲み口のやわらかい軟水です。日常の飲用を想定しています。",
+  },
+  {
+    waterTypeLabel: "天然水",
+    isNaturalWater: true,
+    packLabel: "500ml × 24本",
+    is500x24: true,
+    hardnessLabel: "中硬水",
+    isSoftWater: false,
+    descriptionText:
+      "地下水を原水とした天然水です。すっきりした後味で、毎日の補給向けの商品です。",
+    specText: "内容量は500ml × 24本です。持ち運びしやすいサイズです。",
+    cautionText:
+      "中硬水タイプです。購入前に飲み口の好みに合うか確認してください。",
+  },
+  {
+    waterTypeLabel: "飲用水（処理水）",
+    isNaturalWater: false,
+    packLabel: "500ml × 24本",
+    is500x24: true,
+    hardnessLabel: "軟水",
+    isSoftWater: true,
+    descriptionText:
+      "飲みやすさを重視したボトル飲料です。処理工程を経た水を使用しています。",
+    specText: "内容量は500ml × 24本です。ケース単位での販売です。",
+    cautionText: "やわらかい口当たりの軟水タイプです。",
+  },
+  {
+    waterTypeLabel: "天然水",
+    isNaturalWater: true,
+    packLabel: "2L × 6本",
+    is500x24: false,
+    hardnessLabel: "軟水",
+    isSoftWater: true,
+    descriptionText:
+      "採水地由来の風味を活かした天然水です。普段使い向けの定番商品です。",
+    specText: "内容量は2L × 6本です。ケース単位での販売です。",
+    cautionText: "飲みやすい軟水です。用途に合う容量か確認してください。",
+  },
+  {
+    waterTypeLabel: "飲用水（処理水）",
+    isNaturalWater: false,
+    packLabel: "500ml × 24本",
+    is500x24: true,
+    hardnessLabel: "中硬水",
+    isSoftWater: false,
+    descriptionText:
+      "すっきり飲みやすいボトル飲料です。原水の種類は天然水ではありません。",
+    specText: "内容量は500ml × 24本です。日常のストック向けです。",
+    cautionText: "中硬水タイプです。飲み口はややしっかりしています。",
+  },
+  {
+    waterTypeLabel: "天然水",
+    isNaturalWater: true,
+    packLabel: "350ml × 24本",
+    is500x24: false,
+    hardnessLabel: "軟水",
+    isSoftWater: true,
+    descriptionText:
+      "天然水ならではの自然な味わいが特徴です。小容量で使いやすい商品です。",
+    specText: "内容量は350ml × 24本です。ケース単位での販売です。",
+    cautionText: "口当たりの軽い軟水です。容量条件を確認してください。",
+  },
+];
+
+function getDetailByIndex(index: number): TrialDetail {
+  return trial10Details[index] ?? trial10Details[0];
+}
+
+type ProductDetailModalProps = {
+  product: Product;
+  index: number;
+};
+
+function ProductDetailModal({ product, index }: ProductDetailModalProps) {
   const dialogId = useId();
+  const detail = getDetailByIndex(index);
 
   return (
     <>
@@ -56,37 +150,32 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
           <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
             {/* 左カラム */}
             <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              {/* 商品画像領域 */}
               <section className="rounded-xl border-2 border-gray-300 bg-gray-100 p-4">
                 <div className="flex h-full items-center justify-center text-sm text-gray-400">
                   画像エリア
                 </div>
               </section>
 
-              {/* 商品説明領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h3 className="mb-3 text-sm font-semibold text-gray-900">
                     商品説明
                   </h3>
                   <div className="space-y-2 text-sm leading-6 text-gray-600">
-                    <p>{product.description}</p>
-                    <p>
-                      毎日の使用を想定した定番商品です。購入前に内容をよく確認してください。
-                    </p>
+                    <p>{detail.descriptionText}</p>
+                    <p>水の種類：{detail.waterTypeLabel}</p>
                   </div>
                 </div>
               </section>
 
-              {/* 仕様・補足領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h3 className="mb-3 text-sm font-semibold text-gray-900">
                     仕様・補足
                   </h3>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <div>内容量：500ml × 24本</div>
-                    <div>ケース単位での販売です</div>
+                    <div>{detail.specText}</div>
+                    <div>内容量：{detail.packLabel}</div>
                     <div>保存方法：高温・直射日光を避けて保管してください</div>
                   </div>
                 </div>
@@ -95,8 +184,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
 
             {/* 右カラム */}
             <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              {/* 商品名・価格領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col justify-start">
                   <h3 className="text-2xl font-bold leading-tight text-gray-900">
                     {product.name}
@@ -108,37 +196,34 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                 </div>
               </section>
 
-              {/* 購入前の確認領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h4 className="mb-3 text-sm font-semibold text-gray-900">
                     購入前の確認
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>条件に合う商品か確認してから選択してください</div>
-                    <div>購入手続き画面で最終確認ができます</div>
+                    <div>{detail.cautionText}</div>
+                    <div>硬度区分：{detail.hardnessLabel}</div>
                   </div>
                 </div>
               </section>
 
-              {/* 配送に関わる領域 */}
-              <section className="rounded-xl border-2 border-gray-300 p-4 overflow-hidden">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col">
                   <h4 className="mb-3 text-sm font-semibold text-gray-900">
                     配送に関わる情報
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>地域によって配送方法が異なる場合があります</div>
-                    <div>配送料金は購入手続き画面で選択できます</div>
+                    <div>送料は購入手続き画面で確認できます</div>
+                    <div>通常配送・お急ぎ便・当日便を選択できます</div>
                   </div>
                 </div>
               </section>
 
-              {/* 商品選択ボタン領域 */}
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+                    href={`/trials/b1/trial10/checkout?productId=${product.id}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -152,16 +237,15 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
     </>
   );
 }
-function ProductCard({ product }: { product: Product }) {
+
+function ProductCard({ product, index }: { product: Product; index: number }) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
-        {/* 画像 */}
         <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像エリア
         </div>
 
-        {/* 商品名 + 価格 */}
         <div className="grid h-16 grid-rows-[1fr_auto] overflow-hidden">
           <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">
             {product.name}
@@ -172,17 +256,13 @@ function ProductCard({ product }: { product: Product }) {
           </p>
         </div>
 
-        {/* 情報挿入予定エリア（空） */}
-        <div className="h-11 overflow-hidden">
-          {/* ここにレビュー / viewerText などが入る予定 */}
-        </div>
+        <div className="h-11 overflow-hidden"></div>
 
-        {/* ボタン */}
         <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal product={product} />
+          <ProductDetailModal product={product} index={index} />
 
           <Link
-            href={`/trials/a1/trial1/checkout?productId=${product.id}`}
+            href={`/trials/b1/trial10/checkout?productId=${product.id}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
@@ -193,13 +273,14 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ProductPageA1Trial1() {
+export default function ProductPageB1Trial10() {
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          「天然水」「500ml ×
+          24本」「軟水」を満たす商品を1つ選んで購入してください
         </div>
 
         <header className="mb-5 shrink-0">
@@ -207,12 +288,9 @@ export default function ProductPageA1Trial1() {
         </header>
 
         <section className="grid flex-1 grid-cols-3 gap-8">
-          <ProductCard product={products6[0]} />
-          <ProductCard product={products6[1]} />
-          <ProductCard product={products6[2]} />
-          <ProductCard product={products6[3]} />
-          <ProductCard product={products6[4]} />
-          <ProductCard product={products6[5]} />
+          {products6.slice(0, 6).map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
+          ))}
         </section>
       </div>
     </main>
