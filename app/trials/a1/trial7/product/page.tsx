@@ -1,26 +1,35 @@
+
 "use client";
 
 import Link from "next/link";
 import { useId } from "react";
-import { products6 } from "@/config/products";
+import { trial7Data, type Trial7Product } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Product = (typeof products6)[number];
-
-type RankingInfoProps = {
+type BadgeInfoProps = {
   show: boolean;
-  rankingText?: string;
+  rankingLabel?: string;
+  awardLabel?: string;
 };
 
-function RankingInfo({ show, rankingText }: RankingInfoProps) {
+function BadgeInfo({ show, rankingLabel, awardLabel }: BadgeInfoProps) {
   return (
     <div className="h-11 overflow-hidden">
       {show ? (
-        <div className="flex h-full items-center rounded-md bg-sky-50 px-3 py-2 text-sm text-sky-700">
-          <p className="line-clamp-1 font-medium">{rankingText}</p>
+        <div className="flex h-full items-center gap-2 overflow-hidden rounded-md bg-gray-50 px-3 py-2 text-sm">
+          {rankingLabel ? (
+            <span className="truncate rounded bg-sky-100 px-2 py-1 text-sky-700">
+              {rankingLabel}
+            </span>
+          ) : null}
+          {awardLabel ? (
+            <span className="truncate rounded bg-violet-100 px-2 py-1 text-violet-700">
+              {awardLabel}
+            </span>
+          ) : null}
         </div>
       ) : (
         <div className="h-full w-full" aria-hidden="true" />
@@ -30,15 +39,17 @@ function RankingInfo({ show, rankingText }: RankingInfoProps) {
 }
 
 type ProductDetailModalProps = {
-  product: Product;
-  showRanking: boolean;
-  rankingText?: string;
+  product: Trial7Product;
+  showBadge: boolean;
+  rankingLabel?: string;
+  awardLabel?: string;
 };
 
 function ProductDetailModal({
   product,
-  showRanking,
-  rankingText,
+  showBadge,
+  rankingLabel,
+  awardLabel,
 }: ProductDetailModalProps) {
   const dialogId = useId();
 
@@ -106,9 +117,9 @@ function ProductDetailModal({
                     仕様・補足
                   </h3>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <div>内容量：500ml × 24本</div>
-                    <div>ケース単位での販売です</div>
-                    <div>保存方法：高温・直射日光を避けて保管してください</div>
+                    {product.specsAndNotes.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -117,9 +128,18 @@ function ProductDetailModal({
             <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
               <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full flex-col justify-start">
-                  {showRanking ? (
-                    <div className="mb-3 rounded-md bg-sky-50 px-3 py-2 text-sm font-medium text-sky-700">
-                      {rankingText}
+                  {showBadge ? (
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      {rankingLabel ? (
+                        <span className="rounded bg-sky-100 px-2 py-1 text-sm text-sky-700">
+                          {rankingLabel}
+                        </span>
+                      ) : null}
+                      {awardLabel ? (
+                        <span className="rounded bg-violet-100 px-2 py-1 text-sm text-violet-700">
+                          {awardLabel}
+                        </span>
+                      ) : null}
                     </div>
                   ) : (
                     <div className="mb-3 h-[40px]" aria-hidden="true" />
@@ -141,8 +161,9 @@ function ProductDetailModal({
                     購入前の確認
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>条件に合う商品か確認してから選択してください</div>
-                    <div>購入手続き画面で最終確認ができます</div>
+                    {product.prePurchaseCheck.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -153,8 +174,9 @@ function ProductDetailModal({
                     配送に関わる情報
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>地域によって配送方法が異なる場合があります</div>
-                    <div>配送料金は購入手続き画面で選択できます</div>
+                    {product.deliveryInfo.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -178,12 +200,18 @@ function ProductDetailModal({
 }
 
 type ProductCardProps = {
-  product: Product;
-  showRanking: boolean;
-  rankingText?: string;
+  product: Trial7Product;
+  showBadge: boolean;
+  rankingLabel?: string;
+  awardLabel?: string;
 };
 
-function ProductCard({ product, showRanking, rankingText }: ProductCardProps) {
+function ProductCard({
+  product,
+  showBadge,
+  rankingLabel,
+  awardLabel,
+}: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -200,13 +228,18 @@ function ProductCard({ product, showRanking, rankingText }: ProductCardProps) {
           </p>
         </div>
 
-        <RankingInfo show={showRanking} rankingText={rankingText} />
+        <BadgeInfo
+          show={showBadge}
+          rankingLabel={rankingLabel}
+          awardLabel={awardLabel}
+        />
 
         <div className="grid h-10 grid-cols-2 gap-2">
           <ProductDetailModal
             product={product}
-            showRanking={showRanking}
-            rankingText={rankingText}
+            showBadge={showBadge}
+            rankingLabel={rankingLabel}
+            awardLabel={awardLabel}
           />
 
           <Link
@@ -222,36 +255,32 @@ function ProductCard({ product, showRanking, rankingText }: ProductCardProps) {
 }
 
 export default function ProductPageA1Trial7() {
-  const rankingTexts = [
-    "売れ筋ランキング 1位",
-    "売れ筋ランキング 2位",
-    "売れ筋ランキング 3位",
-    "売れ筋ランキング 4位",
-    "売れ筋ランキング 5位",
-    "売れ筋ランキング 6位",
-  ];
-
-  const showRankingFlags = [true, true, true, false, false, false];
+  const products = trial7Data.products;
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial7Data.purchaseConditions.budgetYen}円以内、
+          {trial7Data.purchaseConditions.quantityCondition}、
+          {trial7Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
           <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
         </header>
 
-        <section className="grid flex-1 grid-cols-3 items-start gap-8">
-          {products6.map((product, index) => (
+        <section className="grid flex-1 grid-cols-2 gap-8">
+          {products.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
-              showRanking={showRankingFlags[index]}
-              rankingText={rankingTexts[index]}
+              showBadge={Boolean(
+                product.dpDisplay?.rankingLabel || product.dpDisplay?.awardLabel,
+              )}
+              rankingLabel={product.dpDisplay?.rankingLabel}
+              awardLabel={product.dpDisplay?.awardLabel}
             />
           ))}
         </section>

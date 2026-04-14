@@ -2,25 +2,23 @@
 
 import Link from "next/link";
 import { useId } from "react";
-import { products6 } from "@/config/products";
+import { trial4Data, type Trial4Product } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Product = (typeof products6)[number];
-
 type StockInfoProps = {
   show: boolean;
-  stockText?: string;
+  text?: string;
 };
 
-function StockInfo({ show, stockText }: StockInfoProps) {
+function StockInfo({ show, text }: StockInfoProps) {
   return (
     <div className="h-11 overflow-hidden">
       {show ? (
         <div className="flex h-full items-center rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-          <p className="line-clamp-1 font-medium">{stockText}</p>
+          <p className="line-clamp-1 font-medium">{text}</p>
         </div>
       ) : (
         <div className="h-full w-full" aria-hidden="true" />
@@ -30,7 +28,7 @@ function StockInfo({ show, stockText }: StockInfoProps) {
 }
 
 type ProductDetailModalProps = {
-  product: Product;
+  product: Trial4Product;
   showStock: boolean;
   stockText?: string;
 };
@@ -106,9 +104,9 @@ function ProductDetailModal({
                     仕様・補足
                   </h3>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <div>内容量：500ml × 24本</div>
-                    <div>ケース単位での販売です</div>
-                    <div>保存方法：高温・直射日光を避けて保管してください</div>
+                    {product.specsAndNotes.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -141,8 +139,9 @@ function ProductDetailModal({
                     購入前の確認
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>条件に合う商品か確認してから選択してください</div>
-                    <div>購入手続き画面で最終確認ができます</div>
+                    {product.prePurchaseCheck.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -153,8 +152,9 @@ function ProductDetailModal({
                     配送に関わる情報
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>地域によって配送方法が異なる場合があります</div>
-                    <div>配送料金は購入手続き画面で選択できます</div>
+                    {product.deliveryInfo.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -178,7 +178,7 @@ function ProductDetailModal({
 }
 
 type ProductCardProps = {
-  product: Product;
+  product: Trial4Product;
   showStock: boolean;
   stockText?: string;
 };
@@ -200,7 +200,7 @@ function ProductCard({ product, showStock, stockText }: ProductCardProps) {
           </p>
         </div>
 
-        <StockInfo show={showStock} stockText={stockText} />
+        <StockInfo show={showStock} text={stockText} />
 
         <div className="grid h-10 grid-cols-2 gap-2">
           <ProductDetailModal
@@ -222,31 +222,26 @@ function ProductCard({ product, showStock, stockText }: ProductCardProps) {
 }
 
 export default function ProductPageA1Trial4() {
-  const stockTexts = [
-    "残り3点",
-    "残り5点",
-    "残り8点",
-    "残り12点",
-    "残り15点",
-    "残り20点",
-  ];
-
-  const showStockFlags = [true, true, true, false, false, false];
+  const products = trial4Data.products;
+  const stockTexts = products.map((product) => product.dpDisplay?.label ?? "");
+  const showStockFlags = products.map((product) => Boolean(product.dpDisplay));
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial4Data.purchaseConditions.budgetYen}円以内、
+          {trial4Data.purchaseConditions.quantityCondition}、
+          {trial4Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
           <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
         </header>
 
-        <section className="grid flex-1 grid-cols-3 items-start gap-8">
-          {products6.map((product, index) => (
+        <section className="grid flex-1 grid-cols-2 items-start gap-10">
+          {products.map((product, index) => (
             <ProductCard
               key={product.id}
               product={product}

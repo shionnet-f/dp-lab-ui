@@ -1,8 +1,9 @@
+
 "use client";
 
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
-import { products6 } from "@/config/products";
+import { trial6Data, type Trial6Product } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
@@ -14,8 +15,6 @@ function formatCountdown(totalSeconds: number) {
   const seconds = safe % 60;
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
-
-type Product = (typeof products6)[number];
 
 type CountdownInfoProps = {
   show: boolean;
@@ -39,7 +38,7 @@ function CountdownInfo({ show, secondsLeft }: CountdownInfoProps) {
 }
 
 type ProductDetailModalProps = {
-  product: Product;
+  product: Trial6Product;
   showCountdown: boolean;
   secondsLeft: number;
 };
@@ -115,9 +114,9 @@ function ProductDetailModal({
                     仕様・補足
                   </h3>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <div>内容量：500ml × 24本</div>
-                    <div>ケース単位での販売です</div>
-                    <div>保存方法：高温・直射日光を避けて保管してください</div>
+                    {product.specsAndNotes.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -150,8 +149,9 @@ function ProductDetailModal({
                     購入前の確認
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>条件に合う商品か確認してから選択してください</div>
-                    <div>購入手続き画面で最終確認ができます</div>
+                    {product.prePurchaseCheck.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -162,8 +162,9 @@ function ProductDetailModal({
                     配送に関わる情報
                   </h4>
                   <div className="space-y-2 text-sm text-gray-700">
-                    <div>地域によって配送方法が異なる場合があります</div>
-                    <div>配送料金は購入手続き画面で選択できます</div>
+                    {product.deliveryInfo.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -187,7 +188,7 @@ function ProductDetailModal({
 }
 
 type ProductCardProps = {
-  product: Product;
+  product: Trial6Product;
   showCountdown: boolean;
   secondsLeft: number;
 };
@@ -237,6 +238,7 @@ function ProductCard({
 export default function ProductPageA1Trial6() {
   const initialSeconds = 9 * 60 + 59;
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
+  const products = trial6Data.products;
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -246,26 +248,26 @@ export default function ProductPageA1Trial6() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const showCountdownFlags = [true, true, true, false, false, false];
-
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial6Data.purchaseConditions.budgetYen}円以内、
+          {trial6Data.purchaseConditions.quantityCondition}、
+          {trial6Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
           <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
         </header>
 
-        <section className="grid flex-1 grid-cols-3 items-start gap-8">
-          {products6.map((product, index) => (
+        <section className="grid flex-1 grid-cols-2 gap-8">
+          {products.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
-              showCountdown={showCountdownFlags[index]}
+              showCountdown={Boolean(product.dpDisplay?.showCountdown)}
               secondsLeft={secondsLeft}
             />
           ))}
