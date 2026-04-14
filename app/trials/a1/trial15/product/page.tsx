@@ -10,7 +10,6 @@ function yen(n: number) {
 
 type Product = (typeof products6)[number];
 
-
 type TrialDetail = {
   descriptionText: string;
   specText: string;
@@ -55,6 +54,11 @@ const trial15Details: TrialDetail[] = [
   },
 ];
 
+/**
+ * 0/1 フラグで送料無料UIを制御
+ * 1: 赤字で「送料無料」を表示
+ * 0: 表示しない
+ */
 const freeShippingFlags: number[] = [0, 1, 0, 1, 1, 0];
 
 function getDetailByIndex(index: number): TrialDetail {
@@ -68,7 +72,9 @@ function getFreeShippingFlag(index: number): number {
 function FreeShippingBadge({ visible }: { visible: boolean }) {
   if (!visible) return null;
 
-  return <div className="text-sm font-bold leading-5 text-red-600">送料無料</div>;
+  return (
+    <div className="text-sm font-bold leading-5 text-red-600">送料無料</div>
+  );
 }
 
 type ProductDetailModalProps = {
@@ -81,22 +87,15 @@ function ProductDetailModal({ product, index }: ProductDetailModalProps) {
   const detail = getDetailByIndex(index);
   const showFreeShipping = getFreeShippingFlag(index) === 1;
 
-  function openDialog() {
-    const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-    el?.showModal();
-  }
-
-  function closeDialog() {
-    const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-    el?.close();
-  }
-
   return (
     <>
       <button
         type="button"
-        onClick={openDialog}
-        className="flex h-11 items-center justify-center rounded-md border border-gray-300 px-4 text-sm text-gray-700"
+        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
+        onClick={() => {
+          const el = document.getElementById(dialogId) as HTMLDialogElement | null;
+          el?.showModal();
+        }}
       >
         詳細を見る
       </button>
@@ -105,90 +104,103 @@ function ProductDetailModal({ product, index }: ProductDetailModalProps) {
         id={dialogId}
         className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
       >
-        <div className="rounded-2xl bg-white">
-          {/* ヘッダー */}
+        <div className="mx-auto rounded-2xl bg-white">
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
-
             <button
               type="button"
-              onClick={closeDialog}
               className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
+              onClick={() => {
+                const el = document.getElementById(dialogId) as HTMLDialogElement | null;
+                el?.close();
+              }}
             >
               閉じる
             </button>
           </div>
 
-          <div className="space-y-5 px-6 py-6">
-            {/* 上段：商品画像 + 商品名 + 価格 */}
-            <section className="rounded-xl border border-gray-200 p-5">
-              <div className="grid grid-cols-[160px_1fr] items-center gap-5">
-                <div className="flex h-28 w-40 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+          <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
+            {/* 左カラム */}
+            <div className="grid grid-rows-[260px_150px_150px] gap-5">
+              <section className="rounded-xl border-2 border-gray-300 bg-gray-100 p-4">
+                <div className="flex h-full items-center justify-center text-sm text-gray-400">
                   画像エリア
                 </div>
+              </section>
 
-                <div className="min-w-0">
-                  <div className="text-xl font-bold leading-tight text-gray-900">
-                    {product.name}
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
+                <div className="flex h-full flex-col">
+                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
+                    商品説明
+                  </h3>
+                  <div className="text-sm leading-6 text-gray-600">
+                    {detail.descriptionText}
                   </div>
-                  <div className="mt-2 text-xl font-semibold text-gray-900">
+                </div>
+              </section>
+
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
+                <div className="flex h-full flex-col">
+                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
+                    仕様・補足
+                  </h3>
+                  <div className="text-sm leading-6 text-gray-600">
+                    {detail.specText}
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            {/* 右カラム */}
+            <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
+                <div className="flex h-full flex-col justify-start">
+                  <h3 className="text-2xl font-bold leading-tight text-gray-900">
+                    {product.name}
+                  </h3>
+
+                  <div className="mt-3 text-2xl font-semibold text-gray-900">
                     ¥{yen(product.priceYen)}
                   </div>
-                  <div className="mt-2">
+
+                  <div className="mt-3">
                     <FreeShippingBadge visible={showFreeShipping} />
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            {/* 中段：2列（左:商品説明 / 右:仕様補足） */}
-            <section className="grid grid-cols-2 gap-4">
-              <div className="rounded-xl border border-gray-200 p-5">
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  商品説明
-                </h3>
-                <div className="space-y-2 text-sm leading-6 text-gray-600">
-                  <p>{detail.descriptionText}</p>
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
+                <div className="flex h-full flex-col">
+                  <h4 className="mb-3 text-sm font-semibold text-gray-900">
+                    購入前の確認
+                  </h4>
+                  <div className="text-sm leading-6 text-gray-700">
+                    商品の内容や価格を確認したうえで選択してください。
+                  </div>
                 </div>
-              </div>
+              </section>
 
-              <div className="rounded-xl border border-gray-200 p-5">
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  仕様・補足
-                </h3>
-                <div className="space-y-2 text-sm leading-6 text-gray-600">
-                  <div>{detail.specText}</div>
+              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
+                <div className="flex h-full flex-col">
+                  <h4 className="mb-3 text-sm font-semibold text-gray-900">
+                    配送に関わる情報
+                  </h4>
+                  <div className="text-sm leading-6 text-gray-700">
+                    配送方法は購入手続き画面で確認できます。
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            {/* 購入前の確認 */}
-            <section className="rounded-xl border border-gray-200 bg-gray-50 p-5">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                購入前の確認
-              </h3>
-
-              <div className="space-y-2 text-sm leading-6 text-gray-600">
-                <p>
-                  配送方法や追加オプション、最終的なお支払い金額は購入手続き画面で確認できます。
-                </p>
-                <p>
-                  商品内容・数量・各種条件を確認したうえで、購入手続きへ進んでください。
-                </p>
-                <p>
-                  ご注文確定前に、配送先や選択内容をあらためてご確認ください。
-                </p>
-              </div>
-            </section>
-
-            {/* CTA */}
-            <div className="pt-1">
-              <Link
-                href={`/trials/a2/trial15/checkout?productId=${product.id}`}
-                className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white"
-              >
-                この商品を選ぶ
-              </Link>
+              <section className="rounded-xl border-2 border-gray-300 p-4">
+                <div className="flex h-full items-end">
+                  <Link
+                    href={`/trials/a1/trial15/checkout?productId=${product.id}`}
+                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
+                  >
+                    この商品を選ぶ
+                  </Link>
+                </div>
+              </section>
             </div>
           </div>
         </div>
@@ -199,31 +211,36 @@ function ProductDetailModal({ product, index }: ProductDetailModalProps) {
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const showFreeShipping = getFreeShippingFlag(index) === 1;
+
   return (
-    <article className="h-[104px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
-      <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">
-        <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-          画像
+    <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+      <div className="grid h-full grid-rows-[128px_78px_30px_40px] gap-4">
+        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+          画像エリア
         </div>
 
-        <div className="min-w-0">
-          <h2 className="line-clamp-1 text-base font-semibold text-gray-900">
+        <div className="grid h-[78px] grid-rows-[1fr_auto_auto] overflow-hidden">
+          <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">
             {product.name}
           </h2>
-          <p className="mt-2 text-base font-medium text-gray-800">
+
+          <div className="text-base font-medium leading-5 text-gray-800">
             ¥{yen(product.priceYen)}
-          </p>
-          <div className="mt-1">
-            <FreeShippingBadge visible={showFreeShipping} />
           </div>
+
+          <FreeShippingBadge visible={showFreeShipping} />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="h-[30px] overflow-hidden text-xs leading-5 text-gray-500">
+          詳しい内容は商品詳細から確認できます
+        </div>
+
+        <div className="grid h-10 grid-cols-2 gap-2">
           <ProductDetailModal product={product} index={index} />
 
           <Link
-            href={`/trials/a2/trial15/checkout?productId=${product.id}`}
-            className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white"
+            href={`/trials/a1/trial15/checkout?productId=${product.id}`}
+            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
           </Link>
@@ -233,7 +250,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   );
 }
 
-export default function ProductPageA2Trial15() {
+export default function ProductPageA1Trial15() {
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -246,7 +263,7 @@ export default function ProductPageA2Trial15() {
           <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
         </header>
 
-        <section className="grid flex-1 gap-5">
+        <section className="grid flex-1 grid-cols-3 gap-8">
           {products6.slice(0, 6).map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}

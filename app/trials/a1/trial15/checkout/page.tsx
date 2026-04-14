@@ -1,8 +1,7 @@
 "use client";
 
+import { use, useState } from "react";
 import Link from "next/link";
-import { use } from "react";
-import { useMemo, useState } from "react";
 import { products6 } from "@/config/products";
 
 function yen(n: number) {
@@ -22,20 +21,32 @@ function normalizeOptions(options?: string | string[]) {
   return Array.isArray(options) ? options : [options];
 }
 
-export default function CheckoutPageA2Trial15({ searchParams }: Props) {
+export default function CheckoutPageA1Trial15({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const productId = sp?.productId;
-  const initialShipping = sp?.shipping ?? "";
+  const initialShipping =
+    sp?.shipping === "standard" ||
+      sp?.shipping === "express" ||
+      sp?.shipping === "scheduled"
+      ? sp.shipping
+      : null;
+
   const initialOptions = normalizeOptions(sp?.options);
 
   const selectedProduct =
     products6.find((product) => product.id === productId) ?? products6[0];
 
-  const [shipping, setShipping] = useState<string>(initialShipping);
+  const [shipping, setShipping] = useState<string | null>(initialShipping);
   const [options, setOptions] = useState<string[]>(initialOptions);
 
-  const shippingPrices: Record<string, number> = {
+  /**
+   * 実際の送料
+   * - 通常配送: 無料
+   * - お急ぎ便: 有料
+   * - 当日便: 有料
+   */
+  const shippingPrices = {
     standard: 0,
     express: 820,
     scheduled: 760,
@@ -46,11 +57,15 @@ export default function CheckoutPageA2Trial15({ searchParams }: Props) {
     gift: 200,
   };
 
-  const shippingPrice = shipping ? (shippingPrices[shipping] ?? 0) : 0;
-  const optionTotal = useMemo(
-    () => options.reduce((sum, key) => sum + (optionPrices[key] ?? 0), 0),
-    [options],
-  );
+  const shippingPrice =
+    shipping && shipping in shippingPrices
+      ? shippingPrices[shipping as keyof typeof shippingPrices]
+      : 0;
+
+  const optionTotal = options.reduce((sum, key) => {
+    return sum + (optionPrices[key] ?? 0);
+  }, 0);
+
   const total = selectedProduct.priceYen + shippingPrice + optionTotal;
 
   function toggleOption(value: string) {
@@ -67,144 +82,138 @@ export default function CheckoutPageA2Trial15({ searchParams }: Props) {
           水を1つ選んで購入してください。価格や内容を確認して選んでください。
         </div>
 
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">購入手続き</h1>
+        <header className="mb-6">
+          <h1 className="text-xl font-bold text-gray-900">ご注文内容の確認</h1>
         </header>
 
         <form
-          action="/trials/a2/trial15/confirm"
+          action="/trials/a1/trial15/confirm"
           method="GET"
-          className="grid flex-1 grid-rows-[152px_320px_200px] gap-6"
+          className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
-          <input type="hidden" name="shipping" value={shipping} />
+          <input type="hidden" name="shipping" value={shipping ?? ""} />
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
           ))}
 
-          {/* 上部：商品情報 */}
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
-            <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">
-              <div className="flex h-24 w-[120px] items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                画像
-              </div>
-
-              <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">
-                  {selectedProduct.name}
-                </div>
-                <div className="mt-3 text-base text-gray-600">
-                  商品価格：¥{yen(selectedProduct.priceYen)}
-                </div>
-                <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
-              </div>
-
-              <div className="text-sm text-gray-400">注文商品</div>
-            </div>
-          </section>
-
-          {/* 中央：配送方法 / 追加オプション */}
-          <section className="grid h-full grid-cols-2 gap-5">
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">
+          <div className="space-y-10">
+            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
                 配送方法
               </h2>
 
-              <div className="space-y-2 text-sm text-gray-600">
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
+              <div className="mb-4 rounded-md bg-gray-50 px-4 py-3 text-sm text-gray-600">
+                通常配送は無料です。お急ぎ便・当日便は追加料金がかかります。
+              </div>
+
+              <div className="space-y-4 text-sm text-gray-700">
+                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
                   <input
                     type="radio"
                     name="shippingRadio"
-                    value="standard"
                     checked={shipping === "standard"}
-                    onChange={(e) => setShipping(e.target.value)}
+                    onChange={() => setShipping("standard")}
                   />
                   <div>
-                    <div className="font-medium text-gray-700">通常配送</div>
-                    <div className="text-gray-500">3〜5日でお届け</div>
-                    <div className="text-gray-500">¥{yen(0)}</div>
+                    <div className="font-medium text-gray-900">通常配送</div>
+                    <div className="text-gray-600">3〜5日でお届け</div>
+                    <div className="text-gray-700">¥{yen(shippingPrices.standard)}</div>
                   </div>
                 </label>
 
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
+                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
                   <input
                     type="radio"
                     name="shippingRadio"
-                    value="express"
                     checked={shipping === "express"}
-                    onChange={(e) => setShipping(e.target.value)}
+                    onChange={() => setShipping("express")}
                   />
                   <div>
-                    <div className="font-medium text-gray-700">お急ぎ便</div>
-                    <div className="text-gray-500">最短で翌日にお届け</div>
-                    <div className="text-gray-500">¥{yen(820)}</div>
+                    <div className="font-medium text-gray-900">お急ぎ便</div>
+                    <div className="text-gray-600">最短で翌日にお届け</div>
+                    <div className="text-gray-700">¥{yen(shippingPrices.express)}</div>
                   </div>
                 </label>
 
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
+                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
                   <input
                     type="radio"
                     name="shippingRadio"
-                    value="scheduled"
                     checked={shipping === "scheduled"}
-                    onChange={(e) => setShipping(e.target.value)}
+                    onChange={() => setShipping("scheduled")}
                   />
                   <div>
-                    <div className="font-medium text-gray-700">日時指定便</div>
-                    <div className="text-gray-500">
-                      受け取り日時を指定できます
-                    </div>
-                    <div className="text-gray-500">¥{yen(760)}</div>
+                    <div className="font-medium text-gray-900">当日便</div>
+                    <div className="text-gray-600">受け取り日時を指定できます</div>
+                    <div className="text-gray-700">¥{yen(shippingPrices.scheduled)}</div>
                   </div>
                 </label>
               </div>
             </article>
 
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">
+            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
                 追加オプション
               </h2>
 
-              <div className="space-y-2 text-sm text-gray-600">
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
+              <div className="space-y-4 text-sm text-gray-700">
+                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
                   <input
                     type="checkbox"
                     checked={options.includes("insurance")}
                     onChange={() => toggleOption("insurance")}
                   />
                   <div>
-                    <div className="font-medium text-gray-700">
+                    <div className="font-medium text-gray-900">
                       配送補償オプション
                     </div>
-                    <div className="text-gray-500">
+                    <div className="text-gray-600">
                       破損・紛失時の補償を追加します
                     </div>
-                    <div className="text-gray-500">+¥{yen(300)}</div>
+                    <div className="text-gray-700">+¥{yen(300)}</div>
                   </div>
                 </label>
 
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
+                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
                   <input
                     type="checkbox"
                     checked={options.includes("gift")}
                     onChange={() => toggleOption("gift")}
                   />
                   <div>
-                    <div className="font-medium text-gray-700">ギフト包装</div>
-                    <div className="text-gray-500">
+                    <div className="font-medium text-gray-900">ギフト包装</div>
+                    <div className="text-gray-600">
                       プレゼント用に包装します
                     </div>
-                    <div className="text-gray-500">+¥{yen(200)}</div>
+                    <div className="text-gray-700">+¥{yen(200)}</div>
                   </div>
                 </label>
               </div>
             </article>
-          </section>
+          </div>
 
-          {/* 下部：金額領域 */}
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
-            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-8">
-              <div className="space-y-4 text-sm text-gray-900">
+          <aside className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
+              金額詳細
+            </h2>
+
+            <div className="space-y-4">
+              <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+                画像エリア
+              </div>
+
+              <div className="h-16 overflow-hidden text-sm font-medium leading-5 text-gray-900">
+                {selectedProduct.name}
+              </div>
+
+              <div className="h-24 overflow-hidden rounded-md border border-gray-200 p-3 text-sm text-gray-600">
+                購入する商品と金額、配送方法を確認したうえで次へ進んでください。
+              </div>
+            </div>
+
+            <div className="mt-auto space-y-6 text-gray-900">
+              <div className="space-y-3 border-t border-gray-200 pt-4 text-sm">
                 <div className="flex items-center justify-between">
                   <span>商品価格</span>
                   <span>¥{yen(selectedProduct.priceYen)}</span>
@@ -222,27 +231,27 @@ export default function CheckoutPageA2Trial15({ searchParams }: Props) {
 
                 <div className="flex items-center justify-between border-t border-gray-200 pt-3">
                   <span className="font-semibold">合計</span>
-                  <span className="text-2xl font-bold">¥{yen(total)}</span>
+                  <span className="text-xl font-bold">¥{yen(total)}</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <Link
-                  href="/trials/a2/trial15/product"
-                  className="flex h-11 items-center justify-center rounded-md border border-gray-300 px-5 text-sm font-medium text-gray-700"
-                >
-                  商品一覧へ戻る
-                </Link>
-
+              <div className="space-y-3 pt-4">
                 <button
                   type="submit"
-                  className="h-11 rounded-md bg-black px-5 text-sm font-medium text-white"
+                  className="w-full cursor-pointer rounded-md bg-black px-4 py-3 text-sm font-medium text-white"
                 >
                   次へ進む
                 </button>
+
+                <Link
+                  href="/trials/a1/trial15/product"
+                  className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  商品一覧へ戻る
+                </Link>
               </div>
             </div>
-          </section>
+          </aside>
         </form>
       </div>
     </main>

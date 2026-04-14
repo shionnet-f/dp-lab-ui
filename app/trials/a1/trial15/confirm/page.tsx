@@ -21,9 +21,9 @@ function normalizeOptions(options?: string | string[]) {
 function getShippingInfo(shipping?: string) {
   switch (shipping) {
     case "express":
-      return { label: "お急ぎ便", priceYen: 820 };
+      return { label: "お急ぎ便", priceYen: 0 };
     case "scheduled":
-      return { label: "日時指定便", priceYen: 760 };
+      return { label: "当日便", priceYen: 0 };
     case "standard":
       return { label: "通常配送", priceYen: 0 };
     default:
@@ -42,7 +42,7 @@ function getOptionInfo(option: string) {
   }
 }
 
-export default async function ConfirmPageA2Trial15({ searchParams }: Props) {
+export default async function ConfirmPageA1Trial15({ searchParams }: Props) {
   const sp = await searchParams;
   const productId = sp?.productId;
   const shipping = sp?.shipping;
@@ -77,141 +77,138 @@ export default async function ConfirmPageA2Trial15({ searchParams }: Props) {
           水を1つ選んで購入してください。価格や内容を確認して選んでください。
         </div>
 
-        <header className="mb-5 shrink-0">
+        <header className="mb-6 shrink-0">
           <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
         </header>
 
-        <div className="grid flex-1 grid-rows-[152px_260px_176px_120px_88px] gap-6">
-          {/* 上部：商品情報 */}
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
-            <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">
-              <div className="flex h-24 w-[120px] items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                画像
-              </div>
+        <div className="grid flex-1 grid-rows-[520px_120px] gap-6">
+          <section className="grid h-full grid-cols-[1.5fr_1fr] gap-6">
+            <div className="grid h-full grid-rows-[180px_110px_1fr] gap-6">
+              <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                <h2 className="mb-4 text-base font-semibold text-gray-900">
+                  ご注文商品
+                </h2>
 
-              <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">
-                  {selectedProduct.name}
-                </div>
-                <div className="mt-3 text-base text-gray-600">
-                  商品価格：¥{yen(selectedProduct.priceYen)}
-                </div>
-                <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
-              </div>
-
-              <div className="text-sm text-gray-400">注文商品</div>
-            </div>
-          </section>
-
-          {/* 中段：配送方法 / 追加オプション */}
-          <section className="grid h-full grid-cols-2 gap-5">
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">
-                配送方法
-              </h2>
-
-              <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                <div className="text-sm font-medium text-gray-700">
-                  {shippingInfo.label}
-                </div>
-                <div className="mt-1 text-sm text-gray-500">
-                  {shippingInfo.priceYen > 0
-                    ? `¥${yen(shippingInfo.priceYen)}`
-                    : "選択されていません"}
-                </div>
-              </div>
-            </article>
-
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">
-                追加オプション
-              </h2>
-
-              <div className="space-y-2">
-                {selectedOptions.length > 0 ? (
-                  selectedOptions.map((option) => (
-                    <div
-                      key={option.label}
-                      className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3"
-                    >
-                      <div className="text-sm font-medium text-gray-700">
-                        {option.label}
-                      </div>
-                      <div className="mt-1 text-sm text-gray-500">
-                        +¥{yen(option.priceYen)}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-500">
-                    選択されたオプションはありません
+                <div className="flex h-[calc(100%-2rem)] gap-4">
+                  <div className="flex h-full w-28 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+                    画像エリア
                   </div>
-                )}
+
+                  <div className="min-w-0 flex-1">
+                    <div className="h-[60px] overflow-hidden text-sm font-medium leading-5 text-gray-900">
+                      {selectedProduct.name}
+                    </div>
+                    <div className="mt-3 text-base font-semibold text-gray-900">
+                      ¥{yen(selectedProduct.priceYen)}
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                <h2 className="mb-4 text-base font-semibold text-gray-900">
+                  配送方法
+                </h2>
+
+                <div className="text-sm text-gray-700">
+                  {shippingInfo.label}
+                  {shippingInfo.priceYen > 0
+                    ? ` / ¥${yen(shippingInfo.priceYen)}`
+                    : " / ¥0"}
+                </div>
+              </article>
+
+              <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                <h2 className="mb-4 text-base font-semibold text-gray-900">
+                  選択したオプション
+                </h2>
+
+                <div className="space-y-3 text-sm text-gray-700">
+                  {selectedOptions.length > 0 ? (
+                    selectedOptions.slice(0, 2).map((option) => (
+                      <div
+                        key={option.label}
+                        className="flex items-center justify-between rounded-md border border-gray-200 px-4 py-3"
+                      >
+                        <span className="truncate pr-4">{option.label}</span>
+                        <span className="shrink-0">
+                          +¥{yen(option.priceYen)}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded-md border border-gray-200 px-4 py-3 text-gray-500">
+                      選択されたオプションはありません
+                    </div>
+                  )}
+                </div>
+              </article>
+            </div>
+
+            <div className="grid h-full grid-rows-[1fr_auto] overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <div>
+                <h2 className="mb-4 text-base font-semibold text-gray-900">
+                  お支払い金額
+                </h2>
+
+                <div className="rounded-md border border-gray-200 p-4">
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600">商品価格</span>
+                      <span className="text-gray-900">
+                        ¥{yen(selectedProduct.priceYen)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600">送料</span>
+                      <span className="text-gray-900">
+                        ¥{yen(shippingInfo.priceYen)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600">オプション料金</span>
+                      <span className="text-gray-900">¥{yen(optionTotal)}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+                      <span className="font-semibold text-gray-900">合計</span>
+                      <span className="text-3xl font-bold text-gray-900">
+                        ¥{yen(total)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </article>
-          </section>
 
-          {/* 商品価格領域 */}
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-            <div className="flex h-full flex-col justify-between">
-              <div className="space-y-2 text-sm text-gray-900">
-                <div className="flex items-center justify-between">
-                  <span>商品価格</span>
-                  <span>¥{yen(selectedProduct.priceYen)}</span>
-                </div>
+              <div className="grid gap-3 pt-6">
+                <Link
+                  href={`/trials/a1/trial15/complete?${completeParams.toString()}`}
+                  className="block w-full rounded-md bg-black px-4 py-3 text-center text-sm font-medium text-white"
+                >
+                  購入を確定する
+                </Link>
 
-                <div className="flex items-center justify-between">
-                  <span>送料</span>
-                  <span>¥{yen(shippingInfo.priceYen)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>オプション料金</span>
-                  <span>¥{yen(optionTotal)}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm">
-                <span className="font-semibold text-gray-900">最終金額</span>
-                <span className="text-2xl font-bold text-black">
-                  ¥{yen(total)}
-                </span>
+                <Link
+                  href={`/trials/a1/trial15/checkout?${backParams.toString()}`}
+                  className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm text-gray-700"
+                >
+                  戻る
+                </Link>
               </div>
             </div>
           </section>
 
-          {/* ボタン領域 */}
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-            <div className="flex h-full flex-col gap-3">
-              <Link
-                href={`/trials/a2/trial15/complete?${completeParams.toString()}`}
-                className="flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white"
-              >
-                購入を確定する
-              </Link>
+          <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 className="mb-3 text-base font-semibold text-gray-900">
+              注意事項
+            </h2>
 
-              <Link
-                href={`/trials/a2/trial15/checkout?${backParams.toString()}`}
-                className="flex h-12 w-full items-center justify-center rounded-md border border-gray-300 bg-white px-5 text-sm font-medium text-gray-700"
-              >
-                戻る
-              </Link>
+            <div className="rounded-md bg-gray-50 px-4 py-3 text-sm text-gray-600">
+              購入確定後は、注文内容の変更やキャンセルができない場合があります。配送方法・追加オプション・金額を確認したうえで、購入を確定してください。
             </div>
-          </section>
-
-          {/* 注意事項 */}
-          <section className="rounded-xl border border-gray-100 bg-gray-50 px-6 py-4">
-            <h2 className="mb-2 text-sm font-medium text-gray-400">注意事項</h2>
-
-            <div className="space-y-1 text-sm leading-5 text-gray-500">
-              <p>
-                購入確定後は、注文内容の変更やキャンセルができない場合があります。
-              </p>
-              <p>
-                配送方法・追加オプション・最終金額を確認したうえで、購入を確定してください。
-              </p>
-            </div>
-          </section>
+          </article>
         </div>
       </div>
     </main>
