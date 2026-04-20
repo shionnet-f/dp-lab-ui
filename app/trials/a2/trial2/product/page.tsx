@@ -2,44 +2,68 @@
 
 import Link from "next/link";
 import { useId } from "react";
-import { products6 } from "@/config/products";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Product = (typeof products6)[number];
-
-type ViewerInfoProps = {
-  show: boolean;
-  text?: string;
+type Product = {
+  id: string;
+  name: string;
+  priceYen: number;
+  description: string;
+  specVolume: string;
+  specNote: string;
+  isPopular?: boolean;
+  viewersText?: string;
 };
 
-function ViewerInfo({ show, text }: ViewerInfoProps) {
-  return (
-    <div className="h-11 w-[160px] overflow-hidden">
-      {show ? (
-        <div className="flex h-full w-full items-center rounded-md bg-orange-50 px-3 text-sm text-orange-700">
-          <p className="line-clamp-2 leading-5">{text}</p>
-        </div>
-      ) : (
-        <div className="h-full w-full" aria-hidden="true" />
-      )}
-    </div>
-  );
-}
+const products: Product[] = [
+  {
+    id: "hdmi-1",
+    name: "ベーシック HDMIケーブル 2.0m 4K対応",
+    priceYen: 780,
+    description:
+      "テレビやモニター、レコーダーなどに接続できるHDMIケーブルです。家庭用として使いやすい標準的なモデルです。",
+    specVolume: "長さ：2.0m",
+    specNote: "4K対応 / HDMI端子対応機器向け",
+  },
+  {
+    id: "hdmi-2",
+    name: "高耐久 HDMIケーブル 2.5m 4K対応",
+    priceYen: 980,
+    description:
+      "取り回ししやすい長さで、映像機器やゲーム機など幅広い用途に使えるHDMIケーブルです。",
+    specVolume: "長さ：2.5m",
+    specNote: "4K対応 / 高耐久被膜仕様",
+    isPopular: true,
+    viewersText: "現在 23人が見ています",
+  },
+  {
+    id: "hdmi-3",
+    name: "コンパクト HDMIケーブル 1.5m 4K対応",
+    priceYen: 650,
+    description:
+      "配線を短くまとめたい環境向けのHDMIケーブルです。机まわりや近距離接続に向いています。",
+    specVolume: "長さ：1.5m",
+    specNote: "4K対応 / 短距離接続向け",
+  },
+  {
+    id: "hdmi-4",
+    name: "スタンダード HDMIケーブル 2.0m フルHD対応",
+    priceYen: 720,
+    description:
+      "一般的な映像出力向けのHDMIケーブルです。標準的な長さで日常用途に使えます。",
+    specVolume: "長さ：2.0m",
+    specNote: "フルHD対応 / 4K非対応",
+  },
+];
 
 type ProductDetailModalProps = {
   product: Product;
-  showViewer: boolean;
-  viewerText?: string;
 };
 
-function ProductDetailModal({
-  product,
-  showViewer,
-  viewerText,
-}: ProductDetailModalProps) {
+function ProductDetailModal({ product }: ProductDetailModalProps) {
   const dialogId = useId();
 
   function openDialog() {
@@ -69,6 +93,7 @@ function ProductDetailModal({
         <div className="rounded-2xl bg-white">
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
+
             <button
               type="button"
               onClick={closeDialog}
@@ -86,20 +111,17 @@ function ProductDetailModal({
                 </div>
 
                 <div className="min-w-0">
-                  {showViewer ? (
-                    <div className="mb-3 w-[260px] rounded-md bg-orange-50 px-3 py-2 text-sm text-orange-700">
-                      <p className="leading-5">{viewerText}</p>
-                    </div>
-                  ) : (
-                    <div className="mb-3 h-[40px] w-[260px]" aria-hidden="true" />
-                  )}
-
                   <div className="text-xl font-bold leading-tight text-gray-900">
                     {product.name}
                   </div>
                   <div className="mt-2 text-xl font-semibold text-gray-900">
                     ¥{yen(product.priceYen)}
                   </div>
+                  {product.isPopular ? (
+                    <div className="mt-2 text-sm font-semibold text-orange-600">
+                      {product.viewersText}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </section>
@@ -112,7 +134,7 @@ function ProductDetailModal({
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
                   <p>{product.description}</p>
                   <p>
-                    毎日の使用を想定した定番商品です。用途や内容を確認のうえ選択してください。
+                    使用する機器や必要な長さ、対応規格を確認のうえ選択してください。
                   </p>
                 </div>
               </div>
@@ -122,9 +144,9 @@ function ProductDetailModal({
                   仕様・補足
                 </h3>
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
-                  <div>内容量：500ml × 24本</div>
-                  <div>ケース単位での販売です</div>
-                  <div>保存方法：高温・直射日光を避けて保管してください</div>
+                  <div>{product.specVolume}</div>
+                  <div>{product.specNote}</div>
+                  <div>映像・音声の入出力に対応しています</div>
                 </div>
               </div>
             </section>
@@ -133,6 +155,7 @@ function ProductDetailModal({
               <h3 className="mb-3 text-sm font-semibold text-gray-900">
                 購入前の確認
               </h3>
+
               <div className="space-y-2 text-sm leading-6 text-gray-600">
                 <p>
                   配送方法や追加オプション、最終的なお支払い金額は購入手続き画面で確認できます。
@@ -161,16 +184,10 @@ function ProductDetailModal({
   );
 }
 
-type ProductCardProps = {
-  product: Product;
-  showViewer: boolean;
-  viewerText?: string;
-};
-
-function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
+function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="h-[132px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
-      <div className="grid h-full grid-cols-[112px_220px_160px_1fr_260px] items-center gap-6">
+    <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+      <div className="grid h-full grid-cols-[112px_minmax(0,300px)_220px_1fr] items-center gap-5">
         <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像
         </div>
@@ -184,16 +201,17 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
           </p>
         </div>
 
-        <ViewerInfo show={showViewer} text={viewerText} />
+        <div className="min-w-0">
+          {product.isPopular ? (
+            <p className="text-sm font-semibold text-orange-600">
+              {product.viewersText}
+            </p>
+          ) : null}
+        </div>
 
-        <div aria-hidden="true" />
+        <div className="ml-auto grid w-[220px] grid-cols-2 gap-3 justify-self-end">
+          <ProductDetailModal product={product} />
 
-        <div className="grid grid-cols-2 gap-3">
-          <ProductDetailModal
-            product={product}
-            showViewer={showViewer}
-            viewerText={viewerText}
-          />
           <Link
             href={`/trials/a2/trial2/checkout?productId=${product.id}`}
             className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white"
@@ -207,23 +225,12 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
 }
 
 export default function ProductPageA2Trial2() {
-  const viewerTexts = [
-    "21人がこの商品を見ています",
-    "15人がこの商品を見ています",
-    "8人がこの商品を見ています",
-    "6人がこの商品を見ています",
-    "2人がこの商品を見ています",
-    "2人がこの商品を見ています",
-  ];
-
-  const showViewerFlags = [true, true, true, false, false, false];
-
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          「HDMIケーブル」を1つ選んで購入してください（2m以上、4K対応、予算1,000円以内）
         </div>
 
         <header className="mb-5 shrink-0">
@@ -231,14 +238,10 @@ export default function ProductPageA2Trial2() {
         </header>
 
         <section className="grid flex-1 gap-5">
-          {products6.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              showViewer={showViewerFlags[index]}
-              viewerText={viewerTexts[index]}
-            />
-          ))}
+          <ProductCard product={products[0]} />
+          <ProductCard product={products[1]} />
+          <ProductCard product={products[2]} />
+          <ProductCard product={products[3]} />
         </section>
       </div>
     </main>

@@ -12,7 +12,7 @@ export default function TrialStartPageA2Trial2() {
 
         <div className="z-10 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          「HDMIケーブル」を1つ選んで購入してください（2m以上、4K対応、予算1,000円以内）
         </div>
 
         <Link

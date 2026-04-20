@@ -81,7 +81,7 @@ export default async function ConfirmPageA2Trial1({ searchParams }: Props) {
           <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
         </header>
 
-        <div className="grid flex-1 grid-rows-[152px_260px_176px_120px_88px] gap-6">
+        <div className="grid flex-1 grid-rows-[152px_228px_176px_120px_88px] gap-6">
           {/* 上部：商品情報 */}
           <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
             <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">

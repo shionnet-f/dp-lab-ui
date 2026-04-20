@@ -137,7 +137,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
 
 function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="h-[104px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+    <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
       <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">
         <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像
@@ -185,8 +185,6 @@ export default function ProductPageA2Trial1() {
           <ProductCard product={products6[1]} />
           <ProductCard product={products6[2]} />
           <ProductCard product={products6[3]} />
-          <ProductCard product={products6[4]} />
-          <ProductCard product={products6[5]} />
         </section>
       </div>
     </main>

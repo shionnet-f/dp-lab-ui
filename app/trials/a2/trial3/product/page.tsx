@@ -2,62 +2,66 @@
 
 import Link from "next/link";
 import { useId } from "react";
-import { products6 } from "@/config/products";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Product = (typeof products6)[number];
-
-type ReviewInfoProps = {
-  show: boolean;
-  rating?: number;
-  reviewCount?: number;
+type Product = {
+  id: string;
+  name: string;
+  priceYen: number;
+  description: string;
+  specs: string[];
+  review: { starsText: string; score: string; count: string };
+  isDpTarget?: boolean;
 };
 
-function renderStars(rating: number) {
-  const fullStars = Math.floor(rating);
-  const hasHalf = rating - fullStars >= 0.5;
-
-  return Array.from({ length: 5 }, (_, i) => {
-    if (i < fullStars) return "★";
-    if (i === fullStars && hasHalf) return "☆";
-    return "☆";
-  }).join("");
-}
-
-function ReviewInfo({ show, rating, reviewCount }: ReviewInfoProps) {
-  return (
-    <div className="h-11 w-[160px] overflow-hidden">
-      {show ? (
-        <div className="flex h-full w-full items-center rounded-md bg-amber-50 px-3 text-sm text-amber-700">
-          <p className="line-clamp-2 leading-5">
-            <span className="font-semibold">{renderStars(rating ?? 4.0)}</span>
-            <span className="ml-2">{(rating ?? 4.0).toFixed(1)}</span>
-            <span className="ml-2 text-amber-600">（{reviewCount ?? 0}件）</span>
-          </p>
-        </div>
-      ) : (
-        <div className="h-full w-full" aria-hidden="true" />
-      )}
-    </div>
-  );
-}
+const trial3Products: Product[] = [
+  {
+    id: "earphone-1",
+    name: "ワイヤレスイヤホン A",
+    priceYen: 7980,
+    description:
+      "Bluetooth接続に対応したワイヤレスイヤホンです。通勤や通学などの日常利用を想定した標準モデルです。",
+    specs: ["内容：1個", "Bluetooth接続対応", "連続再生：約5時間"],
+    review: { starsText: "★★★★☆", score: "3.9", count: "(128件)" },
+  },
+  {
+    id: "earphone-2",
+    name: "ワイヤレスイヤホン B",
+    priceYen: 9280,
+    description:
+      "Bluetooth接続に対応したワイヤレスイヤホンです。安定した装着感とバランスのよい音質が特徴のモデルです。",
+    specs: ["内容：1個", "Bluetooth接続対応", "連続再生：約6時間"],
+    review: { starsText: "★★★★★", score: "4.8", count: "(642件)" },
+    isDpTarget: true,
+  },
+  {
+    id: "earphone-3",
+    name: "ワイヤレスイヤホン C",
+    priceYen: 9580,
+    description:
+      "Bluetooth接続に対応したワイヤレスイヤホンです。動画視聴や音楽再生など、幅広い用途に使えるモデルです。",
+    specs: ["内容：1個", "Bluetooth接続対応", "連続再生：約7時間"],
+    review: { starsText: "★★★★☆", score: "4.2", count: "(214件)" },
+  },
+  {
+    id: "earphone-4",
+    name: "ワイヤレスイヤホン D",
+    priceYen: 9980,
+    description:
+      "Bluetooth接続に対応したワイヤレスイヤホンです。軽量で持ち運びしやすいコンパクトモデルです。",
+    specs: ["内容：1個", "Bluetooth接続対応", "連続再生：約4.5時間"],
+    review: { starsText: "★★★★☆", score: "4.0", count: "(96件)" },
+  },
+];
 
 type ProductDetailModalProps = {
   product: Product;
-  showReview: boolean;
-  rating?: number;
-  reviewCount?: number;
 };
 
-function ProductDetailModal({
-  product,
-  showReview,
-  rating,
-  reviewCount,
-}: ProductDetailModalProps) {
+function ProductDetailModal({ product }: ProductDetailModalProps) {
   const dialogId = useId();
 
   function openDialog() {
@@ -87,6 +91,7 @@ function ProductDetailModal({
         <div className="rounded-2xl bg-white">
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
+
             <button
               type="button"
               onClick={closeDialog}
@@ -104,25 +109,16 @@ function ProductDetailModal({
                 </div>
 
                 <div className="min-w-0">
-                  {showReview ? (
-                    <div className="mb-3 w-[260px] rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
-                      <span className="font-semibold">
-                        {renderStars(rating ?? 4.0)}
-                      </span>
-                      <span className="ml-2">{(rating ?? 4.0).toFixed(1)}</span>
-                      <span className="ml-2 text-amber-600">
-                        （{reviewCount ?? 0}件のレビュー）
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="mb-3 h-[40px] w-[260px]" aria-hidden="true" />
-                  )}
-
                   <div className="text-xl font-bold leading-tight text-gray-900">
                     {product.name}
                   </div>
                   <div className="mt-2 text-xl font-semibold text-gray-900">
                     ¥{yen(product.priceYen)}
+                  </div>
+                  <div className="mt-3 text-sm font-medium text-amber-600">
+                    <span>{product.review.starsText}</span>{" "}
+                    <span className="text-amber-700">{product.review.score}</span>{" "}
+                    <span className="text-gray-600">{product.review.count}</span>
                   </div>
                 </div>
               </div>
@@ -136,7 +132,7 @@ function ProductDetailModal({
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
                   <p>{product.description}</p>
                   <p>
-                    毎日の使用を想定した定番商品です。用途や内容を確認のうえ選択してください。
+                    用途や接続方式、数量などを確認のうえ選択してください。
                   </p>
                 </div>
               </div>
@@ -146,9 +142,9 @@ function ProductDetailModal({
                   仕様・補足
                 </h3>
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
-                  <div>内容量：500ml × 24本</div>
-                  <div>ケース単位での販売です</div>
-                  <div>保存方法：高温・直射日光を避けて保管してください</div>
+                  {product.specs.map((spec) => (
+                    <div key={spec}>{spec}</div>
+                  ))}
                 </div>
               </div>
             </section>
@@ -157,6 +153,7 @@ function ProductDetailModal({
               <h3 className="mb-3 text-sm font-semibold text-gray-900">
                 購入前の確認
               </h3>
+
               <div className="space-y-2 text-sm leading-6 text-gray-600">
                 <p>
                   配送方法や追加オプション、最終的なお支払い金額は購入手続き画面で確認できます。
@@ -185,22 +182,10 @@ function ProductDetailModal({
   );
 }
 
-type ProductCardProps = {
-  product: Product;
-  showReview: boolean;
-  rating?: number;
-  reviewCount?: number;
-};
-
-function ProductCard({
-  product,
-  showReview,
-  rating,
-  reviewCount,
-}: ProductCardProps) {
+function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="h-[132px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
-      <div className="grid h-full grid-cols-[112px_220px_160px_1fr_260px] items-center gap-6">
+    <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+      <div className="grid h-full grid-cols-[112px_minmax(0,300px)_220px_1fr] items-center gap-5">
         <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像
         </div>
@@ -214,21 +199,17 @@ function ProductCard({
           </p>
         </div>
 
-        <ReviewInfo
-          show={showReview}
-          rating={rating}
-          reviewCount={reviewCount}
-        />
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-amber-600">
+            <span>{product.review.starsText}</span>{" "}
+            <span className="text-amber-700">{product.review.score}</span>{" "}
+            <span className="text-gray-600">{product.review.count}</span>
+          </p>
+        </div>
 
-        <div aria-hidden="true" />
+        <div className="ml-auto grid w-[220px] grid-cols-2 gap-3 justify-self-end">
+          <ProductDetailModal product={product} />
 
-        <div className="grid grid-cols-2 gap-3">
-          <ProductDetailModal
-            product={product}
-            showReview={showReview}
-            rating={rating}
-            reviewCount={reviewCount}
-          />
           <Link
             href={`/trials/a2/trial3/checkout?productId=${product.id}`}
             className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white"
@@ -242,16 +223,12 @@ function ProductCard({
 }
 
 export default function ProductPageA2Trial3() {
-  const reviewRatings = [4.8, 4.7, 4.5, 4.1, 3.9, 3.8];
-  const reviewCounts = [328, 254, 186, 42, 18, 11];
-  const showReviewFlags = [true, true, true, false, false, false];
-
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          「ワイヤレスイヤホン」を1個選んで購入してください（Bluetooth接続対応、予算10,000円以内）
         </div>
 
         <header className="mb-5 shrink-0">
@@ -259,14 +236,8 @@ export default function ProductPageA2Trial3() {
         </header>
 
         <section className="grid flex-1 gap-5">
-          {products6.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              showReview={showReviewFlags[index]}
-              rating={reviewRatings[index]}
-              reviewCount={reviewCounts[index]}
-            />
+          {trial3Products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </section>
       </div>

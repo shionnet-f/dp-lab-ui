@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { products6 } from "@/config/products";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
+
+const trial3Products = [
+  { id: "earphone-1", name: "ワイヤレスイヤホン A", priceYen: 7980 },
+  { id: "earphone-2", name: "ワイヤレスイヤホン B", priceYen: 9280 },
+  { id: "earphone-3", name: "ワイヤレスイヤホン C", priceYen: 9580 },
+  { id: "earphone-4", name: "ワイヤレスイヤホン D", priceYen: 9980 },
+];
 
 type Props = {
   searchParams?: Promise<{
@@ -49,14 +55,11 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
   const optionKeys = normalizeOptions(sp?.options);
 
   const selectedProduct =
-    products6.find((product) => product.id === productId) ?? products6[0];
+    trial3Products.find((product) => product.id === productId) ?? trial3Products[0];
 
   const shippingInfo = getShippingInfo(shipping);
   const selectedOptions = optionKeys.map(getOptionInfo);
-  const optionTotal = selectedOptions.reduce(
-    (sum, option) => sum + option.priceYen,
-    0,
-  );
+  const optionTotal = selectedOptions.reduce((sum, option) => sum + option.priceYen, 0);
   const total = selectedProduct.priceYen + shippingInfo.priceYen + optionTotal;
 
   const backParams = new URLSearchParams();
@@ -74,14 +77,14 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          「ワイヤレスイヤホン」を1個選んで購入してください（Bluetooth接続対応、予算10,000円以内）
         </div>
 
         <header className="mb-5 shrink-0">
           <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
         </header>
 
-        <div className="grid flex-1 grid-rows-[152px_260px_176px_120px_88px] gap-6">
+        <div className="grid flex-1 grid-rows-[152px_228px_176px_120px_88px] gap-6">
           <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
             <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">
               <div className="flex h-24 w-[120px] items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
@@ -104,14 +107,10 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
 
           <section className="grid h-full grid-cols-2 gap-5">
             <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">
-                配送方法
-              </h2>
+              <h2 className="mb-4 text-sm font-medium text-gray-500">配送方法</h2>
 
               <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                <div className="text-sm font-medium text-gray-700">
-                  {shippingInfo.label}
-                </div>
+                <div className="text-sm font-medium text-gray-700">{shippingInfo.label}</div>
                 <div className="mt-1 text-sm text-gray-500">
                   {shippingInfo.priceYen > 0
                     ? `¥${yen(shippingInfo.priceYen)}`
@@ -121,9 +120,7 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
             </article>
 
             <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">
-                追加オプション
-              </h2>
+              <h2 className="mb-4 text-sm font-medium text-gray-500">追加オプション</h2>
 
               <div className="space-y-2">
                 {selectedOptions.length > 0 ? (
@@ -132,12 +129,8 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
                       key={option.label}
                       className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3"
                     >
-                      <div className="text-sm font-medium text-gray-700">
-                        {option.label}
-                      </div>
-                      <div className="mt-1 text-sm text-gray-500">
-                        +¥{yen(option.priceYen)}
-                      </div>
+                      <div className="text-sm font-medium text-gray-700">{option.label}</div>
+                      <div className="mt-1 text-sm text-gray-500">+¥{yen(option.priceYen)}</div>
                     </div>
                   ))
                 ) : (
@@ -170,9 +163,7 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
 
               <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm">
                 <span className="font-semibold text-gray-900">最終金額</span>
-                <span className="text-2xl font-bold text-black">
-                  ¥{yen(total)}
-                </span>
+                <span className="text-2xl font-bold text-black">¥{yen(total)}</span>
               </div>
             </div>
           </section>
@@ -199,9 +190,7 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
             <h2 className="mb-2 text-sm font-medium text-gray-400">注意事項</h2>
 
             <div className="space-y-1 text-sm leading-5 text-gray-500">
-              <p>
-                購入確定後は、注文内容の変更やキャンセルができない場合があります。
-              </p>
+              <p>購入確定後は、注文内容の変更やキャンセルができない場合があります。</p>
               <p>
                 配送方法・追加オプション・最終金額を確認したうえで、購入を確定してください。
               </p>
