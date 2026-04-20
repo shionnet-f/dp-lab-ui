@@ -1,46 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useId } from "react";
-import { products6 } from "@/config/products";
+import { trial5Data, type Trial5Product } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Product = (typeof products6)[number];
-
-type SaleInfoProps = {
-  show: boolean;
-  saleText?: string;
-};
-
-function SaleInfo({ show, saleText }: SaleInfoProps) {
-  return (
-    <div className="h-11 w-[160px] overflow-hidden">
-      {show ? (
-        <div className="flex h-full w-full items-center rounded-md bg-yellow-50 px-3 py-2 text-sm text-yellow-800">
-          <p className="line-clamp-2 font-medium leading-5">{saleText}</p>
-        </div>
-      ) : (
-        <div className="h-full w-full" aria-hidden="true" />
-      )}
-    </div>
-  );
-}
-
 type ProductDetailModalProps = {
-  product: Product;
-  showSale: boolean;
-  saleText?: string;
+  product: Trial5Product;
 };
 
-function ProductDetailModal({
-  product,
-  showSale,
-  saleText,
-}: ProductDetailModalProps) {
-  const dialogId = useId();
+function ProductDetailModal({ product }: ProductDetailModalProps) {
+  const dialogId = `product-dialog-${product.id}`;
 
   function openDialog() {
     const el = document.getElementById(dialogId) as HTMLDialogElement | null;
@@ -69,6 +41,7 @@ function ProductDetailModal({
         <div className="rounded-2xl bg-white">
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
+
             <button
               type="button"
               onClick={closeDialog}
@@ -86,19 +59,18 @@ function ProductDetailModal({
                 </div>
 
                 <div className="min-w-0">
-                  {showSale ? (
-                    <div className="mb-3 w-[260px] rounded-md bg-yellow-50 px-3 py-2 text-sm font-medium text-yellow-800">
-                      {saleText}
-                    </div>
-                  ) : (
-                    <div className="mb-3 h-[40px] w-[260px]" aria-hidden="true" />
-                  )}
-
                   <div className="text-xl font-bold leading-tight text-gray-900">
                     {product.name}
                   </div>
-                  <div className="mt-2 text-xl font-semibold text-gray-900">
-                    ¥{yen(product.priceYen)}
+                  <div className="mt-2 flex items-center gap-5">
+                    <div className="text-xl font-semibold text-gray-900">
+                      ¥{yen(product.priceYen)}
+                    </div>
+                    {product.dpDisplay ? (
+                      <div className="rounded-md border border-orange-200 bg-orange-50 px-3 py-1 text-sm font-semibold text-orange-600">
+                        {product.dpDisplay.label}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -106,43 +78,32 @@ function ProductDetailModal({
 
             <section className="grid grid-cols-2 gap-4">
               <div className="rounded-xl border border-gray-200 p-5">
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  商品説明
-                </h3>
+                <h3 className="mb-3 text-sm font-semibold text-gray-900">商品説明</h3>
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
                   <p>{product.description}</p>
-                  <p>
-                    毎日の使用を想定した定番商品です。用途や内容を確認のうえ選択してください。
-                  </p>
                 </div>
               </div>
 
               <div className="rounded-xl border border-gray-200 p-5">
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  仕様・補足
-                </h3>
+                <h3 className="mb-3 text-sm font-semibold text-gray-900">仕様・補足</h3>
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
-                  <div>内容量：500ml × 24本</div>
-                  <div>ケース単位での販売です</div>
-                  <div>保存方法：高温・直射日光を避けて保管してください</div>
+                  {product.specsAndNotes.map((item) => (
+                    <div key={item}>{item}</div>
+                  ))}
                 </div>
               </div>
             </section>
 
             <section className="rounded-xl border border-gray-200 bg-gray-50 p-5">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                購入前の確認
-              </h3>
+              <h3 className="mb-3 text-sm font-semibold text-gray-900">購入前の確認</h3>
+
               <div className="space-y-2 text-sm leading-6 text-gray-600">
-                <p>
-                  配送方法や追加オプション、最終的なお支払い金額は購入手続き画面で確認できます。
-                </p>
-                <p>
-                  商品内容・数量・各種条件を確認したうえで、購入手続きへ進んでください。
-                </p>
-                <p>
-                  ご注文確定前に、配送先や選択内容をあらためてご確認ください。
-                </p>
+                {product.prePurchaseCheck.map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
+                {product.deliveryInfo.map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
               </div>
             </section>
 
@@ -161,39 +122,35 @@ function ProductDetailModal({
   );
 }
 
-type ProductCardProps = {
-  product: Product;
-  showSale: boolean;
-  saleText?: string;
-};
-
-function ProductCard({ product, showSale, saleText }: ProductCardProps) {
+function ProductCard({ product }: { product: Trial5Product }) {
   return (
-    <article className="h-[132px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
-      <div className="grid h-full grid-cols-[112px_220px_160px_1fr_260px] items-center gap-6">
+    <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+      <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">
         <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像
         </div>
 
         <div className="min-w-0">
-          <h2 className="line-clamp-1 text-base font-semibold text-gray-900">
-            {product.name}
-          </h2>
-          <p className="mt-2 text-base font-medium text-gray-800">
-            ¥{yen(product.priceYen)}
-          </p>
+          <div className="flex items-center gap-8">
+            <div className="min-w-0">
+              <h2 className="line-clamp-1 text-base font-semibold text-gray-900">
+                {product.name}
+              </h2>
+              <p className="mt-2 text-base font-medium text-gray-800">
+                ¥{yen(product.priceYen)}
+              </p>
+            </div>
+
+            {product.dpDisplay ? (
+              <div className="shrink-0 rounded-md border border-orange-200 bg-orange-50 px-3 py-1 text-sm font-semibold text-orange-600">
+                {product.dpDisplay.label}
+              </div>
+            ) : null}
+          </div>
         </div>
 
-        <SaleInfo show={showSale} saleText={saleText} />
-
-        <div aria-hidden="true" />
-
-        <div className="grid grid-cols-2 gap-3">
-          <ProductDetailModal
-            product={product}
-            showSale={showSale}
-            saleText={saleText}
-          />
+        <div className="grid grid-cols-2 gap-3 justify-self-end">
+          <ProductDetailModal product={product} />
 
           <Link
             href={`/trials/a2/trial5/checkout?productId=${product.id}`}
@@ -208,23 +165,14 @@ function ProductCard({ product, showSale, saleText }: ProductCardProps) {
 }
 
 export default function ProductPageA2Trial5() {
-  const saleTexts = [
-    "タイムセール 残り15分",
-    "タイムセール 残り12分",
-    "タイムセール 残り9分",
-    "タイムセール 残り20分",
-    "タイムセール 残り18分",
-    "タイムセール 残り16分",
-  ];
-
-  const showSaleFlags = [true, true, true, false, false, false];
-
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial5Data.purchaseConditions.budgetYen}円以内、
+          {trial5Data.purchaseConditions.quantityCondition}、
+          {trial5Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
@@ -232,13 +180,8 @@ export default function ProductPageA2Trial5() {
         </header>
 
         <section className="grid flex-1 gap-5">
-          {products6.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              showSale={showSaleFlags[index]}
-              saleText={saleTexts[index]}
-            />
+          {trial5Data.products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </section>
       </div>

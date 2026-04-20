@@ -1,21 +1,37 @@
+
 "use client";
 
 import Link from "next/link";
-import { useId } from "react";
-import { products6 } from "@/config/products";
+import { trial10Data, type Trial10Product } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Product = (typeof products6)[number];
-
 type ProductDetailModalProps = {
-  product: Product;
+  product: Trial10Product;
 };
 
+function PriceBlock({ product }: { product: Trial10Product }) {
+  if (product.dpDisplay?.highlight && product.dpDisplay.originalPriceYen) {
+    return (
+      <div className="flex items-center gap-2 text-sm">
+        <span className="text-gray-400 line-through">
+          ¥{yen(product.dpDisplay?.originalPriceYen ?? product.priceYen)}
+        </span>
+        <span className="text-gray-400">→</span>
+        <span className="text-base font-bold text-red-500">
+          ¥{yen(product.priceYen)}
+        </span>
+      </div>
+    );
+  }
+
+  return <div className="mt-2 text-base font-medium text-gray-800">¥{yen(product.priceYen)}</div>;
+}
+
 function ProductDetailModal({ product }: ProductDetailModalProps) {
-  const dialogId = useId();
+  const dialogId = `product-dialog-${product.id}`;
 
   function openDialog() {
     const el = document.getElementById(dialogId) as HTMLDialogElement | null;
@@ -42,7 +58,6 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
         className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
       >
         <div className="rounded-2xl bg-white">
-          {/* ヘッダー */}
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
 
@@ -56,7 +71,6 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
           </div>
 
           <div className="space-y-5 px-6 py-6">
-            {/* 上段：商品画像 + 商品名 + 価格 */}
             <section className="rounded-xl border border-gray-200 p-5">
               <div className="grid grid-cols-[160px_1fr] items-center gap-5">
                 <div className="flex h-28 w-40 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
@@ -67,59 +81,56 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
                   <div className="text-xl font-bold leading-tight text-gray-900">
                     {product.name}
                   </div>
-                  <div className="mt-2 text-xl font-semibold text-gray-900">
-                    ¥{yen(product.priceYen)}
-                  </div>
+                  {product.dpDisplay?.highlight && product.dpDisplay.originalPriceYen ? (
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-gray-400 line-through">
+                        ¥{yen(product.dpDisplay?.originalPriceYen ?? product.priceYen)}
+                      </span>
+                      <span className="text-gray-400">→</span>
+                      <span className="text-base font-bold text-red-500">
+                        ¥{yen(product.priceYen)}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="mt-2 text-xl font-semibold text-gray-900">
+                      ¥{yen(product.priceYen)}
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
 
-            {/* 中段：2列（左:商品説明 / 右:仕様補足） */}
             <section className="grid grid-cols-2 gap-4">
               <div className="rounded-xl border border-gray-200 p-5">
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  商品説明
-                </h3>
+                <h3 className="mb-3 text-sm font-semibold text-gray-900">商品説明</h3>
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
                   <p>{product.description}</p>
-                  <p>
-                    毎日の使用を想定した定番商品です。用途や内容を確認のうえ選択してください。
-                  </p>
                 </div>
               </div>
 
               <div className="rounded-xl border border-gray-200 p-5">
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  仕様・補足
-                </h3>
+                <h3 className="mb-3 text-sm font-semibold text-gray-900">仕様・補足</h3>
                 <div className="space-y-2 text-sm leading-6 text-gray-600">
-                  <div>内容量：500ml × 24本</div>
-                  <div>ケース単位での販売です</div>
-                  <div>保存方法：高温・直射日光を避けて保管してください</div>
+                  {product.specsAndNotes.map((item) => (
+                    <div key={item}>{item}</div>
+                  ))}
                 </div>
               </div>
             </section>
 
-            {/* 購入前の確認 */}
             <section className="rounded-xl border border-gray-200 bg-gray-50 p-5">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                購入前の確認
-              </h3>
+              <h3 className="mb-3 text-sm font-semibold text-gray-900">購入前の確認</h3>
 
               <div className="space-y-2 text-sm leading-6 text-gray-600">
-                <p>
-                  配送方法や追加オプション、最終的なお支払い金額は購入手続き画面で確認できます。
-                </p>
-                <p>
-                  商品内容・数量・各種条件を確認したうえで、購入手続きへ進んでください。
-                </p>
-                <p>
-                  ご注文確定前に、配送先や選択内容をあらためてご確認ください。
-                </p>
+                {product.prePurchaseCheck.map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
+                {product.deliveryInfo.map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
               </div>
             </section>
 
-            {/* CTA */}
             <div className="pt-1">
               <Link
                 href={`/trials/a2/trial10/checkout?productId=${product.id}`}
@@ -135,9 +146,9 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product }: { product: Trial10Product }) {
   return (
-    <article className="h-[104px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+    <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
       <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">
         <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
           画像
@@ -147,12 +158,15 @@ function ProductCard({ product }: { product: Product }) {
           <h2 className="line-clamp-1 text-base font-semibold text-gray-900">
             {product.name}
           </h2>
-          <p className="mt-2 text-base font-medium text-gray-800">
-            ¥{yen(product.priceYen)}
-          </p>
+          {product.dpDisplay?.highlight && product.dpDisplay.discountLabel ? (
+            <div className="mt-2 inline-flex rounded-md bg-red-50 px-2 py-1 text-[11px] font-medium text-red-600">
+              {product.dpDisplay.discountLabel}
+            </div>
+          ) : null}
+          <PriceBlock product={product} />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 justify-self-end">
           <ProductDetailModal product={product} />
 
           <Link
@@ -173,7 +187,9 @@ export default function ProductPageA2Trial10() {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial10Data.purchaseConditions.budgetYen}円以内、
+          {trial10Data.purchaseConditions.quantityCondition}、
+          {trial10Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
@@ -181,12 +197,9 @@ export default function ProductPageA2Trial10() {
         </header>
 
         <section className="grid flex-1 gap-5">
-          <ProductCard product={products6[0]} />
-          <ProductCard product={products6[1]} />
-          <ProductCard product={products6[2]} />
-          <ProductCard product={products6[3]} />
-          <ProductCard product={products6[4]} />
-          <ProductCard product={products6[5]} />
+          {trial10Data.products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </section>
       </div>
     </main>

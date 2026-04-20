@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { trial7Data } from "../data";
 
 export default function TrialStartPageA2Trial7() {
   return (
@@ -12,7 +13,9 @@ export default function TrialStartPageA2Trial7() {
 
         <div className="z-10 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial7Data.purchaseConditions.budgetYen}円以内、
+          {trial7Data.purchaseConditions.quantityCondition}、
+          {trial7Data.purchaseConditions.specificCondition}
         </div>
 
         <Link
