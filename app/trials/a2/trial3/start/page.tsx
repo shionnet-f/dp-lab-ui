@@ -1,6 +1,7 @@
 import Link from "next/link";
+import trial3Data from "../data";
 
-export default function TrialStartPageA2Trial3() {
+export default function StartPage() {
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -12,7 +13,9 @@ export default function TrialStartPageA2Trial3() {
 
         <div className="z-10 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ワイヤレスイヤホン」を1個選んで購入してください（Bluetooth接続対応、予算10,000円以内）
+          予算{trial3Data.purchaseConditions.budgetYen}円以内、
+          {trial3Data.purchaseConditions.quantityCondition}、
+          {trial3Data.purchaseConditions.specificCondition}
         </div>
 
         <Link

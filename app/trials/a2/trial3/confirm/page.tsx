@@ -1,15 +1,9 @@
 import Link from "next/link";
+import { getOptionsByIds, getProductById, getShippingById, trial3Data } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
-
-const trial3Products = [
-  { id: "earphone-1", name: "ワイヤレスイヤホン A", priceYen: 7980 },
-  { id: "earphone-2", name: "ワイヤレスイヤホン B", priceYen: 9280 },
-  { id: "earphone-3", name: "ワイヤレスイヤホン C", priceYen: 9580 },
-  { id: "earphone-4", name: "ワイヤレスイヤホン D", priceYen: 9980 },
-];
 
 type Props = {
   searchParams?: Promise<{
@@ -24,52 +18,25 @@ function normalizeOptions(options?: string | string[]) {
   return Array.isArray(options) ? options : [options];
 }
 
-function getShippingInfo(shipping?: string) {
-  switch (shipping) {
-    case "express":
-      return { label: "お急ぎ便", priceYen: 800 };
-    case "scheduled":
-      return { label: "日時指定便", priceYen: 700 };
-    case "standard":
-      return { label: "通常配送", priceYen: 500 };
-    default:
-      return { label: "未選択", priceYen: 0 };
-  }
-}
-
-function getOptionInfo(option: string) {
-  switch (option) {
-    case "insurance":
-      return { label: "配送補償オプション", priceYen: 300 };
-    case "gift":
-      return { label: "ギフト包装", priceYen: 200 };
-    default:
-      return { label: option, priceYen: 0 };
-  }
-}
-
-export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
+export default async function ConfirmPage({ searchParams }: Props) {
   const sp = await searchParams;
-  const productId = sp?.productId;
-  const shipping = sp?.shipping;
+  const selectedProduct = getProductById(sp?.productId);
+  const shippingInfo = getShippingById(sp?.shipping);
   const optionKeys = normalizeOptions(sp?.options);
+  const selectedOptions = getOptionsByIds(optionKeys);
 
-  const selectedProduct =
-    trial3Products.find((product) => product.id === productId) ?? trial3Products[0];
-
-  const shippingInfo = getShippingInfo(shipping);
-  const selectedOptions = optionKeys.map(getOptionInfo);
+  const shippingPrice = shippingInfo?.priceYen ?? 0;
   const optionTotal = selectedOptions.reduce((sum, option) => sum + option.priceYen, 0);
-  const total = selectedProduct.priceYen + shippingInfo.priceYen + optionTotal;
+  const total = selectedProduct.priceYen + shippingPrice + optionTotal;
 
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
-  if (shipping) backParams.set("shipping", shipping);
+  if (sp?.shipping) backParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
-  if (shipping) completeParams.set("shipping", shipping);
+  if (sp?.shipping) completeParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 
   return (
@@ -77,7 +44,9 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ワイヤレスイヤホン」を1個選んで購入してください（Bluetooth接続対応、予算10,000円以内）
+          予算{trial3Data.purchaseConditions.budgetYen}円以内、
+          {trial3Data.purchaseConditions.quantityCondition}、
+          {trial3Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
@@ -92,12 +61,8 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
               </div>
 
               <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">
-                  {selectedProduct.name}
-                </div>
-                <div className="mt-3 text-base text-gray-600">
-                  商品価格：¥{yen(selectedProduct.priceYen)}
-                </div>
+                <div className="truncate text-lg font-medium text-gray-800">{selectedProduct.name}</div>
+                <div className="mt-3 text-base text-gray-600">商品価格：¥{yen(selectedProduct.priceYen)}</div>
                 <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
               </div>
 
@@ -110,11 +75,9 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
               <h2 className="mb-4 text-sm font-medium text-gray-500">配送方法</h2>
 
               <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                <div className="text-sm font-medium text-gray-700">{shippingInfo.label}</div>
+                <div className="text-sm font-medium text-gray-700">{shippingInfo?.name ?? "未選択"}</div>
                 <div className="mt-1 text-sm text-gray-500">
-                  {shippingInfo.priceYen > 0
-                    ? `¥${yen(shippingInfo.priceYen)}`
-                    : "選択されていません"}
+                  {shippingInfo ? `¥${yen(shippingInfo.priceYen)}` : "選択されていません"}
                 </div>
               </div>
             </article>
@@ -125,11 +88,8 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
               <div className="space-y-2">
                 {selectedOptions.length > 0 ? (
                   selectedOptions.map((option) => (
-                    <div
-                      key={option.label}
-                      className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3"
-                    >
-                      <div className="text-sm font-medium text-gray-700">{option.label}</div>
+                    <div key={option.id} className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
+                      <div className="text-sm font-medium text-gray-700">{option.name}</div>
                       <div className="mt-1 text-sm text-gray-500">+¥{yen(option.priceYen)}</div>
                     </div>
                   ))
@@ -152,7 +112,7 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
 
                 <div className="flex items-center justify-between">
                   <span>送料</span>
-                  <span>¥{yen(shippingInfo.priceYen)}</span>
+                  <span>¥{yen(shippingPrice)}</span>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -191,9 +151,7 @@ export default async function ConfirmPageA2Trial3({ searchParams }: Props) {
 
             <div className="space-y-1 text-sm leading-5 text-gray-500">
               <p>購入確定後は、注文内容の変更やキャンセルができない場合があります。</p>
-              <p>
-                配送方法・追加オプション・最終金額を確認したうえで、購入を確定してください。
-              </p>
+              <p>配送方法・追加オプション・最終金額を確認したうえで、購入を確定してください。</p>
             </div>
           </section>
         </div>

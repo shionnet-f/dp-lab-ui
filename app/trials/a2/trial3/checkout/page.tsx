@@ -1,19 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { use } from "react";
-import { useState } from "react";
+import { use, useState } from "react";
+import { getProductById, trial3Data } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
-
-const trial3Products = [
-  { id: "earphone-1", name: "ワイヤレスイヤホン A", priceYen: 7980 },
-  { id: "earphone-2", name: "ワイヤレスイヤホン B", priceYen: 9280 },
-  { id: "earphone-3", name: "ワイヤレスイヤホン C", priceYen: 9580 },
-  { id: "earphone-4", name: "ワイヤレスイヤホン D", priceYen: 9980 },
-];
 
 type Props = {
   searchParams: Promise<{
@@ -30,16 +23,9 @@ function normalizeOptions(options?: string | string[]) {
 
 export default function CheckoutPageA2Trial3({ searchParams }: Props) {
   const sp = use(searchParams);
-
-  const productId = sp?.productId;
-  const initialShipping = sp?.shipping ?? "";
-  const initialOptions = normalizeOptions(sp?.options);
-
-  const selectedProduct =
-    trial3Products.find((product) => product.id === productId) ?? trial3Products[0];
-
-  const [shipping, setShipping] = useState<string>(initialShipping);
-  const [options, setOptions] = useState<string[]>(initialOptions);
+  const selectedProduct = getProductById(sp?.productId);
+  const [shipping, setShipping] = useState<string>(sp?.shipping ?? "");
+  const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options));
 
   function toggleOption(value: string) {
     setOptions((prev) =>
@@ -52,7 +38,9 @@ export default function CheckoutPageA2Trial3({ searchParams }: Props) {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ワイヤレスイヤホン」を1個選んで購入してください（Bluetooth接続対応、予算10,000円以内）
+          予算{trial3Data.purchaseConditions.budgetYen}円以内、
+          {trial3Data.purchaseConditions.quantityCondition}、
+          {trial3Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-5 shrink-0">
@@ -62,7 +50,7 @@ export default function CheckoutPageA2Trial3({ searchParams }: Props) {
         <form
           action="/trials/a2/trial3/confirm"
           method="GET"
-          className="grid flex-1 grid-rows-[172px_300px_200px] gap-6"
+          className="grid flex-1 grid-rows-[172px_minmax(0,300px)_auto] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="shipping" value={shipping} />
@@ -77,12 +65,8 @@ export default function CheckoutPageA2Trial3({ searchParams }: Props) {
               </div>
 
               <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">
-                  {selectedProduct.name}
-                </div>
-                <div className="mt-3 text-base text-gray-600">
-                  商品価格：¥{yen(selectedProduct.priceYen)}
-                </div>
+                <div className="truncate text-lg font-medium text-gray-800">{selectedProduct.name}</div>
+                <div className="mt-3 text-base text-gray-600">商品価格：¥{yen(selectedProduct.priceYen)}</div>
                 <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
               </div>
 
@@ -90,55 +74,30 @@ export default function CheckoutPageA2Trial3({ searchParams }: Props) {
             </div>
           </section>
 
-          <section className="grid h-full grid-cols-2 gap-5">
+          <section className="grid min-h-0 grid-cols-2 gap-5">
             <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
               <h2 className="mb-4 text-sm font-medium text-gray-500">配送方法</h2>
 
               <div className="space-y-2 text-sm text-gray-600">
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    value="standard"
-                    checked={shipping === "standard"}
-                    onChange={(e) => setShipping(e.target.value)}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-700">通常配送</div>
-                    <div className="text-gray-500">3〜5日でお届け</div>
-                    <div className="text-gray-500">¥{yen(500)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    value="express"
-                    checked={shipping === "express"}
-                    onChange={(e) => setShipping(e.target.value)}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-700">お急ぎ便</div>
-                    <div className="text-gray-500">最短で翌日にお届け</div>
-                    <div className="text-gray-500">¥{yen(800)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    value="scheduled"
-                    checked={shipping === "scheduled"}
-                    onChange={(e) => setShipping(e.target.value)}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-700">日時指定便</div>
-                    <div className="text-gray-500">受け取り日時を指定できます</div>
-                    <div className="text-gray-500">¥{yen(700)}</div>
-                  </div>
-                </label>
+                {trial3Data.shippingMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2"
+                  >
+                    <input
+                      type="radio"
+                      name="shippingRadio"
+                      value={method.id}
+                      checked={shipping === method.id}
+                      onChange={(e) => setShipping(e.target.value)}
+                    />
+                    <div>
+                      <div className="font-medium text-gray-700">{method.name}</div>
+                      <div className="text-gray-500">{method.shortDescription}</div>
+                      <div className="text-gray-500">¥{yen(method.priceYen)}</div>
+                    </div>
+                  </label>
+                ))}
               </div>
             </article>
 
@@ -146,36 +105,28 @@ export default function CheckoutPageA2Trial3({ searchParams }: Props) {
               <h2 className="mb-4 text-sm font-medium text-gray-500">追加オプション</h2>
 
               <div className="space-y-2 text-sm text-gray-600">
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-                  <input
-                    type="checkbox"
-                    checked={options.includes("insurance")}
-                    onChange={() => toggleOption("insurance")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-700">配送補償オプション</div>
-                    <div className="text-gray-500">破損・紛失時の補償を追加します</div>
-                    <div className="text-gray-500">+¥{yen(300)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-                  <input
-                    type="checkbox"
-                    checked={options.includes("gift")}
-                    onChange={() => toggleOption("gift")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-700">ギフト包装</div>
-                    <div className="text-gray-500">プレゼント用に包装します</div>
-                    <div className="text-gray-500">+¥{yen(200)}</div>
-                  </div>
-                </label>
+                {trial3Data.options.map((option) => (
+                  <label
+                    key={option.id}
+                    className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={options.includes(option.id)}
+                      onChange={() => toggleOption(option.id)}
+                    />
+                    <div>
+                      <div className="font-medium text-gray-700">{option.name}</div>
+                      <div className="text-gray-500">{option.shortDescription}</div>
+                      <div className="text-gray-500">+¥{yen(option.priceYen)}</div>
+                    </div>
+                  </label>
+                ))}
               </div>
             </article>
           </section>
 
-          <section className="px-2 py-4">
+          <section className="px-2 py-4 shrink-0">
             <div className="grid h-full grid-cols-2 gap-3">
               <Link
                 href="/trials/a2/trial3/product"
