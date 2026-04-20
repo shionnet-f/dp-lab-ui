@@ -14,7 +14,7 @@ export default function TrialCompletePageA1Trial11() {
           href="/education?version=A&next=/trials/a2/trial1/start"
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
-          戻る
+          次へ進む
         </Link>
       </div>
     </main>

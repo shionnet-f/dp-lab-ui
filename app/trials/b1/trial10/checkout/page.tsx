@@ -1,8 +1,9 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { products6 } from "@/config/products";
+import { getProductById, trial10Data } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
@@ -11,56 +12,15 @@ function yen(n: number) {
 type Props = {
   searchParams: Promise<{
     productId?: string;
-    shipping?: string;
-    options?: string | string[];
   }>;
 };
 
-function normalizeOptions(options?: string | string[]) {
-  if (!options) return [];
-  return Array.isArray(options) ? options : [options];
-}
-
 export default function CheckoutPageB1Trial10({ searchParams }: Props) {
   const sp = use(searchParams);
+  const selectedProduct = getProductById(sp?.productId);
 
-  const productId = sp?.productId;
-  const initialShipping =
-    sp?.shipping === "standard" ||
-    sp?.shipping === "express" ||
-    sp?.shipping === "scheduled"
-      ? sp.shipping
-      : null;
-
-  const initialOptions = normalizeOptions(sp?.options);
-
-  const selectedProduct =
-    products6.find((product) => product.id === productId) ?? products6[0];
-
-  const [shipping, setShipping] = useState<string | null>(initialShipping);
-  const [options, setOptions] = useState<string[]>(initialOptions);
-
-  const shippingPrices = {
-    standard: 480,
-    express: 820,
-    scheduled: 760,
-  };
-
-  const optionPrices: Record<string, number> = {
-    insurance: 300,
-    gift: 200,
-  };
-
-  const shippingPrice =
-    shipping && shipping in shippingPrices
-      ? shippingPrices[shipping as keyof typeof shippingPrices]
-      : 0;
-
-  const optionTotal = options.reduce((sum, key) => {
-    return sum + (optionPrices[key] ?? 0);
-  }, 0);
-
-  const total = selectedProduct.priceYen + shippingPrice + optionTotal;
+  const [shipping, setShipping] = useState<string | null>(null);
+  const [options, setOptions] = useState<string[]>([]);
 
   function toggleOption(value: string) {
     setOptions((prev) =>
@@ -73,8 +33,9 @@ export default function CheckoutPageB1Trial10({ searchParams }: Props) {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「天然水」「500ml ×
-          24本」「軟水」を満たす商品を1つ選んで購入してください
+          予算{trial10Data.purchaseConditions.budgetYen}円以内、
+          {trial10Data.purchaseConditions.quantityCondition}、
+          {trial10Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-6">
@@ -84,156 +45,86 @@ export default function CheckoutPageB1Trial10({ searchParams }: Props) {
         <form
           action="/trials/b1/trial10/confirm"
           method="GET"
-          className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
+          className="grid flex-1 grid-cols-[1.6fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
-          <input type="hidden" name="shipping" value={shipping ?? ""} />
-          {options.map((o) => (
-            <input key={o} type="hidden" name="options" value={o} />
-          ))}
 
-          <div className="space-y-10">
-            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">
-                配送方法
-              </h2>
+          <div className="grid grid-rows-[1fr_1fr] gap-6">
+            <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">配送方法</h2>
 
-              <div className="space-y-4 text-sm text-gray-700">
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    checked={shipping === "standard"}
-                    onChange={() => setShipping("standard")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">通常配送</div>
-                    <div className="text-gray-600">3〜5日でお届け</div>
-                    <div className="text-gray-700">
-                      ¥{yen(shippingPrices.standard)}
+              <div className="space-y-3">
+                {trial10Data.shippingMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 px-4 py-3"
+                  >
+                    <input
+                      type="radio"
+                      name="shipping"
+                      value={method.id}
+                      checked={shipping === method.id}
+                      onChange={() => setShipping(method.id)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">{method.name}</div>
+                      <div className="text-sm text-gray-600">{method.shortDescription}</div>
+                      <div className="text-sm text-gray-700">+¥{yen(method.priceYen)}</div>
                     </div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    checked={shipping === "express"}
-                    onChange={() => setShipping("express")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">お急ぎ便</div>
-                    <div className="text-gray-600">最短で翌日にお届け</div>
-                    <div className="text-gray-700">
-                      ¥{yen(shippingPrices.express)}
-                    </div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    checked={shipping === "scheduled"}
-                    onChange={() => setShipping("scheduled")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">当日便</div>
-                    <div className="text-gray-600">
-                      受け取り日時を指定できます
-                    </div>
-                    <div className="text-gray-700">
-                      ¥{yen(shippingPrices.scheduled)}
-                    </div>
-                  </div>
-                </label>
+                  </label>
+                ))}
               </div>
             </article>
 
-            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">
-                追加オプション
-              </h2>
+            <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">追加オプション</h2>
 
-              <div className="space-y-4 text-sm text-gray-700">
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="checkbox"
-                    checked={options.includes("insurance")}
-                    onChange={() => toggleOption("insurance")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">
-                      配送補償オプション
+              <div className="space-y-3">
+                {trial10Data.options.map((option) => (
+                  <label
+                    key={option.id}
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 px-4 py-3"
+                  >
+                    <input
+                      type="checkbox"
+                      name="options"
+                      value={option.id}
+                      checked={options.includes(option.id)}
+                      onChange={() => toggleOption(option.id)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">{option.name}</div>
+                      <div className="text-sm text-gray-600">{option.shortDescription}</div>
+                      <div className="text-sm text-gray-700">+¥{yen(option.priceYen)}</div>
                     </div>
-                    <div className="text-gray-600">
-                      破損・紛失時の補償を追加します
-                    </div>
-                    <div className="text-gray-700">+¥{yen(300)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="checkbox"
-                    checked={options.includes("gift")}
-                    onChange={() => toggleOption("gift")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">ギフト包装</div>
-                    <div className="text-gray-600">
-                      プレゼント用に包装します
-                    </div>
-                    <div className="text-gray-700">+¥{yen(200)}</div>
-                  </div>
-                </label>
+                  </label>
+                ))}
               </div>
             </article>
           </div>
 
-          <aside className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
-              金額詳細
-            </h2>
+          <div className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">ご注文商品</h2>
 
             <div className="space-y-4">
               <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
                 画像エリア
               </div>
 
-              <div className="h-16 overflow-hidden text-sm font-medium leading-5 text-gray-900">
+              <div className="min-h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
                 {selectedProduct.name}
               </div>
 
-              <div className="h-24 overflow-hidden rounded-md border border-gray-200 p-3 text-sm text-gray-600">
+              <div className="text-base font-medium text-gray-800">¥{yen(selectedProduct.priceYen)}</div>
+
+              <div className="min-h-[96px] overflow-hidden text-sm leading-6 text-gray-600">
                 {selectedProduct.description}
               </div>
             </div>
 
             <div className="mt-auto space-y-6 text-gray-900">
-              <div className="space-y-3 border-t border-gray-200 pt-4 text-sm">
-                <div className="flex items-center justify-between">
-                  <span>商品価格</span>
-                  <span>¥{yen(selectedProduct.priceYen)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>送料</span>
-                  <span>¥{yen(shippingPrice)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>オプション料金</span>
-                  <span>¥{yen(optionTotal)}</span>
-                </div>
-
-                <div className="flex items-center justify-between border-t border-gray-200 pt-3">
-                  <span className="font-semibold">合計</span>
-                  <span className="text-xl font-bold">¥{yen(total)}</span>
-                </div>
-              </div>
-
               <div className="space-y-3 pt-4">
                 <button
                   type="submit"
@@ -250,7 +141,7 @@ export default function CheckoutPageB1Trial10({ searchParams }: Props) {
                 </Link>
               </div>
             </div>
-          </aside>
+          </div>
         </form>
       </div>
     </main>

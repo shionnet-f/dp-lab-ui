@@ -1,12 +1,17 @@
 import Link from "next/link";
-import { products6 } from "@/config/products";
+import {
+  getOptionsByIds,
+  getProductById,
+  getShippingById,
+  trial7Data,
+} from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
 type Props = {
-  searchParams: Promise<{
+  searchParams?: Promise<{
     productId?: string;
     shipping?: string;
     options?: string | string[];
@@ -18,65 +23,43 @@ function normalizeOptions(options?: string | string[]) {
   return Array.isArray(options) ? options : [options];
 }
 
-function getShippingInfo(shipping?: string) {
-  switch (shipping) {
-    case "express":
-      return { label: "お急ぎ便", priceYen: 800 };
-    case "scheduled":
-      return { label: "当日便", priceYen: 700 };
-    case "standard":
-      return { label: "通常配送", priceYen: 500 };
-    default:
-      return { label: "未選択", priceYen: 0 };
-  }
-}
-
-function getOptionInfo(option: string) {
-  switch (option) {
-    case "insurance":
-      return { label: "配送補償オプション", priceYen: 300 };
-    case "gift":
-      return { label: "ギフト包装", priceYen: 200 };
-    case "paperbag":
-      return { label: "手提げ袋を付ける", priceYen: 100 };
-    default:
-      return { label: option, priceYen: 0 };
-  }
-}
-
 export default async function ConfirmPageB1Trial7({ searchParams }: Props) {
   const sp = await searchParams;
-  const productId = sp?.productId;
-  const shipping = sp?.shipping;
+  const selectedProduct = getProductById(sp?.productId);
+  const shippingInfo = getShippingById(sp?.shipping);
   const optionKeys = normalizeOptions(sp?.options);
+  const selectedOptions = getOptionsByIds(optionKeys);
 
-  const selectedProduct =
-    products6.find((product) => product.id === productId) ?? products6[0];
-
-  const shippingInfo = getShippingInfo(shipping);
-  const selectedOptions = optionKeys.map(getOptionInfo);
+  const effectiveProductPrice =
+    selectedProduct.actualPriceYen ?? selectedProduct.priceYen;
+  const shippingPrice = shippingInfo?.priceYen ?? 0;
   const optionTotal = selectedOptions.reduce(
     (sum, option) => sum + option.priceYen,
     0,
   );
-  const total = selectedProduct.priceYen + shippingInfo.priceYen + optionTotal;
+  const total = effectiveProductPrice + shippingPrice + optionTotal;
 
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
-  if (shipping) backParams.set("shipping", shipping);
+  if (sp?.shipping) backParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
-  if (shipping) completeParams.set("shipping", shipping);
+  if (sp?.shipping) completeParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
+
+  const isSubscriptionPrice =
+    typeof selectedProduct.actualPriceYen === "number";
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial7Data.purchaseConditions.budgetYen}円以内、
+          {trial7Data.purchaseConditions.quantityCondition}、
+          {trial7Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-6 shrink-0">
@@ -113,10 +96,9 @@ export default async function ConfirmPageB1Trial7({ searchParams }: Props) {
                 </h2>
 
                 <div className="text-sm text-gray-700">
-                  {shippingInfo.label}
-                  {shippingInfo.priceYen > 0
-                    ? ` / ¥${yen(shippingInfo.priceYen)}`
-                    : ""}
+                  {shippingInfo
+                    ? `${shippingInfo.name} / ¥${yen(shippingInfo.priceYen)}`
+                    : "未選択"}
                 </div>
               </article>
 
@@ -129,10 +111,10 @@ export default async function ConfirmPageB1Trial7({ searchParams }: Props) {
                   {selectedOptions.length > 0 ? (
                     selectedOptions.slice(0, 2).map((option) => (
                       <div
-                        key={option.label}
+                        key={option.id}
                         className="flex items-center justify-between rounded-md border border-gray-200 px-4 py-3"
                       >
-                        <span className="truncate pr-4">{option.label}</span>
+                        <span className="truncate pr-4">{option.name}</span>
                         <span className="shrink-0">
                           +¥{yen(option.priceYen)}
                         </span>
@@ -158,14 +140,14 @@ export default async function ConfirmPageB1Trial7({ searchParams }: Props) {
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">商品価格</span>
                       <span className="text-gray-900">
-                        ¥{yen(selectedProduct.priceYen)}
+                        ¥{yen(effectiveProductPrice)}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">送料</span>
                       <span className="text-gray-900">
-                        ¥{yen(shippingInfo.priceYen)}
+                        ¥{yen(shippingPrice)}
                       </span>
                     </div>
 
@@ -183,10 +165,13 @@ export default async function ConfirmPageB1Trial7({ searchParams }: Props) {
                   </div>
                 </div>
 
-                {/* DP本体：最終確認で初めて提示 */}
-                <div className="mt-4 rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">
-                  表示価格は定期おトク便ご利用時の価格です。定期便は毎月1回のお届けとなります。
-                </div>
+                {isSubscriptionPrice ? (
+                  <div className="mt-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm leading-6 text-gray-700">
+                    表示されていた商品価格 ¥{yen(selectedProduct.priceYen)}{" "}
+                    は定期お届けコース利用時の価格です。通常購入価格は ¥
+                    {yen(effectiveProductPrice)} です。
+                  </div>
+                ) : null}
               </div>
 
               <div className="grid gap-3 pt-6">
