@@ -3,7 +3,7 @@
 import { use } from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { products6 } from "@/config/products";
+import { getProductById, trial8Data } from "../data";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
@@ -17,28 +17,20 @@ type Props = {
 
 export default function CheckoutPageB1Trial8({ searchParams }: Props) {
   const sp = use(searchParams);
-
-  const productId = sp?.productId;
-
-  const selectedProduct =
-    products6.find((product) => product.id === productId) ?? products6[0];
+  const selectedProduct = getProductById(sp?.productId);
 
   const [shipping, setShipping] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
 
-  const shippingPrices: Record<string, number> = {
-    standard: 500,
-    express: 800,
-    scheduled: 700,
-  };
-
-  const optionPrices: Record<string, number> = {
-    insurance: 300,
-    gift: 200,
-  };
-
-  const shippingPrice = shipping ? shippingPrices[shipping] : 0;
-  const optionTotal = options.reduce((sum, key) => sum + optionPrices[key], 0);
+  const shippingPrice = shipping
+    ? (trial8Data.shippingMethods.find((method) => method.id === shipping)
+        ?.priceYen ?? 0)
+    : 0;
+  const optionTotal = options.reduce((sum, key) => {
+    const optionPrice =
+      trial8Data.options.find((option) => option.id === key)?.priceYen ?? 0;
+    return sum + optionPrice;
+  }, 0);
   const total = selectedProduct.priceYen + shippingPrice + optionTotal;
 
   function toggleOption(value: string) {
@@ -52,7 +44,9 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「天然水 500ml」を1つ選んで購入してください
+          予算{trial8Data.purchaseConditions.budgetYen}円以内、
+          {trial8Data.purchaseConditions.quantityCondition}、
+          {trial8Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-6">
@@ -62,106 +56,85 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
         <form
           action="/trials/b1/trial8/confirm"
           method="GET"
-          className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
+          className="grid flex-1 grid-cols-[1.6fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
-          <input type="hidden" name="shipping" value={shipping ?? ""} />
-          {options.map((o) => (
-            <input key={o} type="hidden" name="options" value={o} />
-          ))}
 
-          <div className="space-y-10">
-            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <div className="grid grid-rows-[1fr_1fr] gap-6">
+            <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-base font-semibold text-gray-900">
                 配送方法
               </h2>
 
-              <div className="space-y-4 text-sm text-gray-700">
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    onChange={() => setShipping("standard")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">通常配送</div>
-                    <div className="text-gray-600">3〜5日でお届け</div>
-                    <div className="text-gray-700">¥{yen(500)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    onChange={() => setShipping("express")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">お急ぎ便</div>
-                    <div className="text-gray-600">最短で翌日にお届け</div>
-                    <div className="text-gray-700">¥{yen(800)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    onChange={() => setShipping("scheduled")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">当日便</div>
-                    <div className="text-gray-600">
-                      受け取り日時を指定できます
+              <div className="space-y-3">
+                {trial8Data.shippingMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 px-4 py-3"
+                  >
+                    <input
+                      type="radio"
+                      name="shipping"
+                      value={method.id}
+                      checked={shipping === method.id}
+                      onChange={() => setShipping(method.id)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {method.name}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {method.shortDescription}
+                      </div>
+                      <div className="text-sm text-gray-700">
+                        +¥{yen(method.priceYen)}
+                      </div>
                     </div>
-                    <div className="text-gray-700">¥{yen(700)}</div>
-                  </div>
-                </label>
+                  </label>
+                ))}
               </div>
             </article>
 
-            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-base font-semibold text-gray-900">
                 追加オプション
               </h2>
 
-              <div className="space-y-4 text-sm text-gray-700">
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="checkbox"
-                    onChange={() => toggleOption("insurance")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">
-                      配送補償オプション
+              <div className="space-y-3">
+                {trial8Data.options.map((option) => (
+                  <label
+                    key={option.id}
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 px-4 py-3"
+                  >
+                    <input
+                      type="checkbox"
+                      name="options"
+                      value={option.id}
+                      checked={options.includes(option.id)}
+                      onChange={() => toggleOption(option.id)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {option.name}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {option.shortDescription}
+                      </div>
+                      <div className="text-sm text-gray-700">
+                        +¥{yen(option.priceYen)}
+                      </div>
                     </div>
-                    <div className="text-gray-600">
-                      破損・紛失時の補償を追加します
-                    </div>
-                    <div className="text-gray-700">+¥{yen(300)}</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="checkbox"
-                    onChange={() => toggleOption("gift")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">ギフト包装</div>
-                    <div className="text-gray-600">
-                      プレゼント用に包装します
-                    </div>
-                    <div className="text-gray-700">+¥{yen(200)}</div>
-                  </div>
-                </label>
+                  </label>
+                ))}
               </div>
             </article>
           </div>
 
-          <aside className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <div className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-base font-semibold text-gray-900">
-              金額詳細
+              ご注文商品
             </h2>
 
             <div className="space-y-4">
@@ -169,38 +142,20 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
                 画像エリア
               </div>
 
-              <div className="h-16 overflow-hidden text-sm font-medium leading-5 text-gray-900">
-                水 500ml
+              <div className="min-h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+                {selectedProduct.name}
               </div>
 
-              <div className="h-24 overflow-hidden rounded-md border border-gray-200 p-3 text-sm text-gray-600">
-                すっきり飲みやすいボトルウォーターです。購入前に内容を確認してください。
+              <div className="text-base font-medium text-gray-800">
+                ¥{yen(selectedProduct.priceYen)}
+              </div>
+
+              <div className="min-h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+                {selectedProduct.description}
               </div>
             </div>
 
             <div className="mt-auto space-y-6 text-gray-900">
-              <div className="space-y-3 border-t border-gray-200 pt-4 text-sm">
-                <div className="flex items-center justify-between">
-                  <span>商品価格</span>
-                  <span>¥{yen(selectedProduct.priceYen)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>送料</span>
-                  <span>¥{yen(shippingPrice)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>オプション料金</span>
-                  <span>¥{yen(optionTotal)}</span>
-                </div>
-
-                <div className="flex items-center justify-between border-t border-gray-200 pt-3">
-                  <span className="font-semibold">合計</span>
-                  <span className="text-xl font-bold">¥{yen(total)}</span>
-                </div>
-              </div>
-
               <div className="space-y-3 pt-4">
                 <button
                   type="submit"
@@ -217,7 +172,7 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
                 </Link>
               </div>
             </div>
-          </aside>
+          </div>
         </form>
       </div>
     </main>

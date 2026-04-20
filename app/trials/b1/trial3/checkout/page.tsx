@@ -2,24 +2,27 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
-import { products6 } from "@/config/products";
+import { getProductById, trial3Data } from "../data";
 
 type Props = {
   searchParams: Promise<{
     productId?: string;
+    shipping?: string;
+    options?: string | string[];
   }>;
 };
+
+function normalizeOptions(options?: string | string[]) {
+  if (!options) return [];
+  return Array.isArray(options) ? options : [options];
+}
 
 export default function CheckoutPageB1Trial3({ searchParams }: Props) {
   const sp = use(searchParams);
 
-  const productId = sp?.productId;
-
-  const selectedProduct =
-    products6.find((product) => product.id === productId) ?? products6[0];
-
-  const [shipping, setShipping] = useState<string | null>(null);
-  const [options, setOptions] = useState<string[]>([]);
+  const selectedProduct = getProductById(sp?.productId);
+  const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
+  const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options));
 
   function toggleOption(value: string) {
     setOptions((prev) =>
@@ -32,7 +35,9 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <span className="font-semibold">購入条件：</span>
-          「ミネラルウォーター 500ml×24」を1つ選んで購入してください
+          予算{trial3Data.purchaseConditions.budgetYen}円以内、
+          {trial3Data.purchaseConditions.quantityCondition}、
+          {trial3Data.purchaseConditions.specificCondition}
         </div>
 
         <header className="mb-6">
@@ -50,126 +55,79 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
             <input key={o} type="hidden" name="options" value={o} />
           ))}
 
-          {/* 左側 */}
           <div className="space-y-10">
-            {/* 配送方法 */}
             <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">
-                配送方法
-              </h2>
+              <h2 className="mb-4 text-base font-semibold text-gray-900">配送方法</h2>
 
               <div className="space-y-4 text-sm text-gray-700">
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    onChange={() => setShipping("standard")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">通常配送</div>
-                    <div className="text-gray-600">3〜5日でお届け</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    onChange={() => setShipping("express")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">お急ぎ便</div>
-                    <div className="text-gray-600">最短で翌日にお届け</div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="radio"
-                    name="shippingRadio"
-                    onChange={() => setShipping("scheduled")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">当日便</div>
-                    <div className="text-gray-600">
-                      受け取り日時を指定できます
+                {trial3Data.shippingMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3"
+                  >
+                    <input
+                      type="radio"
+                      name="shippingRadio"
+                      checked={shipping === method.id}
+                      onChange={() => setShipping(method.id)}
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">{method.name}</div>
+                      <div className="text-gray-600">{method.shortDescription}</div>
                     </div>
-                  </div>
-                </label>
-              </div>
-
-              <div className="mt-4 rounded-md bg-gray-50 px-4 py-3 text-xs text-gray-500">
-                料金は最終確認ページで表示
+                  </label>
+                ))}
               </div>
             </article>
 
-            {/* オプション */}
             <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">
-                追加オプション
-              </h2>
+              <h2 className="mb-4 text-base font-semibold text-gray-900">追加オプション</h2>
 
               <div className="space-y-4 text-sm text-gray-700">
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="checkbox"
-                    onChange={() => toggleOption("insurance")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">
-                      配送補償オプション
+                {trial3Data.options.map((option) => (
+                  <label
+                    key={option.id}
+                    className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={options.includes(option.id)}
+                      onChange={() => toggleOption(option.id)}
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">{option.name}</div>
+                      <div className="text-gray-600">{option.shortDescription}</div>
                     </div>
-                    <div className="text-gray-600">
-                      破損・紛失時の補償を追加します
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      料金は最終確認ページで表示されます
-                    </div>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3">
-                  <input
-                    type="checkbox"
-                    onChange={() => toggleOption("gift")}
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">ギフト包装</div>
-                    <div className="text-gray-600">
-                      プレゼント用に包装します
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      料金は最終確認ページで表示されます
-                    </div>
-                  </div>
-                </label>
+                  </label>
+                ))}
               </div>
             </article>
           </div>
 
-          {/* 右側 */}
-          <aside className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
-              ご注文内容
-            </h2>
+          <div className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">ご注文商品</h2>
 
             <div className="space-y-4">
               <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
                 画像エリア
               </div>
 
-              <div className="h-16 overflow-hidden text-sm font-medium leading-5 text-gray-900">
+              <div className="min-h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
                 {selectedProduct.name}
               </div>
 
-              <div className="h-24 overflow-hidden rounded-md border border-gray-200 p-3 text-sm text-gray-600">
+              <div className="text-base font-medium text-gray-800">
+                ¥{new Intl.NumberFormat("ja-JP").format(selectedProduct.priceYen)}
+              </div>
+
+              <div className="min-h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
                 {selectedProduct.description}
               </div>
             </div>
 
             <div className="mt-auto space-y-6 text-gray-900">
-              <div className="rounded-md border border-dashed border-gray-300 px-4 py-6 text-center text-xs text-gray-500">
-                料金は最終確認ページで表示
+              <div className="px-1 text-center text-xs text-gray-500">
+                配送方法・追加オプションの料金は最終確認ページで表示
               </div>
 
               <div className="space-y-3 pt-4">
@@ -188,7 +146,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
                 </Link>
               </div>
             </div>
-          </aside>
+          </div>
         </form>
       </div>
     </main>
