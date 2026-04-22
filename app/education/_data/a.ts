@@ -53,6 +53,7 @@ export const aSlides = {
       { id: "C", label: "UI C" },
     ],
     correctOptionId: "B",
+    quizUiType: "countdown",
   } satisfies SlideData,
 
   answer1: {
@@ -92,6 +93,7 @@ export const aSlides = {
       { id: "C", label: "UI C" },
     ],
     correctOptionId: "C",
+    quizUiType: "price_interference",
   } satisfies SlideData,
 
   answer2: {
@@ -100,7 +102,7 @@ export const aSlides = {
     title: "回答提示",
     body: [
       "正解は C。",
-      "理由：情報は提示されていても、視覚的な強調や配置によって誤った判断を誘発しやすいためです。",
+      "理由：元値に打消し線を引き、矢印と赤字で割引後価格だけを強く目立たせることで、価格のお得感を過度に印象づけ、判断を誤らせやすいためです。",
     ],
   } satisfies SlideData,
 

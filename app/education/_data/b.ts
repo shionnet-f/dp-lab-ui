@@ -47,13 +47,14 @@ export const bSlides = {
     id: "b-quiz-1",
     kind: "quiz",
     title: "デモ",
-    prompt: "次のうち、もっとも問題のあるUIはどれですか？",
+    prompt: "次のうち、重要な情報がもっとも見つけにくく埋め込まれているUIはどれですか？",
     options: [
-      { id: "A", label: "UI A" },
-      { id: "B", label: "UI B" },
-      { id: "C", label: "UI C" },
+      { id: "A", label: "A" },
+      { id: "B", label: "B" },
+      { id: "C", label: "C" },
     ],
     correctOptionId: "B",
+    quizUiType: "hidden_info",
   } satisfies SlideData,
 
   answer1: {
@@ -62,7 +63,7 @@ export const bSlides = {
     title: "回答提示",
     body: [
       "正解は B。",
-      "理由：重要な情報がアクセスしにくい場所に置かれており、形式上は提示されていても、実質的には気づきにくくなっているためです。",
+      "理由：重要な条件が『仕様・補足』の長文とスクロール領域の中に埋め込まれており、形式上は提示されていても実質的には気づきにくくなっているためです。",
     ],
   } satisfies SlideData,
 
@@ -87,13 +88,14 @@ export const bSlides = {
     id: "b-quiz-2",
     kind: "quiz",
     title: "デモ",
-    prompt: "次のうち、もっとも判断を誤らせやすいUIはどれですか？",
+    prompt: "次のうち、重要な追加コストが適切なタイミングで提示されていないUIはどれですか？",
     options: [
-      { id: "A", label: "UI A" },
-      { id: "B", label: "UI B" },
-      { id: "C", label: "UI C" },
+      { id: "A", label: "A" },
+      { id: "B", label: "B" },
+      { id: "C", label: "C" },
     ],
     correctOptionId: "C",
+    quizUiType: "delayed_info",
   } satisfies SlideData,
 
   answer2: {
@@ -102,7 +104,7 @@ export const bSlides = {
     title: "回答提示",
     body: [
       "正解は C。",
-      "理由：重要な条件やコストが後の段階で提示されることで、消費者が途中で判断を修正しにくくなるためです。",
+      "理由：商品一覧では本体価格だけが見えており、送料という重要な追加コストが checkout / confirm の段階で初めて具体的に示されるため、後戻りしにくい段階で判断を歪めやすくなるからです。",
     ],
   } satisfies SlideData,
 
