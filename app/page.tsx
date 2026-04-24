@@ -1,13 +1,10 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main className="min-h-screen bg-white px-6 py-10">
       <div className="mx-auto flex max-w-3xl flex-col gap-8">
         <header className="space-y-3">
-          <h1 className="text-3xl font-bold text-gray-900">
-            DP-LAB 実験フロー
-          </h1>
           <p className="text-base leading-7 text-gray-600">
             練習課題または実験課題を選択してください。
           </p>
@@ -15,7 +12,7 @@ export default function Home() {
 
         <section className="grid gap-4 md:grid-cols-2">
           <Link
-            href="/experiment/practice"
+            href="/practice"
             className="rounded-xl border border-gray-300 bg-white p-6 shadow-sm transition hover:bg-gray-50"
           >
             <div className="space-y-2">

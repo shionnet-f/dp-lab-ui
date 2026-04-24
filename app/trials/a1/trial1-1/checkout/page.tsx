@@ -13,6 +13,7 @@ type Props = {
     productId?: string;
     shipping?: string;
     options?: string | string[];
+    set?: string;
   }>;
 };
 
@@ -25,6 +26,7 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const selectedProduct = getProductById(sp?.productId);
+  const set = sp?.set ?? "1";
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
   const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options));
 
@@ -54,6 +56,7 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
           className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
+          <input type="hidden" name="set" value={set} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
@@ -142,7 +145,7 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
                 </button>
 
                 <Link
-                  href="/trials/a1/trial1-1/product"
+                  href={`/trials/a1/trial1-1/product?set=${set}`}
                   className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   商品一覧へ戻る
