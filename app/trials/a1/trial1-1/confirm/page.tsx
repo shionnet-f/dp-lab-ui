@@ -15,6 +15,7 @@ type Props = {
     productId?: string;
     shipping?: string;
     options?: string | string[];
+    set?: string;
   }>;
 };
 
@@ -26,6 +27,7 @@ function normalizeOptions(options?: string | string[]) {
 export default async function ConfirmPageA1Trial1_1({ searchParams }: Props) {
   const sp = await searchParams;
   const selectedProduct = getProductById(sp?.productId);
+  const set = sp?.set ?? "1";
   const shippingInfo = getShippingById(sp?.shipping);
   const optionKeys = normalizeOptions(sp?.options);
   const selectedOptions = getOptionsByIds(optionKeys);
@@ -39,11 +41,13 @@ export default async function ConfirmPageA1Trial1_1({ searchParams }: Props) {
 
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
+  backParams.set("set", set);
   if (sp?.shipping) backParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
+  completeParams.set("set", set);
   if (sp?.shipping) completeParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 

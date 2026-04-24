@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial1_1Data, type Trial1_1Product } from "../data";
 
 function yen(n: number) {
@@ -39,6 +40,8 @@ function ProductDetailModal({
   viewerText,
 }: ProductDetailModalProps) {
   const dialogId = useId();
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set") ?? "1";
 
   return (
     <>
@@ -162,7 +165,7 @@ function ProductDetailModal({
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial1-1/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial1-1/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -210,7 +213,7 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
           />
 
           <Link
-            href={`/trials/a1/trial1-1/checkout?productId=${product.id}`}
+            href={`/trials/a1/trial1-1/checkout?productId=${product.id}&set=${set}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -222,6 +225,8 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
 }
 
 export default function ProductPageA1Trial1_1() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set") ?? "1";
   const products = trial1_1Data.products;
   const viewerTexts = products.map((product) => product.dpDisplay?.label ?? "");
   const showViewerFlags = products.map((product) => Boolean(product.dpDisplay));
