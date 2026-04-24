@@ -18,11 +18,7 @@ export type QuizOption = {
   label: string;
 };
 
-export type QuizUiType =
-  | "countdown"
-  | "price_interference"
-  | "hidden_info"
-  | "delayed_info";
+export type QuizUiType = "countdown" | "price_interference" | "hidden_info" | "delayed_info";
 
 export type QuizSlideData = SlideBase & {
   kind: "quiz";

@@ -3,78 +3,79 @@ type QuizDelayedInfoOptionsProps = {
   onSelect: (id: string) => void;
 };
 
-type DelayedInfoCard = {
+type Card = {
   id: string;
   productName: string;
-  listPriceText: string;
-  listSubText: string;
-  checkoutLine1: string;
-  checkoutLine2?: string;
-  confirmTotalText: string;
-  confirmNote?: string;
-  isDelayed: boolean;
+  productPrice: string;
+  summaryOpen: boolean;
+  summaryRows: Array<{ label: string; value: string }>;
 };
 
-const cards: DelayedInfoCard[] = [
+const cards: Card[] = [
   {
     id: "A",
     productName: "天然水 500ml × 24本",
-    listPriceText: "¥3,680",
-    listSubText: "送料込み価格を表示",
-    checkoutLine1: "通常配送：無料",
-    checkoutLine2: "商品合計：¥3,680",
-    confirmTotalText: "合計 ¥3,680",
-    confirmNote: "価格情報は早い段階で確認できる",
-    isDelayed: false,
+    productPrice: "¥1,980",
+    summaryOpen: true,
+    summaryRows: [
+      { label: "商品価格", value: "¥1,980" },
+      { label: "送料", value: "¥0" },
+      { label: "合計", value: "¥1,980" },
+    ],
   },
   {
     id: "B",
     productName: "天然水 500ml × 24本",
-    listPriceText: "¥2,980 + 送料",
-    listSubText: "商品一覧で送料の存在を表示",
-    checkoutLine1: "通常配送：¥700",
-    checkoutLine2: "商品合計：¥2,980",
-    confirmTotalText: "合計 ¥3,680",
-    confirmNote: "追加コストの存在が途中で分かる",
-    isDelayed: false,
+    productPrice: "¥1,980",
+    summaryOpen: true,
+    summaryRows: [
+      { label: "商品価格", value: "¥1,980" },
+      { label: "送料", value: "¥0" },
+      { label: "合計", value: "¥1,980" },
+    ],
   },
   {
     id: "C",
     productName: "天然水 500ml × 24本",
-    listPriceText: "¥2,980",
-    listSubText: "商品一覧では本体価格のみ表示",
-    checkoutLine1: "通常配送：¥700",
-    checkoutLine2: "商品合計：¥2,980",
-    confirmTotalText: "合計 ¥3,680",
-    confirmNote: "送料がここで初めて具体表示される",
-    isDelayed: true,
+    productPrice: "¥1,980",
+    summaryOpen: false,
+    summaryRows: [
+      { label: "商品価格", value: "¥1,980" },
+      { label: "送料", value: "¥500" },
+      { label: "合計", value: "¥2,480" },
+    ],
   },
 ];
 
-function MiniStage({
-  title,
-  lines,
-  emphasize,
-}: {
-  title: string;
-  lines: string[];
-  emphasize?: boolean;
-}) {
+function SummaryBox({ card }: { card: Card }) {
+  if (!card.summaryOpen) {
+    return (
+      <div className="rounded-md border border-gray-200 bg-white p-2">
+        <div className="flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-700">
+          <span>注文内容の詳細を見る</span>
+          <span>＋</span>
+        </div>
+        <div className="mt-2 rounded-md bg-gray-50 px-3 py-2 text-[11px] leading-5 text-gray-500">
+          送料や追加料金はこの中に表示されます。
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-lg border border-gray-200 bg-gray-50 p-2.5">
-      <p className="mb-2 text-[11px] font-semibold tracking-wide text-gray-500">{title}</p>
-      <div className="rounded-md border border-gray-200 bg-white p-2.5">
-        {lines.map((line, index) => (
-          <p
-            key={`${title}-${index}`}
-            className={[
-              index === lines.length - 1 ? "mt-1.5" : "",
-              index === lines.length - 1 ? "text-sm font-semibold" : "text-[11px] leading-4",
-              emphasize && index === 0 ? "text-rose-600" : "text-gray-700",
-            ].join(" ")}
-          >
-            {line}
-          </p>
+    <div className="rounded-md border border-gray-200 bg-white p-2">
+      <div className="mb-2 flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-700">
+        <span>注文内容の詳細</span>
+        <span>－</span>
+      </div>
+      <div className="space-y-1 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs leading-5 text-gray-700">
+        {card.summaryRows.map((row) => (
+          <div key={row.label} className="flex items-center justify-between gap-3">
+            <span>{row.label}</span>
+            <span className={row.label === "合計" ? "font-semibold text-gray-900" : ""}>
+              {row.value}
+            </span>
+          </div>
         ))}
       </div>
     </div>
@@ -116,34 +117,25 @@ export default function QuizDelayedInfoOptions({
 
             <article className="rounded-xl border border-gray-200 bg-white p-3 pt-8">
               <div className="grid gap-3">
-                <div className="rounded-lg border border-gray-200 bg-white p-2.5">
-                  <p className="mb-2 text-[11px] font-semibold tracking-wide text-gray-500">商品一覧</p>
-                  <div className="flex h-14 items-center justify-between rounded-md bg-gray-50 px-3">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{card.productName}</p>
-                      <p className="mt-0.5 text-[11px] text-gray-600">{card.listSubText}</p>
-                    </div>
-                    <p className="text-sm font-semibold text-gray-900">{card.listPriceText}</p>
-                  </div>
+                <div className="rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-600">
+                  checkout
                 </div>
 
-                <MiniStage
-                  title="checkout"
-                  lines={[card.checkoutLine1, card.checkoutLine2 ?? ""]}
-                  emphasize={card.isDelayed}
-                />
+                <div className="min-h-[40px]">
+                  <h2 className="line-clamp-2 text-sm font-semibold leading-5 text-gray-900">
+                    {card.productName}
+                  </h2>
+                  <p className="mt-1 text-sm font-medium text-gray-800">{card.productPrice}</p>
+                </div>
 
-                <MiniStage
-                  title="confirm"
-                  lines={card.confirmNote ? [card.confirmNote, card.confirmTotalText] : [card.confirmTotalText]}
-                />
+                <SummaryBox card={card} />
 
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex h-9 items-center justify-center rounded-md border border-gray-300 text-sm text-gray-700">
                     戻る
                   </div>
                   <div className="flex h-9 items-center justify-center rounded-md bg-black text-sm font-medium text-white">
-                    注文を確定
+                    購入へ
                   </div>
                 </div>
               </div>

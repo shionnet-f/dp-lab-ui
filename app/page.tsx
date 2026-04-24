@@ -5,7 +5,6 @@ export default function HomePage() {
     <main className="min-h-screen bg-white px-6 py-10">
       <div className="mx-auto flex max-w-3xl flex-col gap-8">
         <header className="space-y-3">
-          <h1 className="text-3xl font-bold text-gray-900">DP-LAB 実験フロー</h1>
           <p className="text-base leading-7 text-gray-600">
             練習課題または実験課題を選択してください。
           </p>
