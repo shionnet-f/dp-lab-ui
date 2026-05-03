@@ -1,8 +1,16 @@
-
 import Link from "next/link";
-import { trial9Data } from "../data";
+import trial9Data from "../data";
 
-export default function TrialStartPageA2Trial9() {
+type Props = {
+  searchParams?: Promise<{
+    set?: string;
+  }>;
+};
+
+export default async function TrialStartPageA2Trial9({ searchParams }: Props) {
+  const sp = await searchParams;
+  const set = sp?.set ?? "1";
+
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -20,7 +28,7 @@ export default function TrialStartPageA2Trial9() {
         </div>
 
         <Link
-          href="/trials/a2/trial9/product"
+          href={`/trials/a2/trial9/product?set=${set}`}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           試行を開始する

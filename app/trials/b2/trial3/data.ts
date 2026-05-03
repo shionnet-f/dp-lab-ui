@@ -25,7 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial3Data = {
+export type Trial3Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial3Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial3Data: Trial3Data = {
   purchaseConditions: {
     budgetYen: 3000,
     quantityCondition: "アルファ化米が10食以上であること",

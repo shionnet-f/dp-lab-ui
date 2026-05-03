@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial4Data, type Trial4Product } from "../data";
 
 function yen(n: number) {
@@ -31,12 +32,14 @@ type ProductDetailModalProps = {
   product: Trial4Product;
   showStock: boolean;
   stockText?: string;
+  set: string;
 };
 
 function ProductDetailModal({
   product,
   showStock,
   stockText,
+  set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
 
@@ -162,7 +165,7 @@ function ProductDetailModal({
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial4/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial4/checkout?productId=${product.id}&set=${encodeURIComponent(set)}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -181,9 +184,10 @@ type ProductCardProps = {
   product: Trial4Product;
   showStock: boolean;
   stockText?: string;
+  set: string;
 };
 
-function ProductCard({ product, showStock, stockText }: ProductCardProps) {
+function ProductCard({ product, showStock, stockText, set }: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -207,10 +211,11 @@ function ProductCard({ product, showStock, stockText }: ProductCardProps) {
             product={product}
             showStock={showStock}
             stockText={stockText}
+            set={set}
           />
 
           <Link
-            href={`/trials/a1/trial4/checkout?productId=${product.id}`}
+            href={`/trials/a1/trial4/checkout?productId=${product.id}&set=${encodeURIComponent(set)}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -222,6 +227,20 @@ function ProductCard({ product, showStock, stockText }: ProductCardProps) {
 }
 
 export default function ProductPageA1Trial4() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
+        <div className="rounded-xl border border-red-200 bg-white p-8 text-center shadow-sm">
+          <h1 className="text-lg font-bold text-red-700">URL情報が不足しています</h1>
+          <p className="mt-3 text-sm text-gray-600">set パラメータが見つかりません。</p>
+        </div>
+      </main>
+    );
+  }
+
   const products = trial4Data.products;
   const stockTexts = products.map((product) => product.dpDisplay?.label ?? "");
   const showStockFlags = products.map((product) => Boolean(product.dpDisplay));
@@ -247,6 +266,7 @@ export default function ProductPageA1Trial4() {
               product={product}
               showStock={showStockFlags[index]}
               stockText={stockTexts[index]}
+              set={set}
             />
           ))}
         </section>

@@ -22,7 +22,17 @@ export type AddonOption = {
   priceYen: number;
   shortDescription: string;
 };
-export const trial1_4Data = {
+export type Trial1_4Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial14Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+export const trial1_4Data: Trial1_4Data = {
   purchaseConditions: {
     budgetYen: 800,
     quantityCondition: "60日分以上であること",
@@ -77,16 +87,16 @@ export const trial1_4Data = {
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
       dpDisplay: null,
     },
-  ] satisfies Trial14Product[],
+  ],
   shippingMethods: [
     { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
     { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
     { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
     { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
     { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {

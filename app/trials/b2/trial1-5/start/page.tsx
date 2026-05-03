@@ -1,7 +1,15 @@
 import Link from "next/link";
 import trial1_5Data from "../data";
 
-export default function B2trial1_5StartPage() {
+type Props = {
+  searchParams?: Promise<{
+    set?: string;
+  }>;
+};
+
+export default async function B2trial1_5StartPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const set = sp?.set ?? "1";
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -19,7 +27,7 @@ export default function B2trial1_5StartPage() {
         </div>
 
         <Link
-          href="/trials/b2/trial1-5/product"
+          href={`/trials/b2/trial1-5/product?set=${set}`}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           試行を開始する

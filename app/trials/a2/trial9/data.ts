@@ -1,4 +1,3 @@
-
 export type Trial9Product = {
   id: string;
   role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
@@ -177,3 +176,5 @@ export function getShippingById(shippingId?: string) {
 export function getOptionsByIds(optionIds: string[]) {
   return trial9Data.options.filter((option) => optionIds.includes(option.id));
 }
+
+export default trial9Data;

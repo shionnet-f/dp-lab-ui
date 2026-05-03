@@ -178,3 +178,5 @@ export function getShippingById(shippingId?: string) {
 export function getOptionsByIds(optionIds: string[]) {
   return trial7Data.options.filter((option) => optionIds.includes(option.id));
 }
+
+export default trial7Data;

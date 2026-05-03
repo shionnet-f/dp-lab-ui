@@ -29,7 +29,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial7Data = {
+export type Trial7Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial7Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial7Data: Trial7Data = {
   purchaseConditions: {
     budgetYen: 3500,
     quantityCondition: "5号鉢であること",
@@ -120,16 +131,16 @@ export const trial7Data = {
         awardLabel: "ギフト特集 スタッフ推薦",
       },
     },
-  ] satisfies Trial7Product[],
+  ],
   shippingMethods: [
     { id: "standard", name: "通常配送", priceYen: 500, shortDescription: "3〜5日でお届け" },
     { id: "express", name: "お急ぎ便", priceYen: 800, shortDescription: "最短で翌日にお届け" },
     { id: "scheduled", name: "日時指定便", priceYen: 700, shortDescription: "受け取り日時を指定できます" },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
     { id: "message", name: "メッセージカード", priceYen: 200, shortDescription: "メッセージカードを追加します" },
     { id: "giftwrap", name: "ギフト包装", priceYen: 300, shortDescription: "プレゼント用に包装します" },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {

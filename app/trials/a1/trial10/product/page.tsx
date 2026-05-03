@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial10Data, type Trial10Product } from "../data";
 
 function yen(n: number) {
@@ -69,9 +70,14 @@ function DiscountInfo({ show }: DiscountInfoProps) {
 type ProductDetailModalProps = {
   product: Trial10Product;
   showDiscount: boolean;
+  set: string;
 };
 
-function ProductDetailModal({ product, showDiscount }: ProductDetailModalProps) {
+function ProductDetailModal({
+  product,
+  showDiscount,
+  set,
+}: ProductDetailModalProps) {
   const dialogId = useId();
   const dp = product.dpDisplay;
 
@@ -179,7 +185,7 @@ function ProductDetailModal({ product, showDiscount }: ProductDetailModalProps) 
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial10/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial10/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -197,9 +203,10 @@ function ProductDetailModal({ product, showDiscount }: ProductDetailModalProps) 
 type ProductCardProps = {
   product: Trial10Product;
   showDiscount: boolean;
+  set: string;
 };
 
-function ProductCard({ product, showDiscount }: ProductCardProps) {
+function ProductCard({ product, showDiscount, set }: ProductCardProps) {
   const dp = product.dpDisplay;
 
   return (
@@ -227,10 +234,14 @@ function ProductCard({ product, showDiscount }: ProductCardProps) {
         </div>
 
         <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal product={product} showDiscount={showDiscount} />
+          <ProductDetailModal
+            product={product}
+            showDiscount={showDiscount}
+            set={set}
+          />
 
           <Link
-            href={`/trials/a1/trial10/checkout?productId=${product.id}`}
+            href={`/trials/a1/trial10/checkout?productId=${product.id}&set=${set}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
@@ -243,6 +254,18 @@ function ProductCard({ product, showDiscount }: ProductCardProps) {
 
 export default function ProductPageA1Trial10() {
   const products = trial10Data.products;
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
@@ -264,6 +287,7 @@ export default function ProductPageA1Trial10() {
               key={product.id}
               product={product}
               showDiscount={Boolean(product.dpDisplay?.isDiscountTarget)}
+              set={set}
             />
           ))}
         </section>

@@ -8,7 +8,7 @@ export type Trial6Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: { kind: "countdown"; initialSeconds: number } | null;
 };
 
 export type ShippingMethod = {
@@ -172,3 +172,5 @@ export function getShippingById(shippingId?: string) {
 export function getOptionsByIds(optionIds: string[]) {
   return trial6Data.options.filter((option) => optionIds.includes(option.id));
 }
+
+export default trial6Data;

@@ -1,6 +1,11 @@
 import Link from "next/link";
 
-export default function TrialCompletePageA1Trial8() {
+type Props = {
+  searchParams?: { set?: string };
+};
+
+export default function TrialCompletePageA1Trial8({ searchParams }: Props) {
+  const set = searchParams?.set ?? "1";
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -11,7 +16,7 @@ export default function TrialCompletePageA1Trial8() {
         </p>
 
         <Link
-          href="/trials/a1/trial9/start"
+          href={`/trials/a1/trial9/start?set=${set}`}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           次へ進む

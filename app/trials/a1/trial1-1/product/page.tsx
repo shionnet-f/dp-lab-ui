@@ -32,16 +32,16 @@ type ProductDetailModalProps = {
   product: Trial1_1Product;
   showViewer: boolean;
   viewerText?: string;
+  set: string;
 };
 
 function ProductDetailModal({
   product,
   showViewer,
   viewerText,
+  set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
-  const searchParams = useSearchParams();
-  const set = searchParams.get("set") ?? "1";
 
   return (
     <>
@@ -184,9 +184,15 @@ type ProductCardProps = {
   product: Trial1_1Product;
   showViewer: boolean;
   viewerText?: string;
+  set: string;
 };
 
-function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
+function ProductCard({
+  product,
+  showViewer,
+  viewerText,
+  set,
+}: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -210,10 +216,11 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
             product={product}
             showViewer={showViewer}
             viewerText={viewerText}
+            set={set}
           />
 
           <Link
-            href={`/trials/a1/trial1-1/checkout?productId=${product.id}&set=${set}`}
+            href={`/trials/a1/trial1-1/checkout?set=${set}&productId=${product.id}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -226,7 +233,18 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
 
 export default function ProductPageA1Trial1_1() {
   const searchParams = useSearchParams();
-  const set = searchParams.get("set") ?? "1";
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
   const products = trial1_1Data.products;
   const viewerTexts = products.map((product) => product.dpDisplay?.label ?? "");
   const showViewerFlags = products.map((product) => Boolean(product.dpDisplay));
@@ -252,6 +270,7 @@ export default function ProductPageA1Trial1_1() {
               product={product}
               showViewer={showViewerFlags[index]}
               viewerText={viewerTexts[index]}
+              set={set}
             />
           ))}
         </section>

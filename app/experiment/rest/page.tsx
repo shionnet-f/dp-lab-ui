@@ -1,152 +1,151 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { getNextGatePathAfterRest } from "../_lib/flow";
-import { loadExperimentSetup } from "../_lib/storage";
-import type { ExperimentSetup, RestAfter } from "../_lib/types";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { loadExperimentPlan } from "../_lib/storage";
+import type { ExperimentPlan, RestNext } from "../_lib/types";
 
-const DURATION_SECONDS = 180;
+const REST_SECONDS = 180;
 
-function isRestAfter(value: string | null): value is RestAfter {
-    return value === "set1" || value === "education" || value === "set2";
+function isRestNext(value: string | null): value is RestNext {
+  return value === "education" || value === "set2" || value === "set3";
 }
 
-function getRestTitle(after: RestAfter) {
-    switch (after) {
-        case "set1":
-            return "実験課題1後の休憩";
-        case "education":
-            return "教育後の休憩";
-        case "set2":
-            return "実験課題2後の休憩";
-        default:
-            return "休憩";
-    }
+function getRestContent(next: RestNext, plan: ExperimentPlan) {
+  if (next === "education") {
+    return {
+      title: "休憩時間です",
+      description: "実験課題1が終了しました。休憩後、教育フェーズの開始画面へ進みます。",
+      nextPath: "/experiment/gate?step=education",
+      button: "教育フェーズへ進む",
+      badge: `次：教育バージョン${plan.educationVersion}`,
+    };
+  }
+
+  if (next === "set2") {
+    return {
+      title: "休憩時間です",
+      description: "教育フェーズが終了しました。休憩後、実験課題2の開始画面へ進みます。",
+      nextPath: "/experiment/gate?step=set2",
+      button: "実験課題2へ進む",
+      badge: `次：${plan.sets["2"].label} / ${plan.sets["2"].phase}`,
+    };
+  }
+
+  return {
+    title: "休憩時間です",
+    description: "実験課題2が終了しました。休憩後、実験課題3の開始画面へ進みます。",
+    nextPath: "/experiment/gate?step=set3",
+    button: "実験課題3へ進む",
+    badge: `次：${plan.sets["3"].label} / ${plan.sets["3"].phase}`,
+  };
 }
 
-function formatTime(totalSeconds: number) {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const restSeconds = seconds % 60;
+  return `${minutes}:${restSeconds.toString().padStart(2, "0")}`;
 }
 
 export default function ExperimentRestPage() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
+  const [plan, setPlan] = useState<ExperimentPlan | null | undefined>(undefined);
+  const [remainingSeconds, setRemainingSeconds] = useState(REST_SECONDS);
 
-    const [setup, setSetup] = useState<ExperimentSetup | null | undefined>(undefined);
-    const [remainingSeconds, setRemainingSeconds] = useState(DURATION_SECONDS);
+  const nextParam = searchParams.get("next");
+  const next = isRestNext(nextParam) ? nextParam : null;
 
-    const afterParam = searchParams.get("after");
-    const after = isRestAfter(afterParam) ? afterParam : null;
+  useEffect(() => {
+    setPlan(loadExperimentPlan());
+  }, []);
 
-    useEffect(() => {
-        const data = loadExperimentSetup();
-        setSetup(data);
-    }, []);
+  useEffect(() => {
+    if (remainingSeconds <= 0) return;
+    const timer = window.setTimeout(() => {
+      setRemainingSeconds((prev) => prev - 1);
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [remainingSeconds]);
 
-    const nextPath = useMemo(() => {
-        if (!after) return "/";
-        return getNextGatePathAfterRest(after);
-    }, [after]);
+  const content = useMemo(() => {
+    if (!plan || !next) return null;
+    return getRestContent(next, plan);
+  }, [next, plan]);
 
-    useEffect(() => {
-        if (!setup || !after) return;
-
-        if (remainingSeconds <= 0) {
-            router.push(nextPath);
-            return;
-        }
-
-        const timer = window.setTimeout(() => {
-            setRemainingSeconds((prev) => prev - 1);
-        }, 1000);
-
-        return () => {
-            window.clearTimeout(timer);
-        };
-    }, [after, nextPath, remainingSeconds, router, setup]);
-
-    if (setup === undefined) {
-        return (
-            <main className="min-h-screen bg-white px-6 py-10">
-                <div className="mx-auto max-w-3xl">
-                    <p className="text-base text-gray-700">読み込み中です...</p>
-                </div>
-            </main>
-        );
-    }
-
-    if (setup === null) {
-        return (
-            <main className="min-h-screen bg-white px-6 py-10">
-                <div className="mx-auto flex max-w-3xl flex-col gap-6">
-                    <header className="space-y-3">
-                        <h1 className="text-3xl font-bold text-gray-900">休憩</h1>
-                        <p className="text-base leading-7 text-gray-600">
-                            設定情報が見つかりませんでした。先に実験課題の設定を行ってください。
-                        </p>
-                    </header>
-
-                    <div>
-                        <Link
-                            href="/experiment/setup"
-                            className="inline-flex rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
-                        >
-                            設定ページへ戻る
-                        </Link>
-                    </div>
-                </div>
-            </main>
-        );
-    }
-
-    if (!after) {
-        return (
-            <main className="min-h-screen bg-white px-6 py-10">
-                <div className="mx-auto flex max-w-3xl flex-col gap-6">
-                    <header className="space-y-3">
-                        <h1 className="text-3xl font-bold text-gray-900">休憩</h1>
-                        <p className="text-base leading-7 text-gray-600">
-                            休憩区間の指定が不正です。前のページからやり直してください。
-                        </p>
-                    </header>
-
-                    <div>
-                        <Link
-                            href="/experiment/setup"
-                            className="inline-flex rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
-                        >
-                            設定ページへ戻る
-                        </Link>
-                    </div>
-                </div>
-            </main>
-        );
-    }
-
+  if (plan === undefined) {
     return (
-        <main className="flex min-h-screen items-center justify-center bg-white px-6 py-10">
-            <div className="flex w-full max-w-3xl flex-col items-center gap-8 text-center">
-                <div className="space-y-3">
-                    <h1 className="text-3xl font-bold text-gray-900">{getRestTitle(after)}</h1>
-                    <p className="text-base leading-7 text-gray-600">
-                        休憩してください。時間が来ると次の開始ページへ進みます。
-                    </p>
-                </div>
-
-                <div className="rounded-2xl border border-gray-200 bg-gray-50 px-10 py-8 shadow-sm">
-                    <p className="text-5xl font-bold tracking-wider text-gray-900">
-                        {formatTime(remainingSeconds)}
-                    </p>
-                </div>
-
-                <p className="text-sm text-gray-500">
-                    カウント終了後、次の gate へ自動で移動します。
-                </p>
-            </div>
-        </main>
+      <main className="flex min-h-screen items-center justify-center bg-slate-100 px-8 text-slate-900">
+        <div className="rounded-3xl border border-slate-200 bg-white px-8 py-7 shadow-sm">
+          <p className="text-base font-semibold text-slate-700">読み込み中です...</p>
+        </div>
+      </main>
     );
+  }
+
+  if (plan === null || !next || !content) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-100 px-8 text-slate-900">
+        <section className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <p className="text-sm font-semibold tracking-wide text-red-500">Rest Error</p>
+          <h1 className="mt-2 text-2xl font-bold text-slate-950">休憩ページを開始できません</h1>
+          <p className="mt-3 text-base leading-7 text-slate-600">
+            URLの next が不正です。setupからやり直してください。
+          </p>
+          <Link href="/experiment/setup" className="mt-7 inline-flex rounded-2xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white">
+            setupへ戻る
+          </Link>
+        </section>
+      </main>
+    );
+  }
+
+  const canContinue = remainingSeconds <= 0;
+
+  return (
+    <main className="min-h-screen bg-slate-100 px-8 py-10 text-slate-900">
+      <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-4xl items-center justify-center">
+        <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
+          <div className="mx-auto inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700">
+            Rest
+          </div>
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-950">
+            {content.title}
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            {content.description}
+          </p>
+
+          <div className="mx-auto mt-8 max-w-md rounded-3xl border border-slate-200 bg-slate-50 p-7">
+            <p className="text-sm font-bold tracking-wide text-slate-500">残り時間</p>
+            <div className="mt-2 text-6xl font-bold tabular-nums text-slate-950">
+              {formatTime(remainingSeconds)}
+            </div>
+            <p className="mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-bold text-slate-700">
+              {content.badge}
+            </p>
+          </div>
+
+          <div className="mt-9 flex justify-center">
+            {canContinue ? (
+              <Link
+                href={content.nextPath}
+                className="rounded-2xl bg-slate-950 px-8 py-4 text-base font-bold text-white shadow-sm transition hover:bg-slate-800"
+              >
+                {content.button}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="rounded-2xl bg-slate-300 px-8 py-4 text-base font-bold text-white"
+              >
+                休憩中
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }

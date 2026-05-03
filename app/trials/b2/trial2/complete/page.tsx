@@ -1,6 +1,15 @@
 import Link from "next/link";
 
-export default function CompletePageB2Trial2() {
+type Props = {
+  searchParams?: Promise<{
+    set?: string;
+  }>;
+};
+
+export default async function CompletePageB2Trial2({ searchParams }: Props) {
+  const sp = await searchParams;
+  const set = sp?.set ?? "1";
+
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -9,7 +18,7 @@ export default function CompletePageB2Trial2() {
         <p className="text-sm text-gray-600">注文が完了しました。次の試行へ進んでください。</p>
 
         <Link
-          href="/trials/b2/trial3/start"
+          href={`/trials/b2/trial3/start?set=${set}`}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           次へ進む

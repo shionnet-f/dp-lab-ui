@@ -26,7 +26,20 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial5Data = {
+export type Trial5Data = {
+  trialId: string;
+  dpType: string;
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial5Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial5Data: Trial5Data = {
   trialId: "b1-trial5",
   dpType: "商品詳細にすべての情報をまとめて入れる",
   purchaseConditions: {

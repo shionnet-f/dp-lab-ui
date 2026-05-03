@@ -1,8 +1,8 @@
-
 "use client";
 
 import Link from "next/link";
 import { useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial11Data, type Trial11Product } from "../data";
 
 function yen(n: number) {
@@ -21,11 +21,13 @@ function FreeShippingBadge({ visible }: { visible: boolean }) {
 type ProductDetailModalProps = {
   product: Trial11Product;
   showFreeShipping: boolean;
+  set: string;
 };
 
 function ProductDetailModal({
   product,
   showFreeShipping,
+  set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
 
@@ -151,7 +153,7 @@ function ProductDetailModal({
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial11/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial11/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -169,9 +171,10 @@ function ProductDetailModal({
 type ProductCardProps = {
   product: Trial11Product;
   showFreeShipping: boolean;
+  set: string;
 };
 
-function ProductCard({ product, showFreeShipping }: ProductCardProps) {
+function ProductCard({ product, showFreeShipping, set }: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_78px_30px_40px] gap-4">
@@ -205,10 +208,11 @@ function ProductCard({ product, showFreeShipping }: ProductCardProps) {
           <ProductDetailModal
             product={product}
             showFreeShipping={showFreeShipping}
+            set={set}
           />
 
           <Link
-            href={`/trials/a1/trial11/checkout?productId=${product.id}`}
+            href={`/trials/a1/trial11/checkout?set=${set}&productId=${product.id}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
@@ -220,6 +224,19 @@ function ProductCard({ product, showFreeShipping }: ProductCardProps) {
 }
 
 export default function ProductPageA1Trial11() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
   const products = trial11Data.products;
   const showFlags = products.map((product) => Boolean(product.dpDisplay?.showFreeShipping));
 
@@ -243,6 +260,7 @@ export default function ProductPageA1Trial11() {
               key={product.id}
               product={product}
               showFreeShipping={showFlags[index]}
+              set={set}
             />
           ))}
         </section>
