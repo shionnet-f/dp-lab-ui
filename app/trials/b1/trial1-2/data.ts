@@ -25,7 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial1_2Data = {
+export type Trial1_2Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial1_2Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial1_2Data: Trial1_2Data = {
   "purchaseConditions": {
     "budgetYen": 1000,
     "quantityCondition": "600ml×4個以上であること",
@@ -151,15 +162,6 @@ export const trial1_2Data = {
       "shortDescription": "プレゼント用に包装します"
     }
   ]
-} satisfies {
-  purchaseConditions: {
-    budgetYen: number;
-    quantityCondition: string;
-    specificCondition: string;
-  };
-  products: Trial1_2Product[];
-  shippingMethods: ShippingMethod[];
-  options: AddonOption[];
 };
 
 export function getProductById(productId?: string) {

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useId } from "react";
 import { trial10Data, type Trial10Product } from "../data";
 
@@ -10,9 +11,10 @@ function yen(n: number) {
 
 type ProductDetailModalProps = {
   product: Trial10Product;
+  set: string;
 };
 
-function ProductDetailModal({ product }: ProductDetailModalProps) {
+function ProductDetailModal({ product, set }: ProductDetailModalProps) {
   const dialogId = useId();
 
   return (
@@ -112,7 +114,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/b1/trial10/checkout?productId=${product.id}`}
+                    href={`/trials/b1/trial10/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -127,7 +129,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product }: { product: Trial10Product }) {
+function ProductCard({ product, set }: { product: Trial10Product; set: string }) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -147,10 +149,10 @@ function ProductCard({ product }: { product: Trial10Product }) {
         </div>
 
         <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal product={product} />
+          <ProductDetailModal product={product} set={set} />
 
           <Link
-            href={`/trials/b1/trial10/checkout?productId=${product.id}`}
+            href={`/trials/b1/trial10/checkout?productId=${product.id}&set=${set}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -162,6 +164,9 @@ function ProductCard({ product }: { product: Trial10Product }) {
 }
 
 export default function ProductPageB1Trial10() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set") ?? "1";
+
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -178,7 +183,7 @@ export default function ProductPageB1Trial10() {
 
         <section className="grid flex-1 grid-cols-2 items-start gap-10">
           {trial10Data.products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} set={set} />
           ))}
         </section>
       </div>

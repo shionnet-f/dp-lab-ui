@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import {
   getOptionsByIds,
   getProductById,
@@ -10,24 +14,28 @@ function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type Props = {
-  searchParams?: Promise<{
-    productId?: string;
-    shipping?: string;
-    options?: string | string[];
-  }>;
-};
+export default function ConfirmPageB1Trial10() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [error, setError] = useState(false);
 
-function normalizeOptions(options?: string | string[]) {
-  if (!options) return [];
-  return Array.isArray(options) ? options : [options];
-}
+  const productId = searchParams.get("productId") ?? undefined;
+  const shipping = searchParams.get("shipping") ?? undefined;
+  const optionKeys = searchParams.getAll("options");
+  const set = searchParams.get("set");
 
-export default async function ConfirmPageB1Trial10({ searchParams }: Props) {
-  const sp = await searchParams;
-  const selectedProduct = getProductById(sp?.productId);
-  const shippingInfo = getShippingById(sp?.shipping);
-  const optionKeys = normalizeOptions(sp?.options);
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
+  const selectedProduct = getProductById(productId);
+  const shippingInfo = getShippingById(shipping);
   const selectedOptions = getOptionsByIds(optionKeys);
 
   const shippingPrice = shippingInfo?.priceYen ?? 0;
@@ -39,13 +47,29 @@ export default async function ConfirmPageB1Trial10({ searchParams }: Props) {
 
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
-  if (sp?.shipping) backParams.set("shipping", sp.shipping);
+  backParams.set("set", set);
+  if (shipping) backParams.set("shipping", shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
-  if (sp?.shipping) completeParams.set("shipping", sp.shipping);
+  completeParams.set("set", set);
+  if (shipping) completeParams.set("shipping", shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
+
+  const handleSubmit = () => {
+    if (!shippingInfo) {
+      setError(true);
+
+      window.setTimeout(() => {
+        setError(false);
+      }, 2500);
+
+      return;
+    }
+
+    router.push(`/trials/b1/trial10/complete?${completeParams.toString()}`);
+  };
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
@@ -60,6 +84,12 @@ export default async function ConfirmPageB1Trial10({ searchParams }: Props) {
         <header className="mb-6 shrink-0">
           <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
         </header>
+
+        {error && (
+          <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
+            配送方法を選択してください
+          </div>
+        )}
 
         <div className="grid flex-1 grid-rows-[520px_120px] gap-6">
           <section className="grid h-full grid-cols-[1.5fr_1fr] gap-6">
@@ -144,12 +174,13 @@ export default async function ConfirmPageB1Trial10({ searchParams }: Props) {
               </div>
 
               <div className="grid gap-3 pt-6">
-                <Link
-                  href={`/trials/b1/trial10/complete?${completeParams.toString()}`}
-                  className="block w-full rounded-md bg-black px-4 py-3 text-center text-sm font-medium text-white"
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="w-full rounded-md bg-black px-4 py-3 text-sm font-medium text-white"
                 >
                   購入を確定する
-                </Link>
+                </button>
 
                 <Link
                   href={`/trials/b1/trial10/checkout?${backParams.toString()}`}

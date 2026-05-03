@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -14,6 +13,7 @@ type Props = {
     productId?: string;
     shipping?: string;
     options?: string | string[];
+    set?: string;
   }>;
 };
 
@@ -24,6 +24,18 @@ function normalizeOptions(options?: string | string[]) {
 
 export default function CheckoutPageA2Trial11({ searchParams }: Props) {
   const sp = use(searchParams);
+
+  const set = sp?.set;
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
 
   const selectedProduct = getProductById(sp?.productId);
   const [shipping, setShipping] = useState<string>(sp?.shipping ?? "");
@@ -55,6 +67,7 @@ export default function CheckoutPageA2Trial11({ searchParams }: Props) {
           className="grid flex-1 grid-rows-[172px_minmax(0,300px)_auto] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
+          <input type="hidden" name="set" value={set} />
           <input type="hidden" name="shipping" value={shipping} />
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
@@ -135,7 +148,7 @@ export default function CheckoutPageA2Trial11({ searchParams }: Props) {
           <section className="px-2 py-4 shrink-0">
             <div className="grid h-full grid-cols-2 gap-3">
               <Link
-                href="/trials/a2/trial11/product"
+                href={`/trials/a2/trial11/product?set=${set}`}
                 className="flex h-11 items-center justify-center rounded-md border border-gray-300 bg-white px-5 text-sm font-medium text-gray-700 shadow-sm"
               >
                 商品一覧へ戻る

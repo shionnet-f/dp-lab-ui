@@ -25,7 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial2Data = {
+export type Trial2Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial2Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial2Data: Trial2Data = {
   purchaseConditions: {
     budgetYen: 600,
     quantityCondition: "4ロール以上であること",

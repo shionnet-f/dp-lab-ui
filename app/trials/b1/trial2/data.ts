@@ -26,7 +26,20 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial2Data = {
+export type Trial2Data = {
+  trialId: string;
+  dpType: string;
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial2Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial2Data: Trial2Data = {
   trialId: "b1-trial2",
   dpType: "商品詳細 dialog の中でさらに詳細を隠す",
   purchaseConditions: {
@@ -127,7 +140,7 @@ export const trial2Data = {
         "地域によりお届け日が異なる場合があります",
       ],
     },
-  ] satisfies Trial2Product[],
+  ],
   shippingMethods: [
     {
       id: "standard",
@@ -147,7 +160,7 @@ export const trial2Data = {
       priceYen: 500,
       shortDescription: "希望日時にあわせてお届け",
     },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
     {
       id: "insurance",
@@ -161,7 +174,7 @@ export const trial2Data = {
       priceYen: 150,
       shortDescription: "輸送時に商品を保護する包装を追加します",
     },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {

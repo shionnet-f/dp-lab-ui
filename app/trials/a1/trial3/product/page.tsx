@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial3Data, type Trial3Product } from "../data";
 
 function yen(n: number) {
@@ -48,6 +49,7 @@ type ProductDetailModalProps = {
   showReview: boolean;
   rating?: number;
   reviewCount?: number;
+  set: string;
 };
 
 function ProductDetailModal({
@@ -55,6 +57,7 @@ function ProductDetailModal({
   showReview,
   rating,
   reviewCount,
+  set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
 
@@ -170,7 +173,7 @@ function ProductDetailModal({
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial3/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial3/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -190,9 +193,10 @@ type ProductCardProps = {
   showReview: boolean;
   rating?: number;
   reviewCount?: number;
+  set: string;
 };
 
-function ProductCard({ product, showReview, rating, reviewCount }: ProductCardProps) {
+function ProductCard({ product, showReview, rating, reviewCount, set }: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -217,10 +221,11 @@ function ProductCard({ product, showReview, rating, reviewCount }: ProductCardPr
             showReview={showReview}
             rating={rating}
             reviewCount={reviewCount}
+            set={set}
           />
 
           <Link
-            href={`/trials/a1/trial3/checkout?productId=${product.id}`}
+            href={`/trials/a1/trial3/checkout?productId=${product.id}&set=${set}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -232,10 +237,22 @@ function ProductCard({ product, showReview, rating, reviewCount }: ProductCardPr
 }
 
 export default function ProductPageA1Trial3() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
   const products = trial3Data.products;
   const reviewRatings = products.map((product) => product.dpDisplay?.rating ?? 0);
   const reviewCounts = products.map((product) => product.dpDisplay?.reviewCount ?? 0);
   const showReviewFlags = products.map((product) => Boolean(product.dpDisplay));
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
@@ -259,6 +276,7 @@ export default function ProductPageA1Trial3() {
               showReview={showReviewFlags[index]}
               rating={reviewRatings[index]}
               reviewCount={reviewCounts[index]}
+              set={set}
             />
           ))}
         </section>

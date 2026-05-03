@@ -13,6 +13,7 @@ type Props = {
     productId?: string;
     shipping?: string;
     options?: string | string[];
+    set?: string;
   }>;
 };
 
@@ -25,12 +26,25 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const selectedProduct = getProductById(sp?.productId);
+  const set = sp?.set;
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
-  const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options));
+  const [options, setOptions] = useState<string[]>(
+    normalizeOptions(sp?.options),
+  );
 
   function toggleOption(value: string) {
     setOptions((prev) =>
       prev.includes(value) ? prev.filter((o) => o !== value) : [...prev, value],
+    );
+  }
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
     );
   }
 
@@ -54,6 +68,7 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
           className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
+          <input type="hidden" name="set" value={set} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
@@ -61,7 +76,9 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
 
           <div className="space-y-10">
             <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">配送方法</h2>
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
+                配送方法
+              </h2>
 
               <div className="space-y-4 text-sm text-gray-700">
                 {trial1_5Data.shippingMethods.map((method) => (
@@ -76,9 +93,15 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
                       onChange={() => setShipping(method.id)}
                     />
                     <div>
-                      <div className="font-medium text-gray-900">{method.name}</div>
-                      <div className="text-gray-600">{method.shortDescription}</div>
-                      <div className="text-gray-700">¥{yen(method.priceYen)}</div>
+                      <div className="font-medium text-gray-900">
+                        {method.name}
+                      </div>
+                      <div className="text-gray-600">
+                        {method.shortDescription}
+                      </div>
+                      <div className="text-gray-700">
+                        ¥{yen(method.priceYen)}
+                      </div>
                     </div>
                   </label>
                 ))}
@@ -86,7 +109,9 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
             </article>
 
             <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">追加オプション</h2>
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
+                追加オプション
+              </h2>
 
               <div className="space-y-4 text-sm text-gray-700">
                 {trial1_5Data.options.map((option) => (
@@ -100,9 +125,15 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
                       onChange={() => toggleOption(option.id)}
                     />
                     <div>
-                      <div className="font-medium text-gray-900">{option.name}</div>
-                      <div className="text-gray-600">{option.shortDescription}</div>
-                      <div className="text-gray-700">+¥{yen(option.priceYen)}</div>
+                      <div className="font-medium text-gray-900">
+                        {option.name}
+                      </div>
+                      <div className="text-gray-600">
+                        {option.shortDescription}
+                      </div>
+                      <div className="text-gray-700">
+                        +¥{yen(option.priceYen)}
+                      </div>
                     </div>
                   </label>
                 ))}
@@ -111,7 +142,9 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
           </div>
 
           <div className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">ご注文商品</h2>
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
+              ご注文商品
+            </h2>
 
             <div className="space-y-4">
               <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
@@ -132,7 +165,6 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
             </div>
 
             <div className="mt-auto space-y-6 text-gray-900">
-
               <div className="space-y-3 pt-4">
                 <button
                   type="submit"
@@ -142,7 +174,7 @@ export default function CheckoutPageA1Trial1_5({ searchParams }: Props) {
                 </button>
 
                 <Link
-                  href="/trials/a1/trial1-5/product"
+                  href={`/trials/a1/trial1-5/product?set=${set}`}
                   className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   商品一覧へ戻る

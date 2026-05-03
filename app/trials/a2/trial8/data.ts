@@ -8,6 +8,7 @@ export type Trial8Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  dpDisplay?: { label: string } | null;
 };
 
 export type ShippingMethod = {
@@ -28,7 +29,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial8Data = {
+export type Trial8Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial8Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial8Data: Trial8Data = {
   purchaseConditions: {
     budgetYen: 2700,
     quantityCondition: "500ml×24本以上であること",
@@ -123,7 +135,7 @@ export const trial8Data = {
         "地域や天候により到着が前後する場合があります",
       ],
     },
-  ] satisfies Trial8Product[],
+  ],
   shippingMethods: [
     {
       id: "standard",
@@ -155,7 +167,7 @@ export const trial8Data = {
         highlight: true,
       },
     },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
     {
       id: "insurance",
@@ -169,7 +181,7 @@ export const trial8Data = {
       priceYen: 150,
       shortDescription: "簡易ギフト包装を追加します",
     },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {
@@ -183,3 +195,5 @@ export function getShippingById(shippingId?: string) {
 export function getOptionsByIds(optionIds: string[]) {
   return trial8Data.options.filter((option) => optionIds.includes(option.id));
 }
+
+export default trial8Data;

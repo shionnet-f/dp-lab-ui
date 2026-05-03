@@ -25,7 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial5Data = {
+export type Trial5Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial5Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial5Data: Trial5Data = {
   purchaseConditions: {
     budgetYen: 3200,
     quantityCondition: "200ml×30本以上であること",

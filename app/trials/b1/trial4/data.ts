@@ -25,9 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial4Data = {
-  trialId: "b1-trial4",
-  dpType: "dialogで料金詳細を1段深く隠す",
+export type Trial4Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial4Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial4Data: Trial4Data = {
   purchaseConditions: {
     budgetYen: 2000,
     quantityCondition: "A4サイズで10冊以上であること",
@@ -130,7 +139,7 @@ export const trial4Data = {
       ],
       dpDisplay: null,
     },
-  ] satisfies Trial4Product[],
+  ],
   shippingMethods: [
     {
       id: "standard",
@@ -150,7 +159,7 @@ export const trial4Data = {
       priceYen: 380,
       shortDescription: "受け取り日時を指定できます",
     },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
     {
       id: "cover",
@@ -164,7 +173,7 @@ export const trial4Data = {
       priceYen: 120,
       shortDescription: "ノート整理用の見出しインデックスを追加します",
     },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {

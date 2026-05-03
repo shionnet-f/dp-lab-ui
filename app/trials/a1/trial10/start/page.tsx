@@ -1,8 +1,16 @@
 import Link from "next/link";
 import { trial10Data } from "../data";
 
-export default function TrialStartPageA1Trial10() {
+type Props = {
+  searchParams?: Promise<{
+    set?: string;
+  }>;
+};
+
+export default async function TrialStartPageA1Trial10({ searchParams }: Props) {
   const { purchaseConditions } = trial10Data;
+  const sp = await searchParams;
+  const set = sp?.set ?? "1";
 
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
@@ -20,7 +28,7 @@ export default function TrialStartPageA1Trial10() {
         </div>
 
         <Link
-          href="/trials/a1/trial10/product"
+          href={`/trials/a1/trial10/product?set=${set}`}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           試行を開始する

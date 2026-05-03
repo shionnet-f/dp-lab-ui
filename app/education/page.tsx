@@ -9,26 +9,35 @@ import type { SlideData } from "./_data/types";
 
 /* === education patch: block renderer === */
 const renderBlock = (block, i) => {
-  if (block && typeof block === 'object') {
-    if (block.type === 'text') {
-      return <p key={i} className="text-block">{block.content}</p>;
+  if (block && typeof block === "object") {
+    if (block.type === "text") {
+      return (
+        <p key={i} className="text-block">
+          {block.content}
+        </p>
+      );
     }
-    if (block.type === 'list' && Array.isArray(block.items)) {
+    if (block.type === "list" && Array.isArray(block.items)) {
       return (
         <ul key={i} className="list-block">
-          {block.items.map((it, j) => <li key={j}>{it}</li>)}
+          {block.items.map((it, j) => (
+            <li key={j}>{it}</li>
+          ))}
         </ul>
       );
     }
   }
   // fallback for string lines
-  if (typeof block === 'string') {
-    if (block.trim() === '') return null;
-    return <p key={i} className="text-block">{block}</p>;
+  if (typeof block === "string") {
+    if (block.trim() === "") return null;
+    return (
+      <p key={i} className="text-block">
+        {block}
+      </p>
+    );
   }
   return null;
 };
-
 
 type Version = "A" | "B";
 

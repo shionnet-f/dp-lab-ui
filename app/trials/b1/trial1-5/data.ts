@@ -25,7 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial1_5Data = {
+export type Trial1_5Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial1_5Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial1_5Data: Trial1_5Data = {
   "purchaseConditions": {
     "budgetYen": 12000,
     "quantityCondition": "256GB以上であること",
@@ -151,15 +162,6 @@ export const trial1_5Data = {
       "shortDescription": "プレゼント用に包装します"
     }
   ]
-} satisfies {
-  purchaseConditions: {
-    budgetYen: number;
-    quantityCondition: string;
-    specificCondition: string;
-  };
-  products: Trial1_5Product[];
-  shippingMethods: ShippingMethod[];
-  options: AddonOption[];
 };
 
 export function getProductById(productId?: string) {

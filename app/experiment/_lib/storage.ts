@@ -1,22 +1,22 @@
-import type { ExperimentSetup } from "./types";
+import type { ExperimentPlan } from "./types";
 
-const STORAGE_KEY = "experimentSetup";
+const STORAGE_KEY = "experimentPlan";
 
-export function saveExperimentSetup(data: ExperimentSetup) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+export function saveExperimentPlan(plan: ExperimentPlan) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
 }
 
-export function loadExperimentSetup(): ExperimentSetup | null {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
+export function loadExperimentPlan(): ExperimentPlan | null {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return null;
 
-    try {
-        return JSON.parse(raw) as ExperimentSetup;
-    } catch {
-        return null;
-    }
+  try {
+    return JSON.parse(raw) as ExperimentPlan;
+  } catch {
+    return null;
+  }
 }
 
-export function clearExperimentSetup() {
-    localStorage.removeItem(STORAGE_KEY);
+export function clearExperimentPlan() {
+  localStorage.removeItem(STORAGE_KEY);
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useId } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial5Data, type Trial5Product } from "../data";
 
 function yen(n: number) {
@@ -81,7 +82,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product }: { product: Trial5Product }) {
+function ProductCard({ product, set }: { product: Trial5Product; set: string }) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -99,7 +100,7 @@ function ProductCard({ product }: { product: Trial5Product }) {
         <div className="grid h-10 grid-cols-2 gap-2">
           <ProductDetailModal product={product} />
           <Link
-            href={`/trials/b1/trial5/checkout?productId=${product.id}`}
+            href={`/trials/b1/trial5/checkout?set=${set}&productId=${product.id}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -111,6 +112,19 @@ function ProductCard({ product }: { product: Trial5Product }) {
 }
 
 export default function ProductPageB1Trial5() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -127,7 +141,7 @@ export default function ProductPageB1Trial5() {
 
         <section className="grid flex-1 grid-cols-2 items-start gap-10">
           {trial5Data.products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} set={set} />
           ))}
         </section>
       </div>

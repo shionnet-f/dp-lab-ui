@@ -18,6 +18,7 @@ type Props = {
 export default function CheckoutPageB1Trial8({ searchParams }: Props) {
   const sp = use(searchParams);
   const selectedProduct = getProductById(sp?.productId);
+  const set = sp?.set;
 
   const [shipping, setShipping] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
@@ -36,6 +37,16 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
   function toggleOption(value: string) {
     setOptions((prev) =>
       prev.includes(value) ? prev.filter((o) => o !== value) : [...prev, value],
+    );
+  }
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
     );
   }
 
@@ -59,6 +70,7 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
           className="grid flex-1 grid-cols-[1.6fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
+          <input type="hidden" name="set" value={set} />
 
           <div className="grid grid-rows-[1fr_1fr] gap-6">
             <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -165,7 +177,7 @@ export default function CheckoutPageB1Trial8({ searchParams }: Props) {
                 </button>
 
                 <Link
-                  href="/trials/b1/trial8/product"
+                  href={`/trials/b1/trial8/product?set=${set}`}
                   className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   商品一覧へ戻る

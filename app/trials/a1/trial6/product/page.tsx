@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { trial6Data, type Trial6Product } from "../data";
 
 function yen(n: number) {
@@ -41,12 +42,14 @@ type ProductDetailModalProps = {
   product: Trial6Product;
   showCountdown: boolean;
   secondsLeft: number;
+  set: string;
 };
 
 function ProductDetailModal({
   product,
   showCountdown,
   secondsLeft,
+  set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
 
@@ -172,7 +175,7 @@ function ProductDetailModal({
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/a1/trial6/checkout?productId=${product.id}`}
+                    href={`/trials/a1/trial6/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -191,12 +194,14 @@ type ProductCardProps = {
   product: Trial6Product;
   showCountdown: boolean;
   secondsLeft: number;
+  set: string;
 };
 
 function ProductCard({
   product,
   showCountdown,
   secondsLeft,
+  set,
 }: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -221,10 +226,11 @@ function ProductCard({
             product={product}
             showCountdown={showCountdown}
             secondsLeft={secondsLeft}
+            set={set}
           />
 
           <Link
-            href={`/trials/a1/trial6/checkout?productId=${product.id}`}
+            href={`/trials/a1/trial6/checkout?productId=${product.id}&set=${set}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
           >
             購入へ
@@ -236,6 +242,9 @@ function ProductCard({
 }
 
 export default function ProductPageA1Trial6() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
   const initialSeconds = 9 * 60 + 59;
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
   const products = trial6Data.products;
@@ -247,6 +256,16 @@ export default function ProductPageA1Trial6() {
 
     return () => window.clearInterval(timer);
   }, []);
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
@@ -269,6 +288,7 @@ export default function ProductPageA1Trial6() {
               product={product}
               showCountdown={Boolean(product.dpDisplay?.showCountdown)}
               secondsLeft={secondsLeft}
+              set={set}
             />
           ))}
         </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useId, useState } from "react";
 import { trial2Data, type Trial2Product } from "../data";
 
@@ -31,12 +32,14 @@ type ProductDetailModalProps = {
   product: Trial2Product;
   showViewer: boolean;
   viewerText?: string;
+  set: string;
 };
 
 function ProductDetailModal({
   product,
   showViewer,
   viewerText,
+  set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
   const [isExtraOpen, setIsExtraOpen] = useState(false);
@@ -180,7 +183,7 @@ function ProductDetailModal({
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
                   <Link
-                    href={`/trials/b1/trial2/checkout?productId=${product.id}`}
+                    href={`/trials/b1/trial2/checkout?productId=${product.id}&set=${set}`}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
                   >
                     この商品を選ぶ
@@ -199,9 +202,10 @@ type ProductCardProps = {
   product: Trial2Product;
   showViewer: boolean;
   viewerText?: string;
+  set: string;
 };
 
-function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
+function ProductCard({ product, showViewer, viewerText, set }: ProductCardProps) {
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -226,10 +230,11 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
             product={product}
             showViewer={showViewer}
             viewerText={viewerText}
+            set={set}
           />
 
           <Link
-            href={`/trials/b1/trial2/checkout?productId=${product.id}`}
+            href={`/trials/b1/trial2/checkout?productId=${product.id}&set=${set}`}
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
           >
             購入へ
@@ -241,6 +246,19 @@ function ProductCard({ product, showViewer, viewerText }: ProductCardProps) {
 }
 
 export default function ProductPageB1Trial2() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
   const products = trial2Data.products;
   const showViewerFlags = [false, false, false, false];
   const viewerTexts = [undefined, undefined, undefined, undefined] as const;
@@ -266,6 +284,7 @@ export default function ProductPageB1Trial2() {
               product={product}
               showViewer={showViewerFlags[index]}
               viewerText={viewerTexts[index]}
+              set={set}
             />
           ))}
         </section>

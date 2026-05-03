@@ -1,7 +1,7 @@
 export type Trial4Product = {
   id: string;
-  role: "correct" | "budget_over" | "condition_ng" | "dp_candidate";
-  failReason: string | null;
+  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
   name: string;
   priceYen: number;
   description: string;
@@ -25,7 +25,18 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial4Data = {
+export type Trial4Data = {
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial4Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial4Data: Trial4Data = {
   purchaseConditions: {
     budgetYen: 500,
     quantityCondition: "A4サイズで100枚以上であること",

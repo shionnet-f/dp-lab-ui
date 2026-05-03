@@ -1,4 +1,3 @@
-
 "use client";
 
 import { use, useState } from "react";
@@ -14,6 +13,7 @@ type Props = {
     productId?: string;
     shipping?: string;
     options?: string | string[];
+    set?: string;
   }>;
 };
 
@@ -26,6 +26,7 @@ export default function CheckoutPageA1Trial11({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const productId = sp?.productId;
+  const set = sp?.set;
   const initialShipping =
     sp?.shipping === "standard" ||
     sp?.shipping === "express" ||
@@ -59,6 +60,16 @@ export default function CheckoutPageA1Trial11({ searchParams }: Props) {
     );
   }
 
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -79,6 +90,7 @@ export default function CheckoutPageA1Trial11({ searchParams }: Props) {
           className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
+          <input type="hidden" name="set" value={set} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
@@ -168,7 +180,7 @@ export default function CheckoutPageA1Trial11({ searchParams }: Props) {
                 </button>
 
                 <Link
-                  href="/trials/a1/trial11/product"
+                  href={`/trials/a1/trial11/product?set=${set}`}
                   className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   商品一覧へ戻る

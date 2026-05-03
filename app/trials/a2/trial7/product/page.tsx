@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { trial7Data, type Trial7Product } from "../data";
 
 function yen(n: number) {
@@ -9,6 +10,7 @@ function yen(n: number) {
 
 type ProductDetailModalProps = {
   product: Trial7Product;
+  set: string;
 };
 
 function RankingAwardBadge({
@@ -26,7 +28,7 @@ function RankingAwardBadge({
   );
 }
 
-function ProductDetailModal({ product }: ProductDetailModalProps) {
+function ProductDetailModal({ product, set }: ProductDetailModalProps) {
   const dialogId = `product-dialog-${product.id}`;
 
   function openDialog() {
@@ -125,7 +127,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
 
             <div className="pt-1">
               <Link
-                href={`/trials/a2/trial7/checkout?productId=${product.id}`}
+                href={`/trials/a2/trial7/checkout?productId=${product.id}&set=${set}`}
                 className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white"
               >
                 この商品を選ぶ
@@ -138,7 +140,7 @@ function ProductDetailModal({ product }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product }: { product: Trial7Product }) {
+function ProductCard({ product, set }: { product: Trial7Product; set: string }) {
   return (
     <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
       <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">
@@ -167,10 +169,10 @@ function ProductCard({ product }: { product: Trial7Product }) {
         </div>
 
         <div className="grid grid-cols-2 gap-3 justify-self-end">
-          <ProductDetailModal product={product} />
+          <ProductDetailModal product={product} set={set} />
 
           <Link
-            href={`/trials/a2/trial7/checkout?productId=${product.id}`}
+            href={`/trials/a2/trial7/checkout?productId=${product.id}&set=${set}`}
             className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white"
           >
             購入へ
@@ -182,6 +184,19 @@ function ProductCard({ product }: { product: Trial7Product }) {
 }
 
 export default function ProductPageA2Trial7() {
+  const searchParams = useSearchParams();
+  const set = searchParams.get("set");
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
@@ -198,7 +213,7 @@ export default function ProductPageA2Trial7() {
 
         <section className="grid flex-1 gap-5">
           {trial7Data.products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} set={set} />
           ))}
         </section>
       </div>
