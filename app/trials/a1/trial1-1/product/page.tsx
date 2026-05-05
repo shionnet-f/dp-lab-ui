@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { useId } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useId } from "react";
 import { useSearchParams } from "next/navigation";
 import { trial1_1Data, type Trial1_1Product } from "../data";
+import { trackAction } from "@/app/actions/track";
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
@@ -42,6 +43,7 @@ function ProductDetailModal({
   set,
 }: ProductDetailModalProps) {
   const dialogId = useId();
+  const router = useRouter();
 
   return (
     <>
@@ -49,12 +51,14 @@ function ProductDetailModal({
         type="button"
         className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
         onClick={() => {
-          const el = document.getElementById(
-            dialogId,
-          ) as HTMLDialogElement | null;
+          trackAction({
+            page: "product",
+            type: "view_detail",
+            payload: { productId: product.id, },
+          });
+          const el = document.getElementById(dialogId) as HTMLDialogElement | null;
           el?.showModal();
-        }}
-      >
+        }} >
         詳細を見る
       </button>
 
@@ -69,9 +73,19 @@ function ProductDetailModal({
               type="button"
               className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
               onClick={() => {
+
+                trackAction({
+                  page: "product",
+                  type: "close_detail",
+                  payload: {
+                    productId: product.id,
+                  },
+                });
+
                 const el = document.getElementById(
-                  dialogId,
+                  dialogId
                 ) as HTMLDialogElement | null;
+
                 el?.close();
               }}
             >
@@ -164,12 +178,19 @@ function ProductDetailModal({
 
               <section className="rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex h-full items-end">
-                  <Link
-                    href={`/trials/a1/trial1-1/checkout?productId=${product.id}&set=${set}`}
+                  <button
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
-                  >
-                    この商品を選ぶ
-                  </Link>
+                    onClick={async () => {
+                      await trackAction({
+                        page: "product",
+                        type: "product_select",
+                        payload: { productId: product.id, },
+                      });
+                      router.push(
+                        `/trials/a1/trial1-1/checkout?set=${set}&productId=${product.id}`
+                      );
+                    }} > 購入へ
+                  </button>
                 </div>
               </section>
             </div>
@@ -179,6 +200,9 @@ function ProductDetailModal({
     </>
   );
 }
+
+
+
 
 type ProductCardProps = {
   product: Trial1_1Product;
@@ -193,6 +217,8 @@ function ProductCard({
   viewerText,
   set,
 }: ProductCardProps) {
+
+  const router = useRouter();
   return (
     <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
@@ -219,19 +245,41 @@ function ProductCard({
             set={set}
           />
 
-          <Link
-            href={`/trials/a1/trial1-1/checkout?set=${set}&productId=${product.id}`}
+          <button
             className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
-          >
-            購入へ
-          </Link>
+            onClick={async () => {
+              await trackAction({
+                page: "product",
+                type: "product_select",
+                payload: { productId: product.id, },
+              });
+              router.push(
+                `/trials/a1/trial1-1/checkout?set=${set}&productId=${product.id}`
+              );
+            }} > 購入へ
+          </button>
         </div>
       </div>
-    </article>
+    </article >
   );
 }
 
 export default function ProductPageA1Trial1_1() {
+
+  const didTrack = useRef(false);
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "product",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
+
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
 

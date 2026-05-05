@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model EventLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  sessionId     String
+  participantId String?
+  phase         String
+  taskVersion   String?
+  trialId       String?
+  setIndex      Int?
+
+  page      String
+  type      String
+  ts        BigInt
+
+  meta      Json
+  payload   Json
+
+  @@index([sessionId])
+  @@index([participantId])
+  @@index([phase])
+  @@index([trialId])
+  @@index([page])
+  @@index([type])
+  @@index([createdAt])
+}

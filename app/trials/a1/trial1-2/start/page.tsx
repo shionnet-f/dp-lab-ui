@@ -13,26 +13,37 @@ export default async function TrialStartPageA1Trial1_2({ searchParams }: Props) 
   const set = sp?.set ?? "1";
 
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
-      <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <h1 className="text-xl font-bold text-gray-900">試行開始</h1>
 
-        <p className="text-sm text-gray-600">
-          次のページで商品を選び、購入手続きを行ってください。
-        </p>
-        <div className="z-10 mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{purchaseConditions.budgetYen}円以内、
-          {purchaseConditions.quantityCondition}、
-          {purchaseConditions.specificCondition}
+    <main className="w-[1920px] h-[1080px] overflow-hidden bg-gray-50 flex items-center justify-center">
+      <div className="w-[960px] h-[720px] border border-gray-300 bg-white px-[80px] py-[70px] text-center">
+        <div className="flex h-full flex-col items-center gap-[60px]">
+          <h1 className="h-[48px] text-[32px] font-bold leading-[48px] text-gray-900">
+            試行開始
+          </h1>
+
+          <p className="h-[72px] text-[28px] leading-[36px] text-gray-700">
+            次のページで商品を選び、購入手続きを行ってください。
+          </p>
+
+          <div className="w-[760px] h-[260px] border border-blue-300 bg-blue-50 px-[48px] py-[36px] text-left text-[24px] leading-[36px] text-blue-900">
+            <p className="mb-[24px] h-[40px] text-[28px] font-bold leading-[40px]">
+              購入条件
+            </p>
+
+            <ul className="list-disc space-y-[16px] pl-[32px]">
+              <li>予算{purchaseConditions.budgetYen}円以内</li>
+              <li>{purchaseConditions.quantityCondition}</li>
+              <li>{purchaseConditions.specificCondition}</li>
+            </ul>
+          </div>
+
+          <Link
+            href={`/trials/a1/trial1-2/product?set=${set}`}
+            className="inline-flex h-[72px] w-[240px] items-center justify-center border border-black bg-black text-[28px] font-medium leading-none text-white"
+          >
+            開始する
+          </Link>
         </div>
-
-        <Link
-          href={`/trials/a1/trial1-2/product?set=${set}`}
-          className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
-        >
-          試行を開始する
-        </Link>
       </div>
     </main>
   );
