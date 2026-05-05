@@ -4,11 +4,12 @@ type PurchaseConditions = {
     specificCondition: string;
 };
 
-type ProductHeaderProps = {
+type HeaderProps = {
     purchaseConditions: PurchaseConditions;
+    title: string
 };
 
-export function ProductHeader({ purchaseConditions }: ProductHeaderProps) {
+export function TrialPageHeader({ purchaseConditions, title }: HeaderProps) {
     return (
         <>
             <div className="h-[60px]" />
@@ -21,7 +22,7 @@ export function ProductHeader({ purchaseConditions }: ProductHeaderProps) {
             </div>
 
             <header className="mx-auto flex h-[60px] w-[1160px] items-center">
-                <h1 className="text-[24px] font-bold text-gray-900">商品一覧</h1>
+                <h1 className="text-[24px] font-bold text-gray-900">{title}</h1>
             </header>
         </>
     );

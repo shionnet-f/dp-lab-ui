@@ -5,7 +5,7 @@ import { ProductCard } from "@/app/trials/_components/ProductCard";
 import { trial2Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { getTrialPath } from "@/app/trials/_lib/path";
-import { ProductHeader } from "@/app/trials/_components/ProductHeader";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
 const checkoutPath = getTrialPath("a1", "trial2", "checkout");
 
@@ -40,7 +40,10 @@ export default function ProductPageA1Trial2() {
   return (
     <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
       <div className="h-full w-full">
-        <ProductHeader purchaseConditions={trial2Data.purchaseConditions} />
+        <TrialPageHeader
+          purchaseConditions={trial2Data.purchaseConditions}
+          title="商品一覧"
+        />
 
         {/* 商品カード領域：378px + 60px + 378px */}
         <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
