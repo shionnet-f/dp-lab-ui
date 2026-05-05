@@ -11,9 +11,9 @@ model EventLog {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  sessionId     String
+  sessionId     String?
   participantId String?
-  phase         String
+  phase         String?
   taskVersion   String?
   trialId       String?
   setIndex      Int?
