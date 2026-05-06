@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ProductDetailModal } from "@/app/trials/_components/ProductDetailModal";
+import { ProductDetailModal } from "@/app/trials/_components/aTrialComponents/ProductDetailModal";
 import { trackAction } from "@/app/actions/track";
 
 type ProductForCard = {

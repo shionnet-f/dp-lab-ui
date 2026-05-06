@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { getProductById, trial2Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
-import { ShippingMethodSection } from "@/app/trials/_components/ShippingMethodSection";
-import { OptionSection } from "@/app/trials/_components/OptionSection";
-import { OrderSummaryPanel } from "@/app/trials/_components/OrderSummaryPanel";
+import { ShippingMethodSection } from "@/app/trials/_components/aTrialComponents/ShippingMethodSection";
+import { OptionSection } from "@/app/trials/_components/aTrialComponents/OptionSection";
+import { OrderSummaryPanel } from "@/app/trials/_components/aTrialComponents/OrderSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
 const confirmPath = getTrialPath("a1", "trial2", "confirm")
