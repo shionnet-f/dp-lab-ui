@@ -7,11 +7,13 @@ import { trackAction } from "@/app/actions/track";
 type TrialCompletePageProps = {
     set: string;
     nextPath: string;
+    nextParams?: Record<string, string>;
 };
 
 export function TrialCompletePage({
     set,
     nextPath,
+    nextParams,
 }: TrialCompletePageProps) {
     const didTrack = useRef(false);
     const router = useRouter();
@@ -47,7 +49,16 @@ export function TrialCompletePage({
                             payload: {},
                         });
 
-                        router.push(`${nextPath}?set=${set}`);
+                        const params = new URLSearchParams();
+                        params.set("set", set);
+
+                        if (nextParams) {
+                            Object.entries(nextParams).forEach(([key, value]) => {
+                                params.set(key, value);
+                            });
+                        }
+
+                        router.push(`${nextPath}?${params.toString()}`);
                     }}
                 >
                     次へ進む

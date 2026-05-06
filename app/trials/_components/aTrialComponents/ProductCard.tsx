@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { ProductDetailModal } from "@/app/trials/_components/aTrialComponents/ProductDetailModal";
 import { trackAction } from "@/app/actions/track";
@@ -12,13 +13,13 @@ type ProductForCard = {
     specsAndNotes: string[];
     prePurchaseCheck: string[];
     deliveryInfo: string[];
-    dpDisplay?: { label: string } | null;
 };
 
 type ProductCardProps = {
     product: ProductForCard;
     set: string;
     checkoutPath: string;
+    dpArea?: ReactNode;
 };
 
 function yen(n: number) {
@@ -29,12 +30,9 @@ export function ProductCard({
     product,
     set,
     checkoutPath,
+    dpArea,
 }: ProductCardProps) {
-
     const router = useRouter();
-
-    const showViewer = Boolean(product.dpDisplay);
-    const viewerText = product.dpDisplay?.label;
 
     return (
         <article className="h-[378px] w-[550px] border border-gray-200 bg-white shadow-sm rounded-md">
@@ -54,13 +52,7 @@ export function ProductCard({
                 <div className="h-[60px]" />
 
                 <div className="h-[42px] overflow-hidden">
-                    {showViewer ? (
-                        <div className="flex h-full items-center justify-center border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold leading-[42px] text-orange-700">
-                            <p className="truncate">{viewerText}</p>
-                        </div>
-                    ) : (
-                        <div className="h-full w-full" aria-hidden="true" />
-                    )}
+                    {dpArea ?? <div className="h-full w-full" aria-hidden="true" />}
                 </div>
 
                 <div className="h-[60px]" />
@@ -81,9 +73,7 @@ export function ProductCard({
                                 payload: { productId: product.id },
                             });
 
-                            router.push(
-                                `${checkoutPath}?set=${set}&productId=${product.id}`
-                            );
+                            router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
                         }}
                     >
                         購入へ

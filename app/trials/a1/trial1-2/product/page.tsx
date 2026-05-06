@@ -53,6 +53,7 @@ export default function ProductPageA1Trial2() {
               product={product}
               set={set}
               checkoutPath={checkoutPath}
+              dpArea={product.dpDisplay}
             />
           ))}
         </section>
