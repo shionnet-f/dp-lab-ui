@@ -9,8 +9,8 @@ import { OptionSection } from "@/app/trials/_components/aTrialComponents/OptionS
 import { OrderSummaryPanel } from "@/app/trials/_components/aTrialComponents/OrderSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
-const confirmPath = getTrialPath("a1", "trial1-1", "confirm")
-const productPath = getTrialPath("a1", "trial1-1", "product");
+const confirmPath = getTrialPath("a1", "trial1-3", "confirm")
+const productPath = getTrialPath("a1", "trial1-3", "product");
 
 type Props = {
   searchParams: Promise<{
