@@ -1,9 +1,9 @@
 "use client";
 
-import { Fragment, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/app/trials/_components/a2TrialComponents/ProductCard";
-import trial2Data from "../data";
+import { trial2Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";

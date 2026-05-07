@@ -1,15 +1,15 @@
 "use client";
-import { use, useState, useEffect, useRef } from "react";
+
+import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial8Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
-import { ShippingMethodSection } from "@/app/trials/_components/a1TrialComponents/ShippingMethodSection";
 import { OptionSection } from "@/app/trials/_components/a1TrialComponents/OptionSection";
 import { OrderSummaryPanel } from "@/app/trials/_components/a1TrialComponents/OrderSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
-const confirmPath = getTrialPath("a1", "trial8", "confirm")
+const confirmPath = getTrialPath("a1", "trial8", "confirm");
 const productPath = getTrialPath("a1", "trial8", "product");
 
 type Props = {
@@ -21,16 +21,131 @@ type Props = {
   }>;
 };
 
+type ShippingMethod = {
+  id: string;
+  name: string;
+  priceYen: number;
+  shortDescription: string;
+};
+
+type RelativeShippingMethodSectionProps = {
+  shippingMethods: ShippingMethod[];
+  selectedShipping: string | null;
+  onChangeShipping: (id: string) => void;
+};
+
+function yen(n: number) {
+  return new Intl.NumberFormat("ja-JP").format(n);
+}
+
 function normalizeOptions(options?: string | string[]) {
   if (!options) return [];
   return Array.isArray(options) ? options : [options];
 }
 
-export default function CheckoutPageA1Trial2({ searchParams }: Props) {
+function getRelativePriceLabel(priceYen: number, basePriceYen: number) {
+  const diff = priceYen - basePriceYen;
+
+  if (diff === 0) {
+    return "¥0";
+  }
+
+  if (diff > 0) {
+    return `+¥${yen(diff)}`;
+  }
+
+  return `-¥${yen(Math.abs(diff))}`;
+}
+
+function RelativeShippingMethodSection({
+  shippingMethods,
+  selectedShipping,
+  onChangeShipping,
+}: RelativeShippingMethodSectionProps) {
+  // 真ん中の配送方法を基準にする
+  // standard: 500円, express: 800円, scheduled: 700円 の場合
+  // express が ¥0 表示になる
+  const baseIndex = 1;
+  const baseShippingMethod = shippingMethods[baseIndex];
+  const basePriceYen = baseShippingMethod?.priceYen ?? 0;
+
+  return (
+    <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="h-[15px]" />
+
+      <div className="flex h-[30px] items-center px-5">
+        <h2 className="text-base font-semibold text-gray-900">配送方法</h2>
+      </div>
+
+      <div className="h-[60px]" />
+
+      {shippingMethods.map((method, index) => {
+        const relativePriceYen = method.priceYen - basePriceYen;
+        const relativePriceLabel = getRelativePriceLabel(
+          method.priceYen,
+          basePriceYen,
+        );
+
+        return (
+          <div key={method.id}>
+            <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+              <input
+                type="radio"
+                name="shippingRadio"
+                checked={selectedShipping === method.id}
+                onChange={() => {
+                  onChangeShipping(method.id);
+
+                  void trackAction({
+                    page: "checkout",
+                    type: "shipping_select",
+                    payload: {
+                      shippingId: method.id,
+
+                      // 実際の金額
+                      actualPriceYen: method.priceYen,
+
+                      // 相対表示の基準
+                      relativeBaseShippingId: baseShippingMethod?.id ?? null,
+                      relativeBasePriceYen: basePriceYen,
+
+                      // 表示上の差分
+                      relativePriceYen,
+                      relativePriceLabel,
+                    },
+                  });
+                }}
+              />
+
+              <div className="min-w-0 leading-tight">
+                <div className="truncate font-medium text-gray-900">
+                  {method.name}
+                </div>
+
+                <div className="truncate text-gray-600">
+                  {method.shortDescription}
+                </div>
+
+                <div className="text-gray-700">{relativePriceLabel}</div>
+              </div>
+            </label>
+
+            {index < shippingMethods.length - 1 && <div className="h-[60px]" />}
+          </div>
+        );
+      })}
+
+      <div className="h-[15px]" />
+    </article>
+  );
+}
+
+export default function CheckoutPageA1Trial8({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const selectedProduct = getProductById(sp?.productId);
   const set = sp?.set;
+
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
   const [options, setOptions] = useState<string[]>(
     normalizeOptions(sp?.options),
@@ -43,7 +158,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    void trackAction({
       page: "checkout",
       type: "page_view",
       meta: {},
@@ -51,12 +166,30 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
     });
   }, []);
 
-
   function toggleOption(value: string) {
     setOptions((prev) =>
       prev.includes(value) ? prev.filter((o) => o !== value) : [...prev, value],
     );
   }
+
+  const selectedShippingMethod =
+    trial8Data.shippingMethods.find((method) => method.id === shipping) ?? null;
+
+  const selectedOptionItems = trial8Data.options.filter((option) =>
+    options.includes(option.id),
+  );
+
+  const productPrice = selectedProduct.priceYen;
+
+  // 表示は相対価格だが、計算は必ず実価格 priceYen を使う
+  const shippingPrice = selectedShippingMethod?.priceYen ?? 0;
+
+  const optionTotalPrice = selectedOptionItems.reduce(
+    (sum, option) => sum + option.priceYen,
+    0,
+  );
+
+  const totalPrice = productPrice + shippingPrice + optionTotalPrice;
 
   if (!set) {
     return (
@@ -86,8 +219,15 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
               type: "checkout_submit",
               payload: {
                 productId: selectedProduct.id,
+                productPrice,
+
                 shippingId: shipping,
+                shippingPrice,
+
                 optionIds: options,
+                optionTotalPrice,
+
+                totalPrice,
               },
             });
 
@@ -107,6 +247,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="set" value={set} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
+
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
           ))}
@@ -114,7 +255,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
           {/* 左側 */}
           <div className="h-[810px] w-[720px]">
             {/* 配送方法領域：438px */}
-            <ShippingMethodSection
+            <RelativeShippingMethodSection
               shippingMethods={trial8Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}

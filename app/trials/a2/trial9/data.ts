@@ -11,7 +11,7 @@ export type Trial9Product = {
   dpDisplay?: {
     emphasizedVolumeText?: string;
     actualVolumeText?: string;
-    highlight?: boolean;
+    isDpTarget?: boolean;
   } | null;
 };
 
@@ -125,7 +125,7 @@ export const trial9Data = {
       dpDisplay: {
         emphasizedVolumeText: "500ml×12本",
         actualVolumeText: "実際の内容量：350ml×12本",
-        highlight: true,
+        isDpTarget: true,
       },
     },
   ] satisfies Trial9Product[],

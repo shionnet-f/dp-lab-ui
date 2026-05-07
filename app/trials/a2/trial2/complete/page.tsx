@@ -7,7 +7,7 @@ type Props = {
   }>;
 };
 
-const nextPath = getTrialPath("a1", "trial3", "start");
+const nextPath = getTrialPath("a2", "trial3", "start");
 
 export default async function TrialCompletePageA1Trial2({
   searchParams,

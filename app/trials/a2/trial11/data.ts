@@ -10,7 +10,7 @@ export type Trial11Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: {
-    emphasizeFreeShipping?: boolean;
+    showFreeShipping?: boolean;
   } | null;
 };
 
@@ -121,9 +121,7 @@ export const trial11Data = {
         "通常配送は送料無料です",
         "地域や天候により到着が前後する場合があります",
       ],
-      dpDisplay: {
-        emphasizeFreeShipping: true,
-      },
+      dpDisplay: { showFreeShipping: true }
     },
   ] satisfies Trial11Product[],
   shippingMethods: [

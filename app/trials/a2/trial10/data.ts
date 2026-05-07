@@ -10,8 +10,8 @@ export type Trial10Product = {
   deliveryInfo: string[];
   dpDisplay?: {
     originalPriceYen?: number;
-    discountLabel?: string;
-    highlight?: boolean;
+    displayPriceYen?: number;
+    isDiscountTarget?: boolean;
   } | null;
 };
 
@@ -124,7 +124,8 @@ export const trial10Data = {
       ],
       dpDisplay: {
         originalPriceYen: 3980,
-        highlight: true,
+        displayPriceYen: 3250,
+        isDiscountTarget: true
       },
     },
   ] satisfies Trial10Product[],
