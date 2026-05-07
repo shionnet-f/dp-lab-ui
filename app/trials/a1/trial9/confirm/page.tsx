@@ -10,10 +10,10 @@ import {
 } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
-import { OrderItemPanel } from "@/app/trials/_components/aTrialComponents/OrderItemPanel";
-import { ConfirmShippingSection } from "@/app/trials/_components/aTrialComponents/ConfirmShippingSection";
-import { ConfirmOptionSection } from "@/app/trials/_components/aTrialComponents/ConfirmOptionSection";
-import { ConfirmSummaryPanel } from "@/app/trials/_components/aTrialComponents/ConfirmSummaryPanel";
+import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
+import { ConfirmShippingSection } from "@/app/trials/_components/a1TrialComponents/ConfirmShippingSection";
+import { ConfirmOptionSection } from "@/app/trials/_components/a1TrialComponents/ConfirmOptionSection";
+import { ConfirmSummaryPanel } from "@/app/trials/_components/a1TrialComponents/ConfirmSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
 const completePath = getTrialPath("a1", "trial9", "complete");

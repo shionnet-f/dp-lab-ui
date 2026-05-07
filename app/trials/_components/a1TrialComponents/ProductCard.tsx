@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { ProductDetailModal } from "@/app/trials/_components/aTrialComponents/ProductDetailModal";
+import { ProductDetailModal } from "@/app/trials/_components/a1TrialComponents/ProductDetailModal";
 import { trackAction } from "@/app/actions/track";
 
 type ProductForCard = {

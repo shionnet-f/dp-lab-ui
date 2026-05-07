@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { getTrialPath } from "@/app/trials/_lib/path";
+import { OrderItemPanel } from "@/app/trials/_components/a2TrialComponents/CheckoutOrderItemPanel";
+import { ShippingMethodSection } from "@/app/trials/_components/a2TrialComponents/ShippingMethodSection";
+import { OptionSection } from "@/app/trials/_components/a2TrialComponents/OptionSection";
 import { getProductById, trial2Data } from "../data";
 
 const confirmPath = getTrialPath("a2", "trial2", "confirm");
@@ -18,10 +21,6 @@ type Props = {
     set?: string;
   }>;
 };
-
-function yen(n: number) {
-  return new Intl.NumberFormat("ja-JP").format(n);
-}
 
 function normalizeOptions(options?: string | string[]) {
   if (!options) return [];
@@ -56,7 +55,9 @@ export default function CheckoutPageA2Trial2({ searchParams }: Props) {
 
   function toggleOption(value: string) {
     setOptions((prev) =>
-      prev.includes(value) ? prev.filter((o) => o !== value) : [...prev, value],
+      prev.includes(value)
+        ? prev.filter((optionId) => optionId !== value)
+        : [...prev, value],
     );
   }
 
@@ -86,8 +87,8 @@ export default function CheckoutPageA2Trial2({ searchParams }: Props) {
   }
 
   return (
-    <main className="h-[1080px] overflow-hidden bg-gray-50">
-      <div className="mx-auto h-[1080px] w-[1160px] bg-gray-50">
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
         <TrialPageHeader
           purchaseConditions={trial2Data.purchaseConditions}
           title="購入手続き"
@@ -122,7 +123,7 @@ export default function CheckoutPageA2Trial2({ searchParams }: Props) {
 
             router.push(`${confirmPath}?${params.toString()}`);
           }}
-          className="h-[915px] w-[1160px] overflow-hidden"
+          className="mx-auto h-[915px] w-[1160px] overflow-hidden"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="set" value={set} />
@@ -138,160 +139,24 @@ export default function CheckoutPageA2Trial2({ searchParams }: Props) {
           ))}
 
           {/* 160px：商品情報パネル */}
-          <article className="h-[160px] w-[1160px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-            <div className="grid h-full grid-cols-[200px_1fr]">
-              {/* 左：画像領域 */}
-              <div className="flex h-full items-center justify-center">
-                <div className="flex h-[120px] w-[160px] items-center justify-center overflow-hidden rounded-md bg-gray-100 text-[14px] text-gray-400">
-                  画像
-                </div>
-              </div>
-
-              {/* 右：商品名・価格 */}
-              <div className="h-full min-w-0 pl-[20px] pr-[40px]">
-                <div className="h-[10px]" />
-
-                <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-                  <h2 className="truncate text-[22px] font-semibold text-gray-900">
-                    {selectedProduct.name}
-                  </h2>
-                </div>
-
-                <div className="h-[10px]" />
-
-                <div className="h-[60px]" />
-
-                <div className="h-[10px]" />
-
-                <div className="flex h-[30px] items-center overflow-hidden">
-                  <p className="truncate text-[22px] font-semibold text-gray-900">
-                    ¥{yen(selectedProduct.priceYen)}
-                  </p>
-                </div>
-
-                <div className="h-[10px]" />
-              </div>
-            </div>
-          </article>
+          <OrderItemPanel product={selectedProduct} />
 
           {/* 60px：空間 */}
           <div className="h-[60px]" />
 
           {/* 438px：配送方法・追加オプション */}
           <section className="grid h-[438px] w-[1160px] grid-cols-[550px_550px] gap-[60px] overflow-hidden">
-            {/* 配送方法パネル */}
-            <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="h-[15px]" />
+            <ShippingMethodSection
+              shippingMethods={trial2Data.shippingMethods}
+              selectedShipping={shipping}
+              onChangeShipping={setShipping}
+            />
 
-              <div className="flex h-[30px] items-center px-5">
-                <h2 className="text-base font-semibold text-gray-900">
-                  配送方法
-                </h2>
-              </div>
-
-              <div className="h-[60px]" />
-
-              {trial2Data.shippingMethods.map((method, index) => (
-                <div key={method.id}>
-                  <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
-                    <input
-                      type="radio"
-                      name="shippingRadio"
-                      checked={shipping === method.id}
-                      onChange={() => {
-                        setShipping(method.id);
-
-                        void trackAction({
-                          page: "checkout",
-                          type: "shipping_select",
-                          payload: {
-                            shippingId: method.id,
-                            priceYen: method.priceYen,
-                          },
-                        });
-                      }}
-                    />
-
-                    <div className="leading-tight">
-                      <div className="font-medium text-gray-900">
-                        {method.name}
-                      </div>
-                      <div className="text-gray-600">
-                        {method.shortDescription}
-                      </div>
-                      <div className="text-gray-700">
-                        ¥{yen(method.priceYen)}
-                      </div>
-                    </div>
-                  </label>
-
-                  {index < trial2Data.shippingMethods.length - 1 && (
-                    <div className="h-[60px]" />
-                  )}
-                </div>
-              ))}
-
-              <div className="h-[15px]" />
-            </article>
-
-            {/* 追加オプションパネル */}
-            <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="h-[15px]" />
-
-              <div className="flex h-[30px] items-center px-5">
-                <h2 className="text-base font-semibold text-gray-900">
-                  追加オプション
-                </h2>
-              </div>
-
-              <div className="h-[60px]" />
-
-              {trial2Data.options.map((option, index) => {
-                const selected = options.includes(option.id);
-
-                return (
-                  <div key={option.id}>
-                    <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
-                      <input
-                        type="checkbox"
-                        checked={selected}
-                        onChange={() => {
-                          toggleOption(option.id);
-
-                          void trackAction({
-                            page: "checkout",
-                            type: "option_toggle",
-                            payload: {
-                              optionId: option.id,
-                              selected: !selected,
-                              priceYen: option.priceYen,
-                            },
-                          });
-                        }}
-                      />
-
-                      <div className="leading-tight">
-                        <div className="font-medium text-gray-900">
-                          {option.name}
-                        </div>
-                        <div className="text-gray-600">
-                          {option.shortDescription}
-                        </div>
-                        <div className="text-gray-700">
-                          +¥{yen(option.priceYen)}
-                        </div>
-                      </div>
-                    </label>
-
-                    {index < trial2Data.options.length - 1 && (
-                      <div className="h-[60px]" />
-                    )}
-                  </div>
-                );
-              })}
-
-              <div className="h-[141px]" />
-            </article>
+            <OptionSection
+              options={trial2Data.options}
+              selectedOptions={options}
+              onToggleOption={toggleOption}
+            />
           </section>
 
           {/* 60px：空間 */}

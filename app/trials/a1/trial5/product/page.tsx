@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { ProductCard } from "@/app/trials/_components/aTrialComponents/ProductCard";
+import { ProductCard } from "@/app/trials/_components/a1TrialComponents/ProductCard";
 import { trial5Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { getTrialPath } from "@/app/trials/_lib/path";

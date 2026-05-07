@@ -1,360 +1,74 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import trial2Data, { type Trial2Product } from "../data";
-import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { Fragment, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { ProductCard } from "@/app/trials/_components/a2TrialComponents/ProductCard";
+import trial2Data from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
-function yen(n: number) {
-  return new Intl.NumberFormat("ja-JP").format(n);
-}
-
-type ProductDetailModalProps = {
-  product: Trial2Product;
-  set: string;
-};
-
-function renderDpBadge(product: Trial2Product) {
-  if (!product.dpDisplay) return null;
-
-  return (
-    <div className="shrink-0 rounded-md border border-red-200 bg-red-50 px-3 py-1 text-sm font-semibold text-red-600">
-      {product.dpDisplay.label}
-    </div>
-  );
-}
-
-function ProductDetailModal({
-  product,
-  set,
-}: ProductDetailModalProps) {
-  const dialogId = `product-dialog-${product.id}`;
-  const router = useRouter();
-  const nextPath = "/trials/a2/trial2/checkout";
-
-  function closeDialog() {
-    const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-    el?.close();
-  }
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => {
-          trackAction({
-            page: "product",
-            type: "view_detail",
-            payload: { productId: product.id },
-          });
-
-          const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-          el?.showModal();
-        }}
-        className="flex h-[40px] w-[110px] items-center justify-center border border-gray-300 bg-white text-[15px] font-medium text-gray-700"
-      >
-        詳細を見る
-      </button>
-
-      <dialog
-        id={dialogId}
-        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden rounded-lg p-0 backdrop:bg-black/70"
-      >
-        <div className="h-full w-full overflow-hidden bg-white">
-          {/* 70px：見出しと閉じる */}
-          <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[40px]">
-            <h2 className="text-[24px] font-semibold text-gray-900">
-              商品詳細
-            </h2>
-
-            <button
-              type="button"
-              onClick={() => {
-                trackAction({
-                  page: "product",
-                  type: "close_detail",
-                  payload: { productId: product.id },
-                });
-
-                const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-                el?.close();
-              }}
-              className="flex h-[40px] w-[100px] items-center justify-center border border-gray-300 bg-white text-[15px] font-medium text-gray-700"
-            >
-              閉じる
-            </button>
-          </div>
-
-          {/* 160px：商品情報 */}
-          <section className="h-[160px] border-b border-gray-200 px-[40px]">
-            <div className="grid h-full grid-cols-[200px_1fr_180px]">
-              {/* 左：画像領域 */}
-              <div className="flex h-full items-center justify-center">
-                <div className="flex h-[120px] w-[160px] items-center justify-center overflow-hidden rounded-md bg-gray-100 text-[14px] text-gray-400">
-                  画像
-                </div>
-              </div>
-
-              {/* 中央：商品名・価格 */}
-              <div className="h-full min-w-0 pl-[20px] pr-[20px]">
-                <div className="h-[10px]" />
-
-                <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-                  <h3 className="truncate text-[22px] font-semibold text-gray-900">
-                    {product.name}
-                  </h3>
-                </div>
-
-                <div className="h-[10px]" />
-
-                <div className="h-[60px]" />
-
-                <div className="h-[10px]" />
-
-                <div className="flex h-[30px] items-center overflow-hidden">
-                  <p className="truncate text-[22px] font-semibold text-gray-900">
-                    ¥{yen(product.priceYen)}
-                  </p>
-                </div>
-
-                <div className="h-[10px]" />
-              </div>
-
-              {/* 右：DP領域 */}
-              <div className="flex h-full items-center justify-center">
-                <div className="h-[50px] w-[160px] overflow-hidden">
-                  {product.dpDisplay ? (
-                    <div className="flex h-full w-full items-center justify-center overflow-hidden border border-orange-400 bg-orange-100 px-3 text-[15px] font-semibold text-orange-700">
-                      <p className="truncate">{product.dpDisplay.label}</p>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 60px：空間 */}
-          <div className="h-[60px]" />
-
-          {/* 190px：説明領域1 */}
-          <section className="grid h-[190px] grid-cols-[1fr_1fr] gap-[60px] px-[40px]">
-            <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
-              <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
-                  商品説明
-                </h3>
-              </div>
-
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
-                <p className="line-clamp-4">{product.description}</p>
-              </div>
-            </div>
-
-            <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
-              <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
-                  仕様・補足
-                </h3>
-              </div>
-
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
-                {product.specsAndNotes.map((item) => (
-                  <p key={item} className="truncate">
-                    {item}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 60px：空間 */}
-          <div className="h-[60px]" />
-
-          {/* 190px：説明領域2 */}
-          <section className="grid h-[190px] grid-cols-[1fr_1fr] gap-[60px] px-[40px]">
-            <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
-              <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
-                  購入前の確認
-                </h3>
-              </div>
-
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
-                {product.prePurchaseCheck.map((item) => (
-                  <p key={item} className="truncate">
-                    {item}
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
-              <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
-                  配送情報
-                </h3>
-              </div>
-
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
-                {product.deliveryInfo.map((item) => (
-                  <p key={item} className="truncate">
-                    {item}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 60px：空間 */}
-          <div className="h-[60px]" />
-
-          {/* 60px：購入ボタン */}
-          <div className="flex h-[60px] items-center justify-center px-[40px]">
-            <button
-              type="button"
-              className="flex h-[50px] w-[360px] items-center justify-center bg-black text-[16px] font-semibold text-white"
-              onClick={async () => {
-                await trackAction({
-                  page: "product",
-                  type: "product_select",
-                  payload: {
-                    productId: product.id,
-                  },
-                });
-
-                router.push(`${nextPath}?set=${set}&productId=${product.id}`);
-              }}
-            >
-              この商品を選ぶ
-            </button>
-          </div>
-
-          {/* 10px：空間 */}
-          <div className="h-[10px]" />
-        </div>
-      </dialog>
-    </>
-  );
-}
-
-function ProductCard({
-  product,
-  set,
-}: {
-  product: Trial2Product;
-  set: string;
-}) {
-  const router = useRouter();
-  const nextPath = "/trials/a2/trial2/checkout";
-
-  return (
-    <article className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
-      <div className="grid h-full grid-cols-[520px_280px_360px]">
-        {/* 左側：商品名・価格 */}
-        <div className="h-full min-w-0 pl-[60px] pr-[20px]">
-          <div className="h-[10px]" />
-
-          <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-            <h2 className="truncate text-[20px] font-semibold text-gray-900">
-              {product.name}
-            </h2>
-          </div>
-
-          <div className="h-[10px]" />
-
-          <div className="h-[60px]" />
-
-          <div className="h-[10px]" />
-
-          <div className="flex h-[30px] items-center overflow-hidden">
-            <p className="truncate text-[20px] font-semibold text-gray-900">
-              ¥{yen(product.priceYen)}
-            </p>
-          </div>
-
-          <div className="h-[10px]" />
-        </div>
-
-        {/* 中央：DP領域 */}
-        <div className="flex h-full min-w-0 items-center justify-center px-[20px]">
-          <div className="h-[50px] w-full min-w-0 overflow-hidden">
-            {product.dpDisplay ? (
-              <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold text-orange-700">
-                <p className="truncate">{product.dpDisplay.label}</p>
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        {/* 右側：ボタン2つ */}
-        <div className="flex h-full items-center justify-center">
-          <div className="flex items-center gap-[60px]">
-            <ProductDetailModal product={product} set={set} />
-
-            <button
-              type="button"
-              className="flex h-[40px] w-[110px] items-center justify-center bg-black text-[15px] font-medium text-white"
-              onClick={async () => {
-                await trackAction({
-                  page: "product",
-                  type: "product_select",
-                  payload: {
-                    productId: product.id,
-                  },
-                });
-
-                router.push(`${nextPath}?set=${set}&productId=${product.id}`);
-              }}
-            >
-              購入へ
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-}
+const checkoutPath = getTrialPath("a2", "trial2", "checkout");
 
 export default function ProductPageA2Trial2() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
 
+  const didTrack = useRef(false);
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    void trackAction({
+      page: "product",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
+
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
     );
   }
 
+  const products = trial2Data.products;
+
   return (
-    <main className="h-screen overflow-hidden bg-gray-50">
-      <div className="mx-auto h-full max-w-6xl">
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
         <TrialPageHeader
           purchaseConditions={trial2Data.purchaseConditions}
           title="商品一覧"
         />
 
-        <section className="mx-auto grid h-[915px] w-[1160px] grid-rows-[160px_60px_160px_60px_160px_60px_160px_95px] overflow-hidden">
-          <ProductCard product={trial2Data.products[0]} set={set} />
-
-          <div />
-
-          <ProductCard product={trial2Data.products[1]} set={set} />
-
-          <div />
-
-          <ProductCard product={trial2Data.products[2]} set={set} />
-
-          <div />
-
-          <ProductCard product={trial2Data.products[3]} set={set} />
-
-          <div />
+        {/* 商品カード領域：160px + 60px + 160px + 60px + 160px + 60px + 160px */}
+        <section className="mx-auto flex h-[820px] w-[1160px] flex-col gap-[60px] overflow-hidden">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              set={set}
+              checkoutPath={checkoutPath}
+              dpArea={
+                product.dpDisplay ? (
+                  <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold text-orange-700">
+                    <p className="truncate">{product.dpDisplay.label}</p>
+                  </div>
+                ) : undefined
+              }
+            />
+          ))}
         </section>
+
+        {/* 95pxの空間 */}
+        <div className="h-[95px]" />
       </div>
     </main>
   );
