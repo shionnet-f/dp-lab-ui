@@ -22,7 +22,7 @@ export function TrialPageHeader({ purchaseConditions, title }: HeaderProps) {
             </div>
 
             <header className="mx-auto flex h-[60px] w-[1160px] items-center">
-                <h1 className="text-[24px] font-bold text-gray-900">{title}</h1>
+                <h1 className="text-[30px] font-bold text-gray-900">{title}</h1>
             </header>
         </>
     );

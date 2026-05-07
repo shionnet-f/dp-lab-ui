@@ -1,28 +1,65 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { getOptionsByIds, getProductById, getShippingById, trial2Data } from "../data";
+import { use, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { trackAction } from "@/app/actions/track";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import {
+  getOptionsByIds,
+  getProductById,
+  getShippingById,
+  trial2Data,
+} from "../data";
+
+const completePath = getTrialPath("a2", "trial2", "complete");
+const checkoutPath = getTrialPath("a2", "trial2", "checkout");
+
+type Props = {
+  searchParams: Promise<{
+    productId?: string;
+    shipping?: string;
+    options?: string | string[];
+    set?: string;
+  }>;
+};
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-export default function ConfirmPage() {
-  const searchParams = useSearchParams();
+function normalizeOptions(options?: string | string[]) {
+  if (!options) return [];
+  return Array.isArray(options) ? options : [options];
+}
+
+export default function ConfirmPageA2Trial2({ searchParams }: Props) {
+  const sp = use(searchParams);
   const router = useRouter();
+  const didTrack = useRef(false);
   const [error, setError] = useState(false);
 
-  const productId = searchParams.get("productId") ?? undefined;
-  const shipping = searchParams.get("shipping") ?? undefined;
-  const optionKeys = searchParams.getAll("options");
-  const set = searchParams.get("set");
+  const productId = sp?.productId;
+  const shippingId = sp?.shipping;
+  const optionIds = normalizeOptions(sp?.options);
+  const set = sp?.set;
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    void trackAction({
+      page: "confirm",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
 
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
@@ -30,163 +67,266 @@ export default function ConfirmPage() {
   }
 
   const selectedProduct = getProductById(productId);
-  const shippingInfo = getShippingById(shipping);
-  const selectedOptions = getOptionsByIds(optionKeys);
+  const shippingInfo = getShippingById(shippingId);
+  const selectedOptions = getOptionsByIds(optionIds);
 
-  const shippingPrice = shippingInfo?.priceYen ?? 0;
-  const optionTotal = selectedOptions.reduce((sum, option) => sum + option.priceYen, 0);
-  const total = selectedProduct.priceYen + shippingPrice + optionTotal;
+  const productPriceYen = selectedProduct.priceYen;
+  const shippingPriceYen = shippingInfo?.priceYen ?? 0;
+  const optionTotalYen = selectedOptions.reduce(
+    (sum, option) => sum + option.priceYen,
+    0,
+  );
+  const totalYen = productPriceYen + shippingPriceYen + optionTotalYen;
 
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
-  if (shipping) backParams.set("shipping", shipping);
-  optionKeys.forEach((option) => backParams.append("options", option));
+  backParams.set("shipping", shippingId ?? "");
+  optionIds.forEach((id) => backParams.append("options", id));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
-  if (shipping) completeParams.set("shipping", shipping);
-  optionKeys.forEach((option) => completeParams.append("options", option));
+  completeParams.set("shipping", shippingId ?? "");
+  optionIds.forEach((id) => completeParams.append("options", id));
 
-  const handleSubmit = () => {
+  async function handleConfirmSubmit() {
     if (!shippingInfo) {
       setError(true);
-
       window.setTimeout(() => {
         setError(false);
       }, 2500);
-
       return;
     }
 
-    router.push(`/trials/a2/trial2/complete?${completeParams.toString()}`);
-  };
+    await trackAction({
+      page: "confirm",
+      type: "confirm_submit",
+      payload: {
+        productId: selectedProduct.id,
+        shippingId,
+        optionIds,
+        productPriceYen,
+        shippingPriceYen,
+        optionTotalYen,
+        totalYen,
+      },
+    });
+
+    router.push(`${completePath}?${completeParams.toString()}`);
+  }
+
+  async function handleBack() {
+    await trackAction({
+      page: "confirm",
+      type: "confirm_back",
+      payload: {
+        productId: selectedProduct.id,
+        shippingId,
+        optionIds,
+        productPriceYen,
+        shippingPriceYen,
+        optionTotalYen,
+        totalYen,
+      },
+    });
+
+    router.push(`${checkoutPath}?${backParams.toString()}`);
+  }
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      {error && (
-        <div className="fixed left-1/2 top-6 z-50 -translate-x-1/2 rounded-md bg-red-600 px-5 py-3 text-sm font-medium text-white shadow-lg">
-          配送方法を選択してください
-        </div>
-      )}
+    <main className="h-[1080px] overflow-hidden bg-gray-50">
+      <div className="mx-auto h-[1080px] w-[1160px] bg-gray-50">
+        <TrialPageHeader
+          purchaseConditions={trial2Data.purchaseConditions}
+          title="最終確認"
+        />
 
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial2Data.purchaseConditions.budgetYen}円以内、
-          {trial2Data.purchaseConditions.quantityCondition}、
-          {trial2Data.purchaseConditions.specificCondition}
-        </div>
+        {error && (
+          <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
+            配送方法を選択してください
+          </div>
+        )}
 
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
-        </header>
-
-        <div className="grid flex-1 grid-rows-[152px_228px_176px_120px_88px] gap-6">
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
-            <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">
-              <div className="flex h-24 w-[120px] items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                画像
+        {/* 810px メイン領域 */}
+        <div className="h-[810px] w-[1160px] overflow-hidden">
+          {/* 160px：ご注文商品（OrderItemPanelを横に伸ばした版） */}
+          <section className="h-[160px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div className="grid h-full grid-cols-[200px_1fr_180px] px-5">
+              {/* 左：画像 */}
+              <div className="flex h-full items-center justify-center">
+                <div className="flex h-[120px] w-[160px] items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+                  画像エリア
+                </div>
               </div>
 
-              <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">{selectedProduct.name}</div>
-                <div className="mt-3 text-base text-gray-600">商品価格：¥{yen(selectedProduct.priceYen)}</div>
-                <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
+              {/* 中央：商品名・説明 */}
+              <div className="h-full min-w-0 pl-[20px] pr-[20px]">
+                <div className="h-[15px]" />
+
+                <div className="flex h-[30px] items-center">
+                  <h2 className="text-base font-semibold text-gray-900">
+                    ご注文商品
+                  </h2>
+                </div>
+
+                <div className="h-[10px]" />
+
+                <div className="h-[36px] overflow-hidden text-[16px] font-medium leading-[18px] text-gray-900">
+                  {selectedProduct.name}
+                </div>
+
+                <div className="h-[10px]" />
+
+                <div className="h-[34px] overflow-hidden text-[14px] leading-[17px] text-gray-600">
+                  {selectedProduct.description}
+                </div>
+
+                <div className="h-[15px]" />
               </div>
 
-              <div className="text-sm text-gray-400">注文商品</div>
+              {/* 右：価格 */}
+              <div className="flex h-full items-center justify-center">
+                <div className="text-[24px] font-semibold text-gray-900">
+                  ¥{yen(selectedProduct.priceYen)}
+                </div>
+              </div>
             </div>
           </section>
 
-          <section className="grid h-full grid-cols-2 gap-5">
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">配送方法</h2>
+          {/* 60px 空間 */}
+          <div className="h-[60px]" />
 
-              <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                <div className="text-sm font-medium text-gray-700">{shippingInfo?.name ?? "未選択"}</div>
-                <div className="mt-1 text-sm text-gray-500">
-                  {shippingInfo ? `¥${yen(shippingInfo.priceYen)}` : "選択されていません"}
-                </div>
-              </div>
-            </article>
+          {/* 145px：配送方法・オプション */}
+          <section className="grid h-[145px] w-[1160px] grid-cols-[550px_550px] gap-[60px] overflow-hidden">
+            {/* 配送方法 */}
+            <section className="h-[145px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+              <div className="h-[15px]" />
 
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">追加オプション</h2>
+              <h2 className="flex h-[30px] items-center px-5 text-base font-semibold text-gray-900">
+                配送方法
+              </h2>
 
-              <div className="space-y-2">
-                {selectedOptions.length > 0 ? (
-                  selectedOptions.map((option) => (
-                    <div key={option.id} className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                      <div className="text-sm font-medium text-gray-700">{option.name}</div>
-                      <div className="mt-1 text-sm text-gray-500">+¥{yen(option.priceYen)}</div>
-                    </div>
-                  ))
+              <div className="h-[15px]" />
+
+              <div className="h-[70px] px-5">
+                {shippingInfo ? (
+                  <div className="flex h-full items-center justify-between rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+                    <span className="truncate pr-4">{shippingInfo.name}</span>
+                    <span className="shrink-0">¥{yen(shippingInfo.priceYen)}</span>
+                  </div>
                 ) : (
-                  <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                  <div className="flex h-full items-center rounded-md border border-gray-200 px-4 text-sm text-gray-500">
+                    未選択
+                  </div>
+                )}
+              </div>
+
+              <div className="h-[15px]" />
+            </section>
+
+            {/* 選択したオプション */}
+            <section className="h-[145px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+              <div className="h-[15px]" />
+
+              <h2 className="flex h-[30px] items-center px-5 text-base font-semibold text-gray-900">
+                選択したオプション
+              </h2>
+
+              <div className="h-[15px]" />
+
+              <div className="h-[70px] px-5">
+                {selectedOptions.length > 0 ? (
+                  <div className="flex h-full items-center justify-between rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+                    <span className="truncate pr-4">
+                      {selectedOptions.map((option) => option.name).join("、")}
+                    </span>
+
+                    <span className="shrink-0">+¥{yen(optionTotalYen)}</span>
+                  </div>
+                ) : (
+                  <div className="flex h-full items-center rounded-md border border-gray-200 px-4 text-sm text-gray-500">
                     選択されたオプションはありません
                   </div>
                 )}
               </div>
-            </article>
+
+              <div className="h-[15px]" />
+            </section>
           </section>
 
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-            <div className="flex h-full flex-col justify-between">
-              <div className="space-y-2 text-sm text-gray-900">
-                <div className="flex items-center justify-between">
-                  <span>商品価格</span>
-                  <span>¥{yen(selectedProduct.priceYen)}</span>
-                </div>
+          {/* 30px 空間 */}
+          <div className="h-[60px]" />
 
-                <div className="flex items-center justify-between">
-                  <span>送料</span>
-                  <span>¥{yen(shippingPrice)}</span>
-                </div>
+          {/* 190px：お支払い金額 */}
+          <article className="h-[250px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div className="h-[15px]" />
 
-                <div className="flex items-center justify-between">
-                  <span>オプション料金</span>
-                  <span>¥{yen(optionTotal)}</span>
+            <div className="flex h-[30px] items-center px-5">
+              <h2 className="text-base font-semibold text-gray-900">
+                お支払い金額
+              </h2>
+            </div>
+
+            <div className="h-[15px]" />
+
+            <div className="px-5">
+              <div className="rounded-md border border-gray-200 p-4">
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">商品価格</span>
+                    <span className="text-gray-900">¥{yen(productPriceYen)}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">送料</span>
+                    <span className="text-gray-900">¥{yen(shippingPriceYen)}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">オプション料金</span>
+                    <span className="text-gray-900">¥{yen(optionTotalYen)}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+                    <span className="font-semibold text-gray-900">合計</span>
+                    <span className="text-3xl font-bold text-gray-900">
+                      ¥{yen(totalYen)}
+                    </span>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm">
-                <span className="font-semibold text-gray-900">最終金額</span>
-                <span className="text-2xl font-bold text-black">¥{yen(total)}</span>
-              </div>
             </div>
-          </section>
 
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-            <div className="flex h-full flex-col gap-3">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white"
-              >
-                購入を確定する
-              </button>
+            <div className="h-[15px]" />
+          </article>
 
-              <Link
-                href={`/trials/a2/trial2/checkout?${backParams.toString()}`}
-                className="flex h-12 w-full items-center justify-center rounded-md border border-gray-300 bg-white px-5 text-sm font-medium text-gray-700"
-              >
-                戻る
-              </Link>
-            </div>
-          </section>
+          {/* 35px 空間 */}
+          <div className="h-[60px]" />
 
-          <section className="rounded-xl border border-gray-100 bg-gray-50 px-6 py-4">
-            <h2 className="mb-2 text-sm font-medium text-gray-400">注意事項</h2>
+          {/* 60px：ボタン */}
+          <div className="flex h-[60px] w-[1160px] items-center gap-[60px]">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
+            >
+              戻る
+            </button>
 
-            <div className="space-y-1 text-sm leading-5 text-gray-500">
-              <p>購入確定後は、注文内容の変更やキャンセルができない場合があります。</p>
-              <p>配送方法・追加オプション・最終金額を確認したうえで、購入を確定してください。</p>
-            </div>
-          </section>
+            <button
+              type="button"
+              onClick={handleConfirmSubmit}
+              className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+            >
+              購入を確定する
+            </button>
+          </div>
         </div>
+
+        {/* 105px 下余白 */}
+        <div className="h-[105px]" />
       </div>
-    </main>
+    </main >
   );
 }

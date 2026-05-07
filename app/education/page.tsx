@@ -1,43 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { trackAction } from "@/app/actions/track";
 import SlideRenderer from "./_components/SlideRenderer";
 import SlideShell from "./_components/SlideShell";
 import { buildSlides } from "./_lib/buildSlides";
 import type { SlideData } from "./_data/types";
-
-/* === education patch: block renderer === */
-const renderBlock = (block, i) => {
-  if (block && typeof block === "object") {
-    if (block.type === "text") {
-      return (
-        <p key={i} className="text-block">
-          {block.content}
-        </p>
-      );
-    }
-    if (block.type === "list" && Array.isArray(block.items)) {
-      return (
-        <ul key={i} className="list-block">
-          {block.items.map((it, j) => (
-            <li key={j}>{it}</li>
-          ))}
-        </ul>
-      );
-    }
-  }
-  // fallback for string lines
-  if (typeof block === "string") {
-    if (block.trim() === "") return null;
-    return (
-      <p key={i} className="text-block">
-        {block}
-      </p>
-    );
-  }
-  return null;
-};
 
 type Version = "A" | "B";
 
@@ -53,6 +22,10 @@ export default function EducationPage() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false);
+  const [isFinishing, setIsFinishing] = useState(false);
+
+  const didLogStart = useRef(false);
 
   const currentSlide: SlideData = slides[currentIndex];
   const isFirst = currentIndex === 0;
@@ -65,20 +38,148 @@ export default function EducationPage() {
 
   const canGoNext = currentSlide.kind !== "quiz" || selectedOptionId !== null;
 
+  useEffect(() => {
+    if (didLogStart.current) return;
+    didLogStart.current = true;
+
+    void trackAction({
+      page: "education",
+      type: "education_start",
+      payload: {
+        version,
+        totalSlides: slides.length,
+        next,
+      },
+    });
+  }, [next, slides.length, version]);
+
+  useEffect(() => {
+    void trackAction({
+      page: "education",
+      type: "slide_view",
+      payload: {
+        version,
+        slideIndex: currentIndex,
+        slideNumber: currentIndex + 1,
+        slideId: currentSlide.id,
+        slideKind: currentSlide.kind,
+        title: currentSlide.title,
+      },
+    });
+  }, [currentIndex, currentSlide.id, currentSlide.kind, currentSlide.title, version]);
+
   const handlePrev = () => {
     if (isFirst) return;
-    setCurrentIndex((prev) => prev - 1);
+
+    const fromSlide = currentSlide;
+    const fromIndex = currentIndex;
+    const toIndex = currentIndex - 1;
+    const toSlide = slides[toIndex];
+
+    void trackAction({
+      page: "education",
+      type: "slide_prev",
+      payload: {
+        version,
+        fromSlideIndex: fromIndex,
+        fromSlideNumber: fromIndex + 1,
+        fromSlideId: fromSlide.id,
+        toSlideIndex: toIndex,
+        toSlideNumber: toIndex + 1,
+        toSlideId: toSlide.id,
+      },
+    });
+
+    setCurrentIndex(toIndex);
   };
 
   const handleNext = () => {
     if (!canGoNext) return;
 
     if (isLast) {
-      router.push(next);
+      void trackAction({
+        page: "education",
+        type: "education_finish_confirm_open",
+        payload: {
+          version,
+          slideIndex: currentIndex,
+          slideNumber: currentIndex + 1,
+          slideId: currentSlide.id,
+          next,
+        },
+      });
+
+      setShowFinishConfirm(true);
       return;
     }
 
-    setCurrentIndex((prev) => prev + 1);
+    const fromSlide = currentSlide;
+    const fromIndex = currentIndex;
+    const toIndex = currentIndex + 1;
+    const toSlide = slides[toIndex];
+
+    void trackAction({
+      page: "education",
+      type: "slide_next",
+      payload: {
+        version,
+        fromSlideIndex: fromIndex,
+        fromSlideNumber: fromIndex + 1,
+        fromSlideId: fromSlide.id,
+        toSlideIndex: toIndex,
+        toSlideNumber: toIndex + 1,
+        toSlideId: toSlide.id,
+      },
+    });
+
+    setCurrentIndex(toIndex);
+  };
+
+  const handleCancelFinish = () => {
+    void trackAction({
+      page: "education",
+      type: "education_finish_confirm_cancel",
+      payload: {
+        version,
+        slideIndex: currentIndex,
+        slideNumber: currentIndex + 1,
+        slideId: currentSlide.id,
+      },
+    });
+
+    setShowFinishConfirm(false);
+  };
+
+  const handleConfirmFinish = async () => {
+    if (isFinishing) return;
+    setIsFinishing(true);
+
+    try {
+      await trackAction({
+        page: "education",
+        type: "education_finish_confirm_ok",
+        payload: {
+          version,
+          slideIndex: currentIndex,
+          slideNumber: currentIndex + 1,
+          slideId: currentSlide.id,
+          next,
+        },
+      });
+
+      await trackAction({
+        page: "education",
+        type: "education_end",
+        payload: {
+          version,
+          totalSlides: slides.length,
+          next,
+          quizAnswers,
+        },
+      });
+    } finally {
+      router.push(next);
+    }
   };
 
   const handleSelectQuizOption = (optionId: string) => {
@@ -88,10 +189,25 @@ export default function EducationPage() {
       ...prev,
       [currentSlide.id]: optionId,
     }));
+
+    void trackAction({
+      page: "education",
+      type: "quiz_select",
+      payload: {
+        version,
+        slideIndex: currentIndex,
+        slideNumber: currentIndex + 1,
+        slideId: currentSlide.id,
+        question: currentSlide.prompt,
+        selectedOptionId: optionId,
+        correctOptionId: currentSlide.correctOptionId,
+        isCorrect: optionId === currentSlide.correctOptionId,
+      },
+    });
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900">
+    <main className="h-screen w-screen overflow-hidden bg-gray-50 text-gray-900">
       <SlideShell
         title={currentSlide.title}
         currentIndex={currentIndex}
@@ -104,14 +220,14 @@ export default function EducationPage() {
         />
       </SlideShell>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-0">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-8 pb-8">
+      <div className="pointer-events-none fixed inset-x-0 bottom-[32px]">
+        <div className="mx-auto flex w-[1280px] items-center justify-between">
           <div className="pointer-events-auto">
             <button
               type="button"
               onClick={handlePrev}
               disabled={isFirst}
-              className="rounded-2xl border border-gray-300 bg-white px-5 py-3 text-base disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-[48px] w-[120px] rounded-2xl border border-gray-300 bg-white text-[16px] font-medium disabled:cursor-not-allowed disabled:opacity-40"
             >
               戻る
             </button>
@@ -122,13 +238,46 @@ export default function EducationPage() {
               type="button"
               onClick={handleNext}
               disabled={!canGoNext}
-              className="rounded-2xl bg-gray-900 px-6 py-3 text-base text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-[48px] w-[180px] rounded-2xl bg-gray-900 text-[16px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isLast ? "教育を終了する" : "次へ"}
             </button>
           </div>
         </div>
       </div>
+
+      {showFinishConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
+          <div className="w-[520px] rounded-3xl bg-white px-[40px] py-[32px] shadow-xl">
+            <h2 className="text-[24px] font-bold text-gray-900">
+              教育を終了しますか？
+            </h2>
+            <p className="mt-[16px] text-[16px] leading-[1.8] text-gray-700">
+              OKを押すと教育フェーズを終了し、次の画面へ進みます。
+              誤って終了しないように確認してください。
+            </p>
+
+            <div className="mt-[28px] flex justify-end gap-[16px]">
+              <button
+                type="button"
+                onClick={handleCancelFinish}
+                disabled={isFinishing}
+                className="h-[48px] w-[120px] rounded-2xl border border-gray-300 bg-white text-[16px] font-medium text-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmFinish}
+                disabled={isFinishing}
+                className="h-[48px] w-[160px] rounded-2xl bg-gray-900 text-[16px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {isFinishing ? "終了中..." : "終了する"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
