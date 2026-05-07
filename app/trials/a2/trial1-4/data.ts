@@ -8,7 +8,7 @@ export type Trial1Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 export type ShippingMethod = {
   id: string;

@@ -1,67 +1,113 @@
-
 "use client";
 
-import Link from "next/link";
-import { useId } from "react";
-import { useSearchParams } from "next/navigation";
-import { trial9Data, type Trial9Product } from "../data";
+import { useEffect, useId, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { trial9Data } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+
+const checkoutPath = getTrialPath("a1", "trial9", "checkout");
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type PlaceholderInfoProps = {
-  show: boolean;
-};
+type Trial9Product = (typeof trial9Data.products)[number];
 
-function PlaceholderInfo({ show }: PlaceholderInfoProps) {
-  return (
-    <div className="h-11 overflow-hidden">
-      {show ? (
-        <div className="h-full w-full" aria-hidden="true" />
-      ) : (
-        <div className="h-full w-full" aria-hidden="true" />
-      )}
-    </div>
-  );
-}
-
-type ProductDetailModalProps = {
+type ProductCardProps = {
   product: Trial9Product;
-  showNotice: boolean;
   set: string;
 };
 
-function ProductDetailModal({ product, showNotice, set }: ProductDetailModalProps) {
+function ProductCard({ product, set }: ProductCardProps) {
+  const router = useRouter();
   const dialogId = useId();
-  const dp = product.dpDisplay;
+
+  const isDpTarget = Boolean(product.dpDisplay?.isDpTarget);
 
   return (
-    <>
-      <button
-        type="button"
-        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
-        onClick={() => {
-          const el = document.getElementById(
-            dialogId,
-          ) as HTMLDialogElement | null;
-          el?.showModal();
-        }}
-      >
-        詳細を見る
-      </button>
+    <article className="h-[378px] w-[550px] border border-gray-200 bg-white shadow-sm rounded-md">
+      <div className="flex h-full flex-col px-[60px]">
+        <div className="h-[15px]" />
+
+        <h2 className="h-[42px] overflow-hidden text-[20px] font-semibold leading-[42px] text-gray-900">
+          {product.name}
+        </h2>
+
+        <div className="h-[60px]" />
+
+        <p className="h-[42px] overflow-hidden text-[22px] font-semibold leading-[42px] text-gray-900">
+          ¥{yen(product.priceYen)}
+        </p>
+
+        <div className="h-[60px]" />
+
+        <div className="h-[42px] overflow-hidden">
+          <div className="h-full w-full" aria-hidden="true" />
+        </div>
+
+        <div className="h-[60px]" />
+
+        <div className="grid h-[42px] grid-cols-2 gap-[60px]">
+          <button
+            type="button"
+            className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+            onClick={() => {
+              trackAction({
+                page: "product",
+                type: "view_detail",
+                payload: { productId: product.id },
+              });
+
+              const el = document.getElementById(
+                dialogId,
+              ) as HTMLDialogElement | null;
+              el?.showModal();
+            }}
+          >
+            詳細を見る
+          </button>
+
+          <button
+            className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+            onClick={async () => {
+              await trackAction({
+                page: "product",
+                type: "product_select",
+                payload: { productId: product.id },
+              });
+
+              router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
+            }}
+          >
+            購入へ
+          </button>
+        </div>
+
+        <div className="h-[15px]" />
+      </div>
 
       <dialog
         id={dialogId}
-        className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
+        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden p-0 backdrop:bg-black/70"
       >
-        <div className="mx-auto rounded-2xl bg-white">
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
+        <div className="h-full w-full overflow-hidden bg-white">
+          <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[60px]">
+            <h2 className="text-[24px] font-semibold text-gray-900">
+              商品詳細
+            </h2>
+
             <button
               type="button"
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
+              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
+                trackAction({
+                  page: "product",
+                  type: "close_detail",
+                  payload: { productId: product.id },
+                });
+
                 const el = document.getElementById(
                   dialogId,
                 ) as HTMLDialogElement | null;
@@ -72,154 +118,135 @@ function ProductDetailModal({ product, showNotice, set }: ProductDetailModalProp
             </button>
           </div>
 
-          <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
-            <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              <section className="rounded-xl border-2 border-gray-300 bg-gray-100 p-4">
-                <div className="flex h-full items-center justify-center text-sm text-gray-400">
-                  画像エリア
-                </div>
+          <div className="flex h-[790px] overflow-hidden px-[60px]">
+            <div className="flex w-[400px] flex-col">
+              <div className="h-[60px]" />
+
+              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-100">
+                画像エリア
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                    商品説明
-                  </h3>
-                  <div className="space-y-2 text-sm leading-6 text-gray-600">
+              <div className="h-[60px]" />
+
+              <section className="h-[160px] overflow-hidden border border-gray-300 p-[16px]">
+                <h3 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  商品説明
+                </h3>
+
+                {isDpTarget && product.dpDisplay ? (
+                  <div className="text-[14px] leading-[22px] text-gray-600">
+                    <p>{product.dpDisplay.specLead}</p>
+                    <p className="text-[16px] font-bold text-gray-900">
+                      {product.dpDisplay.boldPackText}
+                    </p>
+                    <p>{product.dpDisplay.specTail}</p>
+                  </div>
+                ) : (
+                  <div className="text-[14px] leading-[22px] text-gray-600">
                     <p>{product.description}</p>
                     <p>
                       毎日の使用を想定した定番商品です。購入前に内容をよく確認してください。
                     </p>
                   </div>
-                </div>
+                )}
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                    仕様・補足
-                  </h3>
+              <div className="h-[60px]" />
 
-                  {dp?.isDpTarget ? (
-                    <div className="space-y-2 text-sm text-gray-600">
-                      <p>{dp.specLead}</p>
-                      <p className="text-base font-bold text-gray-900">
-                        {dp.boldPackText}
-                      </p>
-                      <p>{dp.specTail}</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-2 text-sm text-gray-600">
-                      {product.specsAndNotes.map((line) => (
-                        <div key={line}>{line}</div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <section className="h-[160px] overflow-hidden border border-gray-300 p-[16px]">
+                <h3 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  仕様・補足
+                </h3>
+
+                {isDpTarget && product.dpDisplay ? (
+                  <div className="text-[14px] leading-[22px] text-gray-600">
+                    <p>{product.dpDisplay.specLead}</p>
+                    <p className="text-[16px] font-bold text-gray-900">
+                      {product.dpDisplay.boldPackText}
+                    </p>
+                    <p>{product.dpDisplay.specTail}</p>
+                  </div>
+                ) : (
+                  <div className="text-[14px] leading-[22px] text-gray-600">
+                    {product.specsAndNotes.map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
+                  </div>
+                )}
               </section>
             </div>
 
-            <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col justify-start">
-                  {showNotice ? (
-                    <div className="mb-3 rounded-md bg-orange-50 px-3 py-2 text-sm text-orange-700">
-                      詳細情報をご確認ください
-                    </div>
-                  ) : (
-                    <div className="mb-3 h-[40px]" aria-hidden="true" />
-                  )}
+            <div className="w-[60px]" />
 
-                  <h3 className="text-2xl font-bold leading-tight text-gray-900">
-                    {product.name}
-                  </h3>
+            <div className="flex w-[400px] flex-col">
+              <div className="h-[60px]" />
 
-                  <div className="mt-3 text-2xl font-semibold text-gray-900">
-                    ¥{yen(product.priceYen)}
-                  </div>
+              <div className="h-[42px] overflow-hidden">
+                <div className="h-full w-full" aria-hidden="true" />
+              </div>
+
+              <div className="h-[60px]" />
+
+              <h3 className="h-[35px] overflow-hidden text-[20px] font-bold leading-[35px] text-gray-900">
+                {product.name}
+              </h3>
+
+              <div className="h-[60px]" />
+
+              <p className="h-[35px] text-[22px] font-semibold leading-[35px] text-gray-900">
+                ¥{yen(product.priceYen)}
+              </p>
+
+              <div className="h-[60px]" />
+
+              <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
+                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  購入前の確認
+                </h4>
+                <div className="text-[14px] leading-[22px] text-gray-700">
+                  {product.prePurchaseCheck.map((line) => (
+                    <div key={line}>{line}</div>
+                  ))}
                 </div>
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">
-                    購入前の確認
-                  </h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.prePurchaseCheck.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
+              <div className="h-[60px]" />
+
+              <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
+                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  配送に関わる情報
+                </h4>
+                <div className="text-[14px] leading-[22px] text-gray-700">
+                  {product.deliveryInfo.map((line) => (
+                    <div key={line}>{line}</div>
+                  ))}
                 </div>
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">
-                    配送に関わる情報
-                  </h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.deliveryInfo.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
-                </div>
-              </section>
+              <div className="h-[60px]" />
 
-              <section className="rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full items-end">
-                  <Link
-                    href={`/trials/a1/trial9/checkout?productId=${product.id}&set=${set}`}
-                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
-                  >
-                    この商品を選ぶ
-                  </Link>
-                </div>
-              </section>
+              <button
+                className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                onClick={async () => {
+                  await trackAction({
+                    page: "product",
+                    type: "product_select",
+                    payload: { productId: product.id },
+                  });
+
+                  router.push(
+                    `${checkoutPath}?set=${set}&productId=${product.id}`,
+                  );
+                }}
+              >
+                購入へ
+              </button>
+
+              <div className="h-[60px]" />
             </div>
           </div>
         </div>
       </dialog>
-    </>
-  );
-}
-
-type ProductCardProps = {
-  product: Trial9Product;
-  showNotice: boolean;
-  set: string;
-};
-
-function ProductCard({ product, showNotice, set }: ProductCardProps) {
-  return (
-    <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
-        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-          画像エリア
-        </div>
-
-        <div className="grid h-16 grid-rows-[1fr_auto] overflow-hidden">
-          <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">
-            {product.name}
-          </h2>
-          <p className="text-base font-medium leading-5 text-gray-800">
-            ¥{yen(product.priceYen)}
-          </p>
-        </div>
-
-        <PlaceholderInfo show={showNotice} />
-
-        <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal product={product} showNotice={showNotice} set={set} />
-
-          <Link
-            href={`/trials/a1/trial9/checkout?productId=${product.id}&set=${set}`}
-            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
-          >
-            購入へ
-          </Link>
-        </div>
-      </div>
     </article>
   );
 }
@@ -228,10 +255,24 @@ export default function ProductPageA1Trial9() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
 
+  const didTrack = useRef(false);
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "product",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
+
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
@@ -239,32 +280,22 @@ export default function ProductPageA1Trial9() {
   }
 
   const products = trial9Data.products;
-  const showNoticeFlags = products.map((product) => Boolean(product.dpDisplay?.isDpTarget));
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial9Data.purchaseConditions.budgetYen}円以内、
-          {trial9Data.purchaseConditions.quantityCondition}、
-          {trial9Data.purchaseConditions.specificCondition}
-        </div>
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
+        <TrialPageHeader
+          purchaseConditions={trial9Data.purchaseConditions}
+          title="商品一覧"
+        />
 
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
-        </header>
-
-        <section className="grid flex-1 grid-cols-2 items-start gap-10">
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              showNotice={showNoticeFlags[index]}
-              set={set}
-            />
+        <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} set={set} />
           ))}
         </section>
+
+        <div className="h-[99px]" />
       </div>
     </main>
   );

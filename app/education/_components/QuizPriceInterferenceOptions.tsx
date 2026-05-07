@@ -73,7 +73,7 @@ export default function QuizPriceInterferenceOptions({
   onSelect,
 }: QuizPriceInterferenceOptionsProps) {
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
+    <div className="grid grid-cols-3 gap-[16px]">
       {cards.map((card) => {
         const isSelected = selectedId === card.id;
 

@@ -1,39 +1,15 @@
+import { TrialStartPage } from "@/app/trials/_components/TrialStartPage";
+import { trial11Data } from "../data";
+import { getTrialPath } from "@/app/trials/_lib/path";
 
-import Link from "next/link";
-import trial11Data from "../data";
+const nextPath = getTrialPath("a2", "trial11", "product")
 
-type Props = {
-  searchParams?: Promise<{
-    set?: string;
-  }>;
-};
+export default function TrialStartPageA1Trial2() {
 
-export default async function TrialStartPageA2Trial11({ searchParams }: Props) {
-  const sp = await searchParams;
-  const set = sp?.set ?? "1";
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
-      <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <h1 className="text-xl font-bold text-gray-900">試行開始</h1>
-
-        <p className="text-sm text-gray-600">
-          次のページで商品を選び、購入手続きを行ってください。
-        </p>
-
-        <div className="z-10 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial11Data.purchaseConditions.budgetYen}円以内、
-          {trial11Data.purchaseConditions.quantityCondition}、
-          {trial11Data.purchaseConditions.specificCondition}
-        </div>
-
-        <Link
-          href={`/trials/a2/trial11/product?set=${set}`}
-          className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
-        >
-          試行を開始する
-        </Link>
-      </div>
-    </main>
+    <TrialStartPage
+      purchaseConditions={trial11Data.purchaseConditions}
+      nextPath={nextPath}
+    />
   );
 }

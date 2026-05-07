@@ -54,7 +54,7 @@ export default function ExperimentSetupPage() {
                   type="text"
                   value={participantId}
                   onChange={(event) => setParticipantId(event.target.value)}
-                  placeholder="例：s001"
+                  placeholder="例：001"
                   className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-slate-700 focus:ring-4 focus:ring-slate-100"
                 />
               </div>

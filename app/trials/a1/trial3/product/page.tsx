@@ -1,285 +1,91 @@
 "use client";
-
-import Link from "next/link";
-import { useId } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { trial3Data, type Trial3Product } from "../data";
+import { ProductCard } from "@/app/trials/_components/a1TrialComponents/ProductCard";
+import { trial3Data } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
-function yen(n: number) {
-  return new Intl.NumberFormat("ja-JP").format(n);
-}
+const checkoutPath = getTrialPath("a1", "trial3", "checkout");
 
-type ReviewInfoProps = {
-  show: boolean;
-  rating?: number;
-  reviewCount?: number;
-};
-
-function renderStars(rating: number) {
-  const fullStars = Math.floor(rating);
-  const hasHalf = rating - fullStars >= 0.5;
-
-  return Array.from({ length: 5 }, (_, i) => {
-    if (i < fullStars) return "★";
-    if (i === fullStars && hasHalf) return "☆";
-    return "☆";
-  }).join("");
-}
-
-function ReviewInfo({ show, rating, reviewCount }: ReviewInfoProps) {
-  return (
-    <div className="h-11 overflow-hidden">
-      {show ? (
-        <div className="flex h-full items-center rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
-          <p className="line-clamp-1">
-            <span className="font-semibold">{renderStars(rating ?? 4.0)}</span>
-            <span className="ml-2">{(rating ?? 4.0).toFixed(1)}</span>
-            <span className="ml-2 text-amber-600">（{reviewCount ?? 0}件）</span>
-          </p>
-        </div>
-      ) : (
-        <div className="h-full w-full" aria-hidden="true" />
-      )}
-    </div>
-  );
-}
-
-type ProductDetailModalProps = {
-  product: Trial3Product;
-  showReview: boolean;
-  rating?: number;
-  reviewCount?: number;
-  set: string;
-};
-
-function ProductDetailModal({
-  product,
-  showReview,
-  rating,
-  reviewCount,
-  set,
-}: ProductDetailModalProps) {
-  const dialogId = useId();
-
-  return (
-    <>
-      <button
-        type="button"
-        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
-        onClick={() => {
-          const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-          el?.showModal();
-        }}
-      >
-        詳細を見る
-      </button>
-
-      <dialog
-        id={dialogId}
-        className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
-      >
-        <div className="mx-auto rounded-2xl bg-white">
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
-            <button
-              type="button"
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
-              onClick={() => {
-                const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-                el?.close();
-              }}
-            >
-              閉じる
-            </button>
-          </div>
-
-          <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
-            <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              <section className="rounded-xl border-2 border-gray-300 bg-gray-100 p-4">
-                <div className="flex h-full items-center justify-center text-sm text-gray-400">
-                  画像エリア
-                </div>
-              </section>
-
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h3 className="mb-3 text-sm font-semibold text-gray-900">商品説明</h3>
-                  <div className="space-y-2 text-sm leading-6 text-gray-600">
-                    <p>{product.description}</p>
-                    <p>
-                      毎日の使用を想定した定番商品です。購入前に内容をよく確認してください。
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h3 className="mb-3 text-sm font-semibold text-gray-900">仕様・補足</h3>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    {product.specsAndNotes.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            </div>
-
-            <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col justify-start">
-                  {showReview ? (
-                    <div className="mb-3 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
-                      <span className="font-semibold">{renderStars(rating ?? 4.0)}</span>
-                      <span className="ml-2">{(rating ?? 4.0).toFixed(1)}</span>
-                      <span className="ml-2 text-amber-600">（{reviewCount ?? 0}件）</span>
-                    </div>
-                  ) : (
-                    <div className="mb-3 h-[40px]" aria-hidden="true" />
-                  )}
-
-                  <h3 className="text-2xl font-bold leading-tight text-gray-900">
-                    {product.name}
-                  </h3>
-
-                  <div className="mt-3 text-2xl font-semibold text-gray-900">
-                    ¥{yen(product.priceYen)}
-                  </div>
-                </div>
-              </section>
-
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">購入前の確認</h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.prePurchaseCheck.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">配送に関わる情報</h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.deliveryInfo.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              <section className="rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full items-end">
-                  <Link
-                    href={`/trials/a1/trial3/checkout?productId=${product.id}&set=${set}`}
-                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
-                  >
-                    この商品を選ぶ
-                  </Link>
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-      </dialog>
-    </>
-  );
-}
-
-type ProductCardProps = {
-  product: Trial3Product;
-  showReview: boolean;
-  rating?: number;
-  reviewCount?: number;
-  set: string;
-};
-
-function ProductCard({ product, showReview, rating, reviewCount, set }: ProductCardProps) {
-  return (
-    <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
-        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-          画像エリア
-        </div>
-
-        <div className="grid h-16 grid-rows-[1fr_auto] overflow-hidden">
-          <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">
-            {product.name}
-          </h2>
-          <p className="text-base font-medium leading-5 text-gray-800">
-            ¥{yen(product.priceYen)}
-          </p>
-        </div>
-
-        <ReviewInfo show={showReview} rating={rating} reviewCount={reviewCount} />
-
-        <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal
-            product={product}
-            showReview={showReview}
-            rating={rating}
-            reviewCount={reviewCount}
-            set={set}
-          />
-
-          <Link
-            href={`/trials/a1/trial3/checkout?productId=${product.id}&set=${set}`}
-            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-center text-sm font-medium text-white"
-          >
-            購入へ
-          </Link>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-export default function ProductPageA1Trial3() {
+export default function ProductPageA1Trial2() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
-  const products = trial3Data.products;
-  const reviewRatings = products.map((product) => product.dpDisplay?.rating ?? 0);
-  const reviewCounts = products.map((product) => product.dpDisplay?.reviewCount ?? 0);
-  const showReviewFlags = products.map((product) => Boolean(product.dpDisplay));
+
+  const didTrack = useRef(false);
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "product",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
 
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
     );
   }
 
+  const products = trial3Data.products;
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial3Data.purchaseConditions.budgetYen}円以内、
-          {trial3Data.purchaseConditions.quantityCondition}、
-          {trial3Data.purchaseConditions.specificCondition}
-        </div>
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
+        <TrialPageHeader
+          purchaseConditions={trial3Data.purchaseConditions}
+          title="商品一覧"
+        />
 
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
-        </header>
-
-        <section className="grid flex-1 grid-cols-2 items-start gap-10">
-          {products.map((product, index) => (
+        {/* 商品カード領域：378px + 60px + 378px */}
+        <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
+          {products.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
-              showReview={showReviewFlags[index]}
-              rating={reviewRatings[index]}
-              reviewCount={reviewCounts[index]}
               set={set}
+              checkoutPath={checkoutPath}
+              dpArea={
+                product.dpDisplay ? (
+                  <div className="flex h-full items-center justify-center border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold leading-[42px] text-orange-700">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                            key={star}
+                            className={
+                              star <= Math.floor(product.dpDisplay!.rating)
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            }
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+
+                      <p className="truncate">
+                        {product.dpDisplay.rating}（
+                        {product.dpDisplay.reviewCount}件）
+                      </p>
+                    </div>
+                  </div>
+                ) : undefined
+              }
             />
           ))}
         </section>
+
+        {/* 99pxの空間 */}
+        <div className="h-[99px]" />
       </div>
     </main>
   );
