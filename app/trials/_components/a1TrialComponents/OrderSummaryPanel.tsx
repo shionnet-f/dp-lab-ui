@@ -12,12 +12,14 @@ type ProductForOrderSummary = {
 type OrderSummaryPanelProps = {
   product: ProductForOrderSummary;
   set: string;
+  trial: string;
   backPath: string;
 };
 
 export function OrderSummaryPanel({
   product,
   set,
+  trial,
   backPath,
 }: OrderSummaryPanelProps) {
   const router = useRouter();
@@ -65,7 +67,7 @@ export function OrderSummaryPanel({
             type: "checkout_back",
           });
 
-          router.push(`${backPath}?set=${set}`);
+          router.push(`${backPath}?set=${set}&trial=${trial}`);
         }}
         className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
       >

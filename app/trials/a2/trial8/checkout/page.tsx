@@ -18,6 +18,7 @@ type Props = {
     shipping?: string;
     options?: string | string[];
     set?: string;
+    trial?: string;
   }>;
 };
 
@@ -152,6 +153,7 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
 
   const selectedProduct = getProductById(sp?.productId);
   const set = sp?.set;
+  const trial = sp?.trial;
 
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
   const [options, setOptions] = useState<string[]>(
@@ -200,11 +202,11 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
 
   const totalPrice = productPrice + shippingPrice + optionTotalPrice;
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -242,6 +244,7 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
             const params = new URLSearchParams();
             params.set("productId", selectedProduct.id);
             params.set("set", set);
+            params.set("trial", trial);
             params.set("shipping", shipping ?? "");
 
             options.forEach((optionId) => {
@@ -254,6 +257,7 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="set" value={set} />
+          <input type="hidden" name="trial" value={trial} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
 
           {options.map((optionId) => (
@@ -302,7 +306,7 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
                   },
                 });
 
-                router.push(`${productPath}?set=${set}`);
+                router.push(`${productPath}?set=${set}&trial=${trial}`);
               }}
               className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
             >

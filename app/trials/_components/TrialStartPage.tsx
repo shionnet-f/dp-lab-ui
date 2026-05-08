@@ -21,6 +21,7 @@ export function TrialStartPage({
 }: TrialStartPageProps) {
     const searchParams = useSearchParams();
     const set = searchParams.get("set") ?? "1";
+    const trial = searchParams.get("trial") ?? "1";
 
     const didTrack = useRef(false);
     const router = useRouter();
@@ -71,7 +72,7 @@ export function TrialStartPage({
                                 payload: {},
                             });
 
-                            router.push(`${nextPath}?set=${set}`);
+                            router.push(`${nextPath}?set=${set}&trial=${trial}`);
                         }}
                     >
                         開始する

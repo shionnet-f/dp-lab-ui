@@ -4,12 +4,14 @@ import trial1_2Data from "../data";
 type Props = {
   searchParams?: Promise<{
     set?: string;
+    trial?: string;
   }>;
 };
 
-export default async function B2trial1_2StartPage({ searchParams }: Props) {
+export default async function StartPageB2Trial1_2({ searchParams }: Props) {
   const sp = await searchParams;
   const set = sp?.set ?? "1";
+  const trial = sp?.trial ?? "1";
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -27,7 +29,7 @@ export default async function B2trial1_2StartPage({ searchParams }: Props) {
         </div>
 
         <Link
-          href={`/trials/b2/trial1-2/product?set=${set}`}
+          href={`/trials/b2/trial1-2/product?set=${set}&trial=${trial}`}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           試行を開始する

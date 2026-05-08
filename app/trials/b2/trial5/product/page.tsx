@@ -11,9 +11,10 @@ function yen(n: number) {
 type ProductDetailModalProps = {
   product: Trial5Product;
   set: string;
+  trial: string;
 };
 
-function ProductDetailModal({ product, set }: ProductDetailModalProps) {
+function ProductDetailModal({ product, set, trial }: ProductDetailModalProps) {
   const dialogId = `product-dialog-${product.id}`;
 
   function openDialog() {
@@ -76,7 +77,7 @@ function ProductDetailModal({ product, set }: ProductDetailModalProps) {
             </section>
 
             <div className="pt-1">
-              <Link href={`/trials/b2/trial5/checkout?productId=${product.id}&set=${set}`} className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white">
+              <Link href={`/trials/b2/trial5/checkout?productId=${product.id}&set=${set}&trial=${trial}`} className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white">
                 この商品を選ぶ
               </Link>
             </div>
@@ -99,8 +100,8 @@ function ProductCard({ product, set }: { product: Trial5Product; set: string }) 
         </div>
 
         <div className="grid grid-cols-2 gap-3 justify-self-end">
-          <ProductDetailModal product={product} set={set} />
-          <Link href={`/trials/b2/trial5/checkout?productId=${product.id}&set=${set}`} className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white">
+          <ProductDetailModal product={product} set={set} trial={trial} />
+          <Link href={`/trials/b2/trial5/checkout?productId=${product.id}&set=${set}&trial=${trial}`} className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white">
             購入へ
           </Link>
         </div>
@@ -112,12 +113,13 @@ function ProductCard({ product, set }: { product: Trial5Product; set: string }) 
 export default function ProductPageB2Trial5() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
+  const trial = searchParams.get("trial");
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -134,7 +136,7 @@ export default function ProductPageB2Trial5() {
         </div>
         <header className="mb-5 shrink-0"><h1 className="text-xl font-bold text-gray-900">商品一覧</h1></header>
         <section className="grid flex-1 gap-5">
-          {trial5Data.products.map((product) => <ProductCard key={product.id} product={product} set={set} />)}
+          {trial5Data.products.map((product) => <ProductCard key={product.id} product={product} set={set} trial={trial} />)}
         </section>
       </div>
     </main>

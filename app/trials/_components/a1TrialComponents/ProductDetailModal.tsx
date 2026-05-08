@@ -19,6 +19,7 @@ type ProductForDetailModal = {
 type ProductDetailModalProps = {
   product: ProductForDetailModal;
   set: string;
+  trial: string;
   nextPath: string;
   dpArea?: ReactNode;
 };
@@ -30,6 +31,7 @@ function yen(n: number) {
 export function ProductDetailModal({
   product,
   set,
+  trial,
   nextPath,
   dpArea,
 }: ProductDetailModalProps) {
@@ -194,7 +196,9 @@ export function ProductDetailModal({
                     payload: { productId: product.id },
                   });
 
-                  router.push(`${nextPath}?set=${set}&productId=${product.id}`);
+                  router.push(
+                    `${nextPath}?set=${set}&trial=${trial}&productId=${product.id}`,
+                  );
                 }}
               >
                 購入へ

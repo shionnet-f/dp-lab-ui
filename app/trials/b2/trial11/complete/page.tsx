@@ -1,31 +1,30 @@
-import Link from "next/link";
+import { TrialCompletePage } from "@/app/trials/_components/TrialCompletePage";
+import { getNextTrialStep } from "@/app/trials/_lib/trialFlow";
 
 type Props = {
-  searchParams: Promise<{
+  searchParams?: Promise<{
     set?: string;
+    trial?: string;
   }>;
 };
 
-export default async function TrialCompletePageB2Trial11({
+export default async function CompletePageB2Trial11({
   searchParams,
 }: Props) {
   const sp = await searchParams;
-  const set = sp.set ?? "1";
+  const set = sp?.set ?? "1";
+  const trial = sp?.trial ?? "1";
+
+  const next = getNextTrialStep({
+    setId: "b2",
+    trialIndex: trial,
+  });
 
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
-      <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <h1 className="text-xl font-bold text-gray-900">セット完了</h1>
-
-        <p className="text-sm text-gray-600">購入手続き完了です</p>
-
-        <Link
-          href={`/experiment/fixation?set=${set}&position=after`}
-          className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
-        >
-          次へ進む
-        </Link>
-      </div>
-    </main>
+    <TrialCompletePage
+      set={set}
+      nextPath={next.nextPath}
+      nextParams={next.nextParams}
+    />
   );
 }

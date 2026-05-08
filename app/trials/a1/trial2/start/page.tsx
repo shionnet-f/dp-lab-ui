@@ -4,7 +4,7 @@ import { getTrialPath } from "@/app/trials/_lib/path";
 
 const nextPath = getTrialPath("a1", "trial2", "product")
 
-export default function TrialStartPageA1Trial2() {
+export default function StartPageA1Trial2() {
 
   return (
     <TrialStartPage

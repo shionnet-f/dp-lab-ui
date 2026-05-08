@@ -16,6 +16,7 @@ type Props = {
     shipping?: string;
     options?: string | string[];
     set?: string;
+    trial?: string;
   }>;
 };
 
@@ -161,6 +162,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
 
   const selectedProduct = getProductById(sp?.productId);
   const set = sp?.set;
+  const trial = sp?.trial;
 
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
   const [options, setOptions] = useState<string[]>(
@@ -188,11 +190,11 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
     );
   }
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -225,6 +227,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
             const params = new URLSearchParams();
             params.set("productId", selectedProduct.id);
             params.set("set", set);
+            params.set("trial", trial);
             params.set("shipping", shipping ?? "");
 
             options.forEach((o) => {
@@ -237,6 +240,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="set" value={set} />
+          <input type="hidden" name="trial" value={trial} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
 
           {options.map((o) => (
@@ -314,7 +318,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
                   type: "checkout_back",
                 });
 
-                router.push(`${productPath}?set=${set}`);
+                router.push(`${productPath}?set=${set}&trial=${trial}`);
               }}
               className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
             >

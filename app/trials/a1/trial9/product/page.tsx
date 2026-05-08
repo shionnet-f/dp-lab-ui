@@ -78,7 +78,7 @@ function ProductCard({ product, set }: ProductCardProps) {
                 payload: { productId: product.id },
               });
 
-              router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
+              router.push(`${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`);
             }}
           >
             購入へ
@@ -235,7 +235,7 @@ function ProductCard({ product, set }: ProductCardProps) {
                   });
 
                   router.push(
-                    `${checkoutPath}?set=${set}&productId=${product.id}`,
+                    `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
                   );
                 }}
               >
@@ -254,6 +254,7 @@ function ProductCard({ product, set }: ProductCardProps) {
 export default function ProductPageA1Trial9() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
+  const trial = searchParams.get("trial");
 
   const didTrack = useRef(false);
 
@@ -269,11 +270,11 @@ export default function ProductPageA1Trial9() {
     });
   }, []);
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -291,7 +292,7 @@ export default function ProductPageA1Trial9() {
 
         <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} set={set} />
+            <ProductCard key={product.id} product={product} set={set} trial={trial} />
           ))}
         </section>
 

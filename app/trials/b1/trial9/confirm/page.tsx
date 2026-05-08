@@ -31,6 +31,7 @@ export default function ConfirmPageB1Trial9() {
   const shippingId = searchParams.get("shipping") ?? undefined;
   const optionIds = searchParams.getAll("options");
   const set = searchParams.get("set");
+  const trial = searchParams.get("trial");
 
   const selectedProduct = getProductById(productId);
   const selectedShippingBase = getShippingById(shippingId);
@@ -82,11 +83,11 @@ export default function ConfirmPageB1Trial9() {
     totalYen,
   ]);
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -95,6 +96,7 @@ export default function ConfirmPageB1Trial9() {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
+  backParams.set("trial", trial);
   backParams.set("shipping", shippingId ?? "");
 
   optionIds.forEach((optionId) => {
@@ -104,6 +106,7 @@ export default function ConfirmPageB1Trial9() {
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
+  completeParams.set("trial", trial);
   completeParams.set("shipping", shippingId ?? "");
 
   optionIds.forEach((optionId) => {

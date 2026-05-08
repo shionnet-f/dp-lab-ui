@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loadExperimentPlan } from "../_lib/storage";
 import type { ExperimentPlan, FixationPosition, SetIndex } from "../_lib/types";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { trialOrder } from "@/app/trials/_lib/trialOrder";
 
 const DURATION_SECONDS = 30;
 
@@ -23,7 +25,9 @@ function getNextPath(
 ) {
   if (position === "before") {
     const phase = plan.sets[setIndex].phase;
-    return `/trials/${phase}/trial1-1/start?set=${setIndex}`;
+    const firstTrial = trialOrder[phase][0];
+
+    return `${getTrialPath(phase, firstTrial, "start")}?set=${setIndex}&trial=1`;
   }
 
   if (setIndex === "1") return "/experiment/rest?next=education";

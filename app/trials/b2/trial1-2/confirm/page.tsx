@@ -9,7 +9,7 @@ function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-export default function B2trial1_2ConfirmPage() {
+export default function ConfirmPageB2Trial1_2() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [error, setError] = useState(false);
@@ -18,12 +18,13 @@ export default function B2trial1_2ConfirmPage() {
   const shipping = searchParams.get("shipping") ?? undefined;
   const optionKeys = searchParams.getAll("options");
   const set = searchParams.get("set");
+  const trial = searchParams.get("trial");
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -40,12 +41,14 @@ export default function B2trial1_2ConfirmPage() {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
+  backParams.set("trial", trial);
   if (shipping) backParams.set("shipping", shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
+  completeParams.set("trial", trial);
   if (shipping) completeParams.set("shipping", shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 

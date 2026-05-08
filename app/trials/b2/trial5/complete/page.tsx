@@ -1,29 +1,30 @@
-import Link from "next/link";
+import { TrialCompletePage } from "@/app/trials/_components/TrialCompletePage";
+import { getNextTrialStep } from "@/app/trials/_lib/trialFlow";
 
 type Props = {
   searchParams?: Promise<{
     set?: string;
+    trial?: string;
   }>;
 };
 
-export default async function CompletePageB2Trial5({ searchParams }: Props) {
+export default async function CompletePageB2Trial5({
+  searchParams,
+}: Props) {
   const sp = await searchParams;
   const set = sp?.set ?? "1";
+  const trial = sp?.trial ?? "1";
+
+  const next = getNextTrialStep({
+    setId: "b2",
+    trialIndex: trial,
+  });
 
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
-      <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <h1 className="text-xl font-bold text-gray-900">購入完了</h1>
-
-        <p className="text-sm text-gray-600">注文が完了しました。次の試行へ進んでください。</p>
-
-        <Link
-          href={`/trials/b2/trial6/start?set=${set}`}
-          className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
-        >
-          次へ進む
-        </Link>
-      </div>
-    </main>
+    <TrialCompletePage
+      set={set}
+      nextPath={next.nextPath}
+      nextParams={next.nextParams}
+    />
   );
 }

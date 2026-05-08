@@ -33,7 +33,7 @@ function normalizeOptions(options?: string | string[]) {
   return Array.isArray(options) ? options : [options];
 }
 
-export default function ConfirmPageA2Trial2({ searchParams }: Props) {
+export default function ConfirmPageA2Trial1_3({ searchParams }: Props) {
   const sp = use(searchParams);
   const router = useRouter();
 
@@ -57,11 +57,11 @@ export default function ConfirmPageA2Trial2({ searchParams }: Props) {
     });
   }, []);
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -82,6 +82,7 @@ export default function ConfirmPageA2Trial2({ searchParams }: Props) {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
+  backParams.set("trial", trial);
   backParams.set("shipping", shippingId ?? "");
   optionIds.forEach((id) => {
     backParams.append("options", id);
@@ -90,6 +91,7 @@ export default function ConfirmPageA2Trial2({ searchParams }: Props) {
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
+  completeParams.set("trial", trial);
   completeParams.set("shipping", shippingId ?? "");
   optionIds.forEach((id) => {
     completeParams.append("options", id);

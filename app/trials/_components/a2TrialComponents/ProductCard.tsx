@@ -18,6 +18,7 @@ type ProductForCard = {
 type ProductCardProps = {
     product: ProductForCard;
     set: string;
+    trial: string;
     checkoutPath: string;
     dpArea?: ReactNode;
 };
@@ -29,6 +30,7 @@ function yen(n: number) {
 export function ProductCard({
     product,
     set,
+    trial,
     checkoutPath,
     dpArea,
 }: ProductCardProps) {
@@ -75,6 +77,7 @@ export function ProductCard({
                         <ProductDetailModal
                             product={product}
                             set={set}
+                            trial={trial}
                             nextPath={checkoutPath}
                             dpArea={dpArea}
                         />
@@ -92,7 +95,9 @@ export function ProductCard({
                                     },
                                 });
 
-                                router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
+                                router.push(
+                `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
+              );
                             }}
                         >
                             購入へ

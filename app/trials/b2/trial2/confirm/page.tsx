@@ -40,12 +40,14 @@ export default function ConfirmPageB2Trial2({ searchParams }: Props) {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   if (set) backParams.set("set", set);
+  backParams.set("trial", trial);
   if (sp?.shipping) backParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   if (set) completeParams.set("set", set);
+  completeParams.set("trial", trial);
   if (sp?.shipping) completeParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 
@@ -63,11 +65,11 @@ export default function ConfirmPageB2Trial2({ searchParams }: Props) {
     router.push(`/trials/b2/trial2/complete?${completeParams.toString()}`);
   };
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );

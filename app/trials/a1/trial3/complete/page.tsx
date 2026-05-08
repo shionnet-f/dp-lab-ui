@@ -1,24 +1,30 @@
 import { TrialCompletePage } from "@/app/trials/_components/TrialCompletePage";
-import { getTrialPath } from "@/app/trials/_lib/path";
+import { getNextTrialStep } from "@/app/trials/_lib/trialFlow";
 
 type Props = {
   searchParams?: Promise<{
     set?: string;
+    trial?: string;
   }>;
 };
 
-const nextPath = getTrialPath("a1", "trial4", "start");
-
-export default async function TrialCompletePageA1Trial2({
+export default async function CompletePageA1Trial3({
   searchParams,
 }: Props) {
   const sp = await searchParams;
   const set = sp?.set ?? "1";
+  const trial = sp?.trial ?? "1";
+
+  const next = getNextTrialStep({
+    setId: "a1",
+    trialIndex: trial,
+  });
 
   return (
     <TrialCompletePage
       set={set}
-      nextPath={nextPath}
+      nextPath={next.nextPath}
+      nextParams={next.nextParams}
     />
   );
 }

@@ -209,7 +209,7 @@ function ProductDetailModalB1Trial2({
                   });
 
                   router.push(
-                    `${checkoutPath}?set=${set}&productId=${product.id}`,
+                    `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
                   );
                 }}
               >
@@ -254,7 +254,7 @@ function ProductCardB1Trial2({ product, set }: ProductCardB1Trial2Props) {
       <div className="h-[60px]" />
 
       <div className="flex h-[42px] items-center justify-between">
-        <ProductDetailModalB1Trial2 product={product} set={set} />
+        <ProductDetailModalB1Trial2 product={product} set={set} trial={trial} />
 
         <button
           type="button"
@@ -270,7 +270,7 @@ function ProductCardB1Trial2({ product, set }: ProductCardB1Trial2Props) {
               },
             });
 
-            router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
+            router.push(`${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`);
           }}
         >
           購入へ
@@ -285,6 +285,7 @@ function ProductCardB1Trial2({ product, set }: ProductCardB1Trial2Props) {
 export default function ProductPageB1Trial2() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
+  const trial = searchParams.get("trial");
 
   const didTrack = useRef(false);
 
@@ -300,11 +301,11 @@ export default function ProductPageB1Trial2() {
     });
   }, []);
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -323,7 +324,7 @@ export default function ProductPageB1Trial2() {
         {/* 商品カード領域：378px + 60px + 378px */}
         <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
           {products.map((product) => (
-            <ProductCardB1Trial2 key={product.id} product={product} set={set} />
+            <ProductCardB1Trial2 key={product.id} product={product} set={set} trial={trial} />
           ))}
         </section>
 

@@ -18,6 +18,7 @@ type Props = {
     shipping?: string;
     options?: string | string[];
     set?: string;
+    trial?: string;
   }>;
 };
 
@@ -26,11 +27,12 @@ function normalizeOptions(options?: string | string[]) {
   return Array.isArray(options) ? options : [options];
 }
 
-export default function CheckoutPageA1Trial2({ searchParams }: Props) {
+export default function CheckoutPageA1Trial3({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const selectedProduct = getProductById(sp?.productId);
   const set = sp?.set;
+  const trial = sp?.trial;
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
   const [options, setOptions] = useState<string[]>(
     normalizeOptions(sp?.options),
@@ -58,11 +60,11 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
     );
   }
 
-  if (!set) {
+  if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
         <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set がありません。
+          URLに set または trial がありません。
         </div>
       </main>
     );
@@ -94,6 +96,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
             const params = new URLSearchParams();
             params.set("productId", selectedProduct.id);
             params.set("set", set);
+            params.set("trial", trial);
             params.set("shipping", shipping ?? "");
 
             options.forEach((o) => {
@@ -106,6 +109,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="set" value={set} />
+          <input type="hidden" name="trial" value={trial} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
@@ -135,6 +139,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
           <OrderSummaryPanel
             product={selectedProduct}
             set={set}
+            trial={trial}
             backPath={productPath}
           />
         </form>
