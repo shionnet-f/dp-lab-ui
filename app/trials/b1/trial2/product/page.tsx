@@ -1,56 +1,47 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { trial2Data, type Trial2Product } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+
+const checkoutPath = getTrialPath("b1", "trial2", "checkout");
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type ViewerInfoProps = {
-  show: boolean;
-  text?: string;
-};
-
-function ViewerInfo({ show, text }: ViewerInfoProps) {
-  return (
-    <div className="h-11 overflow-hidden">
-      {show ? (
-        <div className="flex h-full items-center px-3 py-2 text-sm text-gray-700">
-          <p className="line-clamp-1">{text}</p>
-        </div>
-      ) : (
-        <div className="h-full w-full" aria-hidden="true" />
-      )}
-    </div>
-  );
-}
-
-type ProductDetailModalProps = {
+type ProductDetailModalB1Trial2Props = {
   product: Trial2Product;
-  showViewer: boolean;
-  viewerText?: string;
   set: string;
 };
 
-function ProductDetailModal({
+function ProductDetailModalB1Trial2({
   product,
-  showViewer,
-  viewerText,
   set,
-}: ProductDetailModalProps) {
+}: ProductDetailModalB1Trial2Props) {
   const dialogId = useId();
+  const router = useRouter();
   const [isExtraOpen, setIsExtraOpen] = useState(false);
 
   return (
     <>
       <button
         type="button"
-        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
-        onClick={() => {
-          const el = document.getElementById(dialogId) as HTMLDialogElement | null;
+        className="flex h-[42px] w-[180px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
+        onClick={async () => {
+          await trackAction({
+            page: "product",
+            type: "view_detail",
+            meta: {},
+            payload: { productId: product.id },
+          });
+
+          const el = document.getElementById(
+            dialogId,
+          ) as HTMLDialogElement | null;
           el?.showModal();
         }}
       >
@@ -59,17 +50,29 @@ function ProductDetailModal({
 
       <dialog
         id={dialogId}
-        className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
+        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden p-0 backdrop:bg-black/70"
         onClose={() => setIsExtraOpen(false)}
       >
-        <div className="mx-auto rounded-2xl bg-white">
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
+        <div className="h-full w-full overflow-hidden bg-white">
+          <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[60px]">
+            <h2 className="text-[24px] font-semibold text-gray-900">
+              商品詳細
+            </h2>
+
             <button
               type="button"
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
+              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
-                const el = document.getElementById(dialogId) as HTMLDialogElement | null;
+                void trackAction({
+                  page: "product",
+                  type: "close_detail",
+                  meta: {},
+                  payload: { productId: product.id },
+                });
+
+                const el = document.getElementById(
+                  dialogId,
+                ) as HTMLDialogElement | null;
                 el?.close();
               }}
             >
@@ -77,119 +80,143 @@ function ProductDetailModal({
             </button>
           </div>
 
-          <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
-            <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              <section className="rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full items-center justify-center text-sm text-gray-400">
-                  画像エリア
-                </div>
+          <div className="flex h-[790px] overflow-hidden px-[60px]">
+            <div className="flex w-[400px] flex-col">
+              <div className="h-[60px]" />
+
+              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-100 text-[14px] text-gray-400">
+                画像エリア
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                    商品説明
+              <div className="h-[60px]" />
+
+              <section className="h-[160px] overflow-hidden border border-gray-300 p-[16px]">
+                <h3 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  商品説明
+                </h3>
+
+                <p className="text-[14px] leading-[22px] text-gray-600">
+                  {product.description}
+                </p>
+              </section>
+
+              <div className="h-[60px]" />
+
+              <section className="h-[160px] overflow-hidden border border-gray-300 p-[16px]">
+                <div className="flex h-[24px] items-center justify-between">
+                  <h3 className="text-[16px] font-semibold leading-[24px] text-gray-900">
+                    仕様・補足
                   </h3>
-                  <div className="h-full overflow-y-auto text-sm leading-6 text-gray-600">
-                    <div className="space-y-2 pr-1">
-                      <p>{product.description}</p>
-                      <p>
-                        毎日の使用を想定した定番商品です。購入前に内容をよく確認してください。
-                      </p>
-                    </div>
-                  </div>
+
+                  <button
+                    type="button"
+                    className="h-[24px] text-[13px] leading-[24px] text-gray-500 underline underline-offset-2"
+                    onClick={() => {
+                      const next = !isExtraOpen;
+                      setIsExtraOpen(next);
+
+                      void trackAction({
+                        page: "product",
+                        type: next
+                          ? "open_hidden_detail"
+                          : "close_hidden_detail",
+                        meta: {},
+                        payload: { productId: product.id },
+                      });
+                    }}
+                  >
+                    {isExtraOpen
+                      ? "閉じる"
+                      : (product.hiddenDetailsTitle ?? "さらに詳細を見る")}
+                  </button>
                 </div>
-              </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-gray-900">
-                      仕様・補足
-                    </h3>
-                    <button
-                      type="button"
-                      className="text-xs text-gray-500 underline underline-offset-2"
-                      onClick={() => setIsExtraOpen((prev) => !prev)}
-                    >
-                      {isExtraOpen ? "閉じる" : "さらに詳細を見る"}
-                    </button>
-                  </div>
-
-                  <div className="mt-3 h-[92px]">
-                    {isExtraOpen ? (
-                      <div className="h-full overflow-y-auto p-1">
-                        <div className="space-y-2 text-sm text-gray-600">
-                          {product.specsAndNotes.map((line) => (
-                            <div key={line}>{line}</div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="h-full" aria-hidden="true" />
-                    )}
-                  </div>
+                <div className="mt-[12px] h-[92px] overflow-hidden text-[14px] leading-[22px] text-gray-600">
+                  {isExtraOpen ? (
+                    <div className="h-full overflow-y-auto">
+                      {product.specsAndNotes.map((line) => (
+                        <div key={line}>{line}</div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="h-full w-full" aria-hidden="true" />
+                  )}
                 </div>
               </section>
             </div>
 
-            <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col justify-start">
-                  {showViewer ? (
-                    <div className="mb-3 px-3 py-2 text-sm text-gray-700">
-                      {viewerText}
-                    </div>
-                  ) : (
-                    <div className="mb-3 h-[40px]" aria-hidden="true" />
-                  )}
+            <div className="w-[60px]" />
 
-                  <h3 className="text-2xl font-bold leading-tight text-gray-900">
-                    {product.name}
-                  </h3>
+            <div className="flex w-[400px] flex-col">
+              <div className="h-[60px]" />
 
-                  <div className="mt-3 text-2xl font-semibold text-gray-900">
-                    ¥{yen(product.priceYen)}
-                  </div>
+              <div className="h-[35px]" aria-hidden="true" />
+
+              <div className="h-[60px]" />
+
+              <h3 className="h-[35px] overflow-hidden text-[20px] font-bold leading-[35px] text-gray-900">
+                {product.name}
+              </h3>
+
+              <div className="h-[60px]" />
+
+              <p className="h-[35px] text-[22px] font-semibold leading-[35px] text-gray-900">
+                ¥{yen(product.priceYen)}
+              </p>
+
+              <div className="h-[60px]" />
+
+              <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
+                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  購入前の確認
+                </h4>
+
+                <div className="text-[14px] leading-[22px] text-gray-700">
+                  {product.prePurchaseCheck.map((line) => (
+                    <div key={line}>{line}</div>
+                  ))}
                 </div>
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">
-                    購入前の確認
-                  </h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.prePurchaseCheck.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
+              <div className="h-[60px]" />
+
+              <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
+                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  配送に関わる情報
+                </h4>
+
+                <div className="text-[14px] leading-[22px] text-gray-700">
+                  {product.deliveryInfo.map((line) => (
+                    <div key={line}>{line}</div>
+                  ))}
                 </div>
               </section>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">
-                    配送に関わる情報
-                  </h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.deliveryInfo.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
-                </div>
-              </section>
+              <div className="h-[60px]" />
 
-              <section className="rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full items-end">
-                  <Link
-                    href={`/trials/b1/trial2/checkout?productId=${product.id}&set=${set}`}
-                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
-                  >
-                    この商品を選ぶ
-                  </Link>
-                </div>
-              </section>
+              <button
+                type="button"
+                className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                onClick={async () => {
+                  await trackAction({
+                    page: "product",
+                    type: "product_select",
+                    meta: {},
+                    payload: {
+                      productId: product.id,
+                      source: "dialog",
+                    },
+                  });
+
+                  router.push(
+                    `${checkoutPath}?set=${set}&productId=${product.id}`,
+                  );
+                }}
+              >
+                購入へ
+              </button>
+
+              <div className="h-[60px]" />
             </div>
           </div>
         </div>
@@ -198,49 +225,59 @@ function ProductDetailModal({
   );
 }
 
-type ProductCardProps = {
+type ProductCardB1Trial2Props = {
   product: Trial2Product;
-  showViewer: boolean;
-  viewerText?: string;
   set: string;
 };
 
-function ProductCard({ product, showViewer, viewerText, set }: ProductCardProps) {
+function ProductCardB1Trial2({ product, set }: ProductCardB1Trial2Props) {
+  const router = useRouter();
+
   return (
-    <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
-        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-          画像エリア
-        </div>
+    <article className="h-[378px] w-[550px] overflow-hidden border border-gray-300 bg-white px-[60px]">
+      <div className="h-[15px]" />
 
-        <div className="grid h-16 grid-rows-[1fr_auto] overflow-hidden">
-          <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">
-            {product.name}
-          </h2>
+      <h2 className="h-[42px] overflow-hidden text-[22px] font-bold leading-[42px] text-gray-900">
+        {product.name}
+      </h2>
 
-          <p className="text-base font-medium leading-5 text-gray-800">
-            ¥{yen(product.priceYen)}
-          </p>
-        </div>
+      <div className="h-[60px]" />
 
-        <ViewerInfo show={showViewer} text={viewerText} />
+      <p className="h-[42px] text-[24px] font-semibold leading-[42px] text-gray-900">
+        ¥{yen(product.priceYen)}
+      </p>
 
-        <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal
-            product={product}
-            showViewer={showViewer}
-            viewerText={viewerText}
-            set={set}
-          />
+      <div className="h-[60px]" />
 
-          <Link
-            href={`/trials/b1/trial2/checkout?productId=${product.id}&set=${set}`}
-            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
-          >
-            購入へ
-          </Link>
-        </div>
+      <div className="h-[42px]" aria-hidden="true" />
+
+      <div className="h-[60px]" />
+
+      <div className="flex h-[42px] items-center justify-between">
+        <ProductDetailModalB1Trial2 product={product} set={set} />
+
+        <button
+          type="button"
+          className="flex h-[42px] w-[180px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+          onClick={async () => {
+            await trackAction({
+              page: "product",
+              type: "product_select",
+              meta: {},
+              payload: {
+                productId: product.id,
+                source: "card",
+              },
+            });
+
+            router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
+          }}
+        >
+          購入へ
+        </button>
       </div>
+
+      <div className="h-[15px]" />
     </article>
   );
 }
@@ -249,10 +286,24 @@ export default function ProductPageB1Trial2() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
 
+  const didTrack = useRef(false);
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "product",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
+
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
@@ -260,34 +311,24 @@ export default function ProductPageB1Trial2() {
   }
 
   const products = trial2Data.products;
-  const showViewerFlags = [false, false, false, false];
-  const viewerTexts = [undefined, undefined, undefined, undefined] as const;
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial2Data.purchaseConditions.budgetYen}円以内、
-          {trial2Data.purchaseConditions.quantityCondition}、
-          {trial2Data.purchaseConditions.specificCondition}
-        </div>
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
+        <TrialPageHeader
+          purchaseConditions={trial2Data.purchaseConditions}
+          title="商品一覧"
+        />
 
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
-        </header>
-
-        <section className="grid flex-1 grid-cols-2 items-start gap-10">
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              showViewer={showViewerFlags[index]}
-              viewerText={viewerTexts[index]}
-              set={set}
-            />
+        {/* 商品カード領域：378px + 60px + 378px */}
+        <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
+          {products.map((product) => (
+            <ProductCardB1Trial2 key={product.id} product={product} set={set} />
           ))}
         </section>
+
+        {/* 99pxの空間 */}
+        <div className="h-[99px]" />
       </div>
     </main>
   );

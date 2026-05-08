@@ -8,7 +8,7 @@ export type Trial10Product = {
   specsAndNotes: string;
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 
 export type ShippingMethod = {
@@ -113,7 +113,7 @@ export const trial10Data = {
         "通常配送・お急ぎ便・日時指定便から選択できます。",
         "送料は配送方法に応じて変わります。",
       ],
-      dpDisplay: { label: "詳しい条件情報は仕様・補足に記載されています" },
+      dpDisplay: null,
     },
   ] satisfies Trial10Product[],
   shippingMethods: [
@@ -161,7 +161,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial10Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial10Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

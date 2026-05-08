@@ -1,8 +1,14 @@
 "use client";
 
-import { use, useState } from "react";
-import Link from "next/link";
+import { use, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getProductById, trial3Data } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { getTrialPath } from "@/app/trials/_lib/path";
+
+const confirmPath = getTrialPath("b1", "trial3", "confirm");
+const productPath = getTrialPath("b1", "trial3", "product");
 
 type Props = {
   searchParams: Promise<{
@@ -18,13 +24,163 @@ function normalizeOptions(options?: string | string[]) {
   return Array.isArray(options) ? options : [options];
 }
 
+type ShippingMethod = {
+  id: string;
+  name: string;
+  priceYen: number;
+  shortDescription: string;
+};
+
+type ShippingMethodSectionHiddenPriceProps = {
+  shippingMethods: ShippingMethod[];
+  selectedShipping: string | null;
+  onChangeShipping: (id: string) => void;
+};
+
+function ShippingMethodSectionHiddenPrice({
+  shippingMethods,
+  selectedShipping,
+  onChangeShipping,
+}: ShippingMethodSectionHiddenPriceProps) {
+  return (
+    <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="h-[15px]" />
+
+      <div className="flex h-[30px] items-center px-5">
+        <h2 className="text-base font-semibold text-gray-900">配送方法</h2>
+      </div>
+
+      <div className="h-[60px]" />
+
+      {shippingMethods.map((method, index) => (
+        <div key={method.id}>
+          <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+            <input
+              type="radio"
+              name="shippingRadio"
+              checked={selectedShipping === method.id}
+              onChange={() => {
+                onChangeShipping(method.id);
+
+                trackAction({
+                  page: "checkout",
+                  type: "shipping_select",
+                  payload: {
+                    shippingId: method.id,
+                  },
+                });
+              }}
+            />
+
+            <div className="leading-tight">
+              <div className="font-medium text-gray-900">{method.name}</div>
+              <div className="text-gray-600">{method.shortDescription}</div>
+            </div>
+          </label>
+
+          {index < shippingMethods.length - 1 && <div className="h-[60px]" />}
+        </div>
+      ))}
+
+      <div className="h-[15px]" />
+    </article>
+  );
+}
+
+type OptionItem = {
+  id: string;
+  name: string;
+  priceYen: number;
+  shortDescription: string;
+};
+
+type OptionSectionHiddenPriceProps = {
+  options: OptionItem[];
+  selectedOptions: string[];
+  onToggleOption: (id: string) => void;
+};
+
+function OptionSectionHiddenPrice({
+  options,
+  selectedOptions,
+  onToggleOption,
+}: OptionSectionHiddenPriceProps) {
+  return (
+    <article className="h-[312px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="h-[15px]" />
+
+      <div className="flex h-[30px] items-center px-5">
+        <h2 className="text-base font-semibold text-gray-900">
+          追加オプション
+        </h2>
+      </div>
+
+      <div className="h-[60px]" />
+
+      {options.map((option, index) => {
+        const selected = selectedOptions.includes(option.id);
+
+        return (
+          <div key={option.id}>
+            <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={selected}
+                onChange={() => {
+                  onToggleOption(option.id);
+
+                  trackAction({
+                    page: "checkout",
+                    type: "option_toggle",
+                    payload: {
+                      optionId: option.id,
+                      selected: !selected,
+                    },
+                  });
+                }}
+              />
+
+              <div className="leading-tight">
+                <div className="font-medium text-gray-900">{option.name}</div>
+                <div className="text-gray-600">{option.shortDescription}</div>
+              </div>
+            </label>
+
+            {index < options.length - 1 && <div className="h-[60px]" />}
+          </div>
+        );
+      })}
+
+      <div className="h-[15px]" />
+    </article>
+  );
+}
+
 export default function CheckoutPageB1Trial3({ searchParams }: Props) {
   const sp = use(searchParams);
 
   const selectedProduct = getProductById(sp?.productId);
   const set = sp?.set;
+
   const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null);
-  const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options));
+  const [options, setOptions] = useState<string[]>(
+    normalizeOptions(sp?.options),
+  );
+
+  const didTrack = useRef(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "checkout",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
 
   function toggleOption(value: string) {
     setOptions((prev) =>
@@ -35,7 +191,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
@@ -43,124 +199,134 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
   }
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial3Data.purchaseConditions.budgetYen}円以内、
-          {trial3Data.purchaseConditions.quantityCondition}、
-          {trial3Data.purchaseConditions.specificCondition}
-        </div>
+    <main className="h-[1080px] overflow-hidden bg-gray-50">
+      <div className="mx-auto h-[1080px] w-[1160px] bg-gray-50">
+        <TrialPageHeader
+          purchaseConditions={trial3Data.purchaseConditions}
+          title="最終確認"
+        />
 
-        <header className="mb-6">
-          <h1 className="text-xl font-bold text-gray-900">ご注文内容の確認</h1>
-        </header>
-
+        {/* 810pxのメイン領域 */}
         <form
-          action="/trials/b1/trial3/confirm"
-          method="GET"
-          className="grid flex-1 grid-cols-[1.5fr_1fr] gap-6"
+          onSubmit={async (e) => {
+            e.preventDefault();
+
+            await trackAction({
+              page: "checkout",
+              type: "checkout_submit",
+              meta: {},
+              payload: {
+                productId: selectedProduct.id,
+                shippingId: shipping,
+                optionIds: options,
+              },
+            });
+
+            const params = new URLSearchParams();
+            params.set("productId", selectedProduct.id);
+            params.set("set", set);
+            params.set("shipping", shipping ?? "");
+
+            options.forEach((o) => {
+              params.append("options", o);
+            });
+
+            router.push(`${confirmPath}?${params.toString()}`);
+          }}
+          className="flex h-[810px] w-[1160px] gap-[60px]"
         >
           <input type="hidden" name="productId" value={selectedProduct.id} />
           <input type="hidden" name="set" value={set} />
           <input type="hidden" name="shipping" value={shipping ?? ""} />
+
           {options.map((o) => (
             <input key={o} type="hidden" name="options" value={o} />
           ))}
 
-          <div className="space-y-10">
-            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">配送方法</h2>
+          {/* 左側 */}
+          <div className="h-[810px] w-[720px]">
+            {/* 配送方法領域：438px */}
+            <ShippingMethodSectionHiddenPrice
+              shippingMethods={trial3Data.shippingMethods}
+              selectedShipping={shipping}
+              onChangeShipping={setShipping}
+            />
 
-              <div className="space-y-4 text-sm text-gray-700">
-                {trial3Data.shippingMethods.map((method) => (
-                  <label
-                    key={method.id}
-                    className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3"
-                  >
-                    <input
-                      type="radio"
-                      name="shippingRadio"
-                      checked={shipping === method.id}
-                      onChange={() => setShipping(method.id)}
-                    />
-                    <div>
-                      <div className="font-medium text-gray-900">{method.name}</div>
-                      <div className="text-gray-600">{method.shortDescription}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </article>
+            {/* 60pxの空間 */}
+            <div className="h-[60px]" />
 
-            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">追加オプション</h2>
-
-              <div className="space-y-4 text-sm text-gray-700">
-                {trial3Data.options.map((option) => (
-                  <label
-                    key={option.id}
-                    className="flex items-start gap-3 rounded-md border border-gray-200 px-4 py-3"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={options.includes(option.id)}
-                      onChange={() => toggleOption(option.id)}
-                    />
-                    <div>
-                      <div className="font-medium text-gray-900">{option.name}</div>
-                      <div className="text-gray-600">{option.shortDescription}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </article>
+            {/* オプション領域：312px */}
+            <OptionSectionHiddenPrice
+              options={trial3Data.options}
+              selectedOptions={options}
+              onToggleOption={toggleOption}
+            />
           </div>
 
-          <div className="flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">ご注文商品</h2>
+          {/* 右側：810pxのご注文商品領域 */}
+          <div className="flex h-[810px] w-[416px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+            <div className="h-[15px]" />
 
-            <div className="space-y-4">
-              <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-                画像エリア
-              </div>
-
-              <div className="min-h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
-                {selectedProduct.name}
-              </div>
-
-              <div className="text-base font-medium text-gray-800">
-                ¥{new Intl.NumberFormat("ja-JP").format(selectedProduct.priceYen)}
-              </div>
-
-              <div className="min-h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
-                {selectedProduct.description}
-              </div>
+            <div className="flex h-[60px] items-center">
+              <h2 className="text-base font-semibold text-gray-900">
+                ご注文商品
+              </h2>
             </div>
 
-            <div className="mt-auto space-y-6 text-gray-900">
-              <div className="px-1 text-center text-xs text-gray-500">
-                配送方法・追加オプションの料金は最終確認ページで表示
-              </div>
-
-              <div className="space-y-3 pt-4">
-                <button
-                  type="submit"
-                  className="w-full cursor-pointer rounded-md bg-black px-4 py-3 text-sm font-medium text-white"
-                >
-                  次へ進む
-                </button>
-
-                <Link
-                  href={`/trials/b1/trial3/product?set=${set}`}
-                  className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  商品一覧へ戻る
-                </Link>
-              </div>
+            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+              画像エリア
             </div>
+
+            <div className="h-[60px]" />
+
+            <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+              {selectedProduct.name}
+            </div>
+
+            <div className="h-[60px]" />
+
+            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+              {selectedProduct.description}
+            </div>
+
+            <div className="h-[80px]" />
+
+            <p className="h-[40px] text-[13px] leading-[20px] text-gray-500">
+              配送方法・追加オプションの料金は最終確認ページで表示されます。
+            </p>
+
+            <div className="h-[60px]" />
+
+            <button
+              type="submit"
+              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-sm font-medium text-white"
+            >
+              次へ進む
+            </button>
+
+            <div className="h-[60px]" />
+
+            <button
+              type="button"
+              onClick={async () => {
+                await trackAction({
+                  page: "checkout",
+                  type: "checkout_back",
+                });
+
+                router.push(`${productPath}?set=${set}`);
+              }}
+              className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              商品一覧へ戻る
+            </button>
+
+            <div className="h-[15px]" />
           </div>
         </form>
+
+        {/* 105pxの空間 */}
+        <div className="h-[105px]" />
       </div>
     </main>
   );

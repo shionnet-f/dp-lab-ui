@@ -17,7 +17,7 @@ import { ConfirmSummaryPanel } from "@/app/trials/_components/a1TrialComponents/
 import { getTrialPath } from "@/app/trials/_lib/path";
 
 const completePath = getTrialPath("a1", "trial1-1", "complete");
-const checkoutPath = getTrialPath("a1", "trial1-1", "checkout")
+const checkoutPath = getTrialPath("a1", "trial1-1", "checkout");
 
 export default function ConfirmPageA1Trial2() {
   const searchParams = useSearchParams();
@@ -28,7 +28,6 @@ export default function ConfirmPageA1Trial2() {
   const shipping = searchParams.get("shipping") ?? undefined;
   const optionKeys = searchParams.getAll("options");
   const set = searchParams.get("set");
-
 
   const didTrack = useRef(false);
 
@@ -43,7 +42,6 @@ export default function ConfirmPageA1Trial2() {
       payload: {},
     });
   }, []);
-
 
   if (!set) {
     return (

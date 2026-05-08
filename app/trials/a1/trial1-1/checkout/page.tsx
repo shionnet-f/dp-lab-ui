@@ -9,7 +9,7 @@ import { OptionSection } from "@/app/trials/_components/a1TrialComponents/Option
 import { OrderSummaryPanel } from "@/app/trials/_components/a1TrialComponents/OrderSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
-const confirmPath = getTrialPath("a1", "trial1-1", "confirm")
+const confirmPath = getTrialPath("a1", "trial1-1", "confirm");
 const productPath = getTrialPath("a1", "trial1-1", "product");
 
 type Props = {
@@ -50,7 +50,6 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
       payload: {},
     });
   }, []);
-
 
   function toggleOption(value: string) {
     setOptions((prev) =>

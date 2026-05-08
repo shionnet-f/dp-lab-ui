@@ -8,7 +8,7 @@ export type Trial4Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 
 export type ShippingMethod = {
@@ -185,7 +185,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial4Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial4Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

@@ -8,7 +8,7 @@ export type Trial1_2Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 
 export type ShippingMethod = {
@@ -37,131 +37,123 @@ export type Trial1_2Data = {
 };
 
 export const trial1_2Data: Trial1_2Data = {
-  "purchaseConditions": {
-    "budgetYen": 1000,
-    "quantityCondition": "600ml×4個以上であること",
-    "specificCondition": "電子レンジ対応であること"
+  purchaseConditions: {
+    budgetYen: 1300,
+    quantityCondition: "Mサイズで100枚以上入っていること",
+    specificCondition: "冷凍保存に対応していること",
   },
-  "products": [
+  products: [
     {
-      "id": "b1-t1-2-p1",
-      "role": "budget_over",
-      "failReason": "budget",
-      "name": "耐熱タッパー 650ml×4個 プレミアム",
-      "priceYen": 1180,
-      "description": "レンジ対応の耐熱タッパー4個セットです。条件は満たしますが予算を超えています。",
-      "specsAndNotes": [
-        "容量：650ml×4個",
-        "対応：電子レンジ対応",
-        "材質：ポリプロピレン"
+      id: "a1-t1-2-p1",
+      role: "budget_over",
+      failReason: "budget",
+      name: "フリーザーバッグ Mサイズ 120枚 プレミアム",
+      priceYen: 1380,
+      description:
+        "冷凍保存にも使える便利な保存バッグです。大容量のプレミアムパックです。",
+      specsAndNotes: ["サイズ：M", "枚数：120枚", "対応：冷凍保存対応"],
+      prePurchaseCheck: [
+        "必要なサイズと枚数を確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
       ],
-      "prePurchaseCheck": [
-        "必要な容量・個数・対応可否を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます"
-      ],
-      "deliveryInfo": [
+      deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります"
-      ]
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
     },
     {
-      "id": "b1-t1-2-p2",
-      "role": "condition_ng",
-      "failReason": "specific_condition",
-      "name": "保存容器 700ml×4個 冷蔵用",
-      "priceYen": 880,
-      "description": "容量と個数は満たしますが、電子レンジには対応していない保存容器です。",
-      "specsAndNotes": [
-        "容量：700ml×4個",
-        "対応：電子レンジ非対応",
-        "材質：ポリプロピレン"
+      id: "a1-t1-2-p2",
+      role: "condition_ng",
+      failReason: "specific_condition",
+      name: "保存バッグ Mサイズ 110枚 キッチン用",
+      priceYen: 980,
+      description:
+        "日常使いしやすい保存バッグです。枚数条件は満たしますが冷凍保存には対応していません。",
+      specsAndNotes: ["サイズ：M", "枚数：110枚", "対応：冷蔵保存向け"],
+      prePurchaseCheck: [
+        "冷凍保存に対応しているかを確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
       ],
-      "prePurchaseCheck": [
-        "電子レンジ対応かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます"
-      ],
-      "deliveryInfo": [
+      deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります"
-      ]
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
     },
     {
-      "id": "b1-t1-2-p3",
-      "role": "correct",
-      "failReason": null,
-      "name": "耐熱タッパー 600ml×4個セット",
-      "priceYen": 920,
-      "description": "電子レンジで使える耐熱タッパー4個セットです。条件を満たす中で最も安い商品です。",
-      "specsAndNotes": [
-        "容量：600ml×4個",
-        "対応：電子レンジ対応",
-        "材質：ポリプロピレン"
-      ],
-      "prePurchaseCheck": [
+      id: "a1-t1-2-p3",
+      role: "correct",
+      failReason: null,
+      name: "フリーザーバッグ Mサイズ 100枚 ベーシック",
+      priceYen: 880,
+      description:
+        "冷凍保存に対応した使いやすいフリーザーバッグです。条件を満たす中で最も安い商品です。",
+      specsAndNotes: ["サイズ：M", "枚数：100枚", "対応：冷凍保存対応"],
+      prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます"
+        "購入手続き画面で配送方法や金額を最終確認できます",
       ],
-      "deliveryInfo": [
+      deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります"
-      ]
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
     },
     {
-      "id": "b1-t1-2-p4",
-      "role": "dp_candidate",
-      "failReason": null,
-      "name": "耐熱タッパー 650ml×4個セット",
-      "priceYen": 980,
-      "description": "電子レンジ対応の耐熱タッパーです。条件は満たしますが、正解商品より少し高い構成です。",
-      "specsAndNotes": [
-        "容量：650ml×4個",
-        "対応：電子レンジ対応",
-        "材質：ポリプロピレン"
-      ],
-      "prePurchaseCheck": [
+      id: "a1-t1-2-p4",
+      role: "dp_candidate",
+      failReason: null,
+      name: "フリーザーバッグ Mサイズ 120枚 ダブルジッパー",
+      priceYen: 1080,
+      description:
+        "冷凍保存に対応した保存バッグです。条件を満たす中ではやや高めの商品です。",
+      specsAndNotes: ["サイズ：M", "枚数：120枚", "対応：冷凍保存対応"],
+      prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます"
+        "購入手続き画面で配送方法や金額を最終確認できます",
       ],
-      "deliveryInfo": [
+      deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります"
-      ]
-    }
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
+    },
   ],
-  "shippingMethods": [
+  shippingMethods: [
     {
-      "id": "standard",
-      "name": "通常配送",
-      "priceYen": 200,
-      "shortDescription": "3〜5日でお届け"
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
     },
     {
-      "id": "express",
-      "name": "お急ぎ便",
-      "priceYen": 500,
-      "shortDescription": "最短で翌日にお届け"
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
     },
     {
-      "id": "scheduled",
-      "name": "当日便",
-      "priceYen": 800,
-      "shortDescription": "本日中のお届けが可能です"
-    }
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    },
   ],
-  "options": [
+  options: [
     {
-      "id": "insurance",
-      "name": "配送補償オプション",
-      "priceYen": 300,
-      "shortDescription": "破損・紛失時の補償を追加します"
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
     },
     {
-      "id": "gift",
-      "name": "ギフト包装",
-      "priceYen": 200,
-      "shortDescription": "プレゼント用に包装します"
-    }
-  ]
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
+  ],
 };
 
 export function getProductById(productId?: string) {
@@ -173,7 +165,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial1_2Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial1_2Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

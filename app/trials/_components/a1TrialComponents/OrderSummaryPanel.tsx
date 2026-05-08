@@ -4,83 +4,75 @@ import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
 
 type ProductForOrderSummary = {
-    id: string;
-    name: string;
-    description: string;
+  id: string;
+  name: string;
+  description: string;
 };
 
 type OrderSummaryPanelProps = {
-    product: ProductForOrderSummary;
-    set: string;
-    backPath: string;
+  product: ProductForOrderSummary;
+  set: string;
+  backPath: string;
 };
 
 export function OrderSummaryPanel({
-    product,
-    set,
-    backPath,
+  product,
+  set,
+  backPath,
 }: OrderSummaryPanelProps) {
-    const router = useRouter();
+  const router = useRouter();
 
-    return (
-        <div className="flex h-[810px] w-[416px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
-            <div className="h-[15px]" />
+  return (
+    <div className="flex h-[810px] w-[416px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
+      <div className="h-[15px]" />
 
-            <div className="flex h-[60px] items-center">
-                <h2 className="text-base font-semibold text-gray-900">ご注文商品</h2>
-            </div>
+      <div className="flex h-[60px] items-center">
+        <h2 className="text-base font-semibold text-gray-900">ご注文商品</h2>
+      </div>
 
-            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-                画像エリア
-            </div>
+      <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
+        画像エリア
+      </div>
 
-            <div className="h-[60px]" />
+      <div className="h-[60px]" />
 
-            <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
-                {product.name}
-            </div>
+      <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+        {product.name}
+      </div>
 
-            <div className="h-[60px]" />
+      <div className="h-[60px]" />
 
-            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
-                {product.description}
-            </div>
+      <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+        {product.description}
+      </div>
 
-            <div className="h-[60px]" />
+      <div className="h-[180px]" />
 
-            <div className="mt-auto">
-                <div className="h-[60px]" />
+      <button
+        type="submit"
+        className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-sm font-medium text-white"
+      >
+        次へ進む
+      </button>
 
-                <div className="mt-auto">
-                    <div className="h-[60px]" />
+      <div className="h-[60px]" />
 
-                    <button
-                        type="submit"
-                        className="w-full cursor-pointer rounded-md bg-black px-4 py-3 text-sm font-medium text-white"
-                    >
-                        次へ進む
-                    </button>
+      <button
+        type="button"
+        onClick={async () => {
+          await trackAction({
+            page: "checkout",
+            type: "checkout_back",
+          });
 
-                    <div className="h-[60px]" />
+          router.push(`${backPath}?set=${set}`);
+        }}
+        className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+      >
+        商品一覧へ戻る
+      </button>
 
-                    <button
-                        type="button"
-                        onClick={async () => {
-                            await trackAction({
-                                page: "checkout",
-                                type: "checkout_back",
-                            });
-
-                            router.push(`${backPath}?set=${set}`);
-                        }}
-                        className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                        商品一覧へ戻る
-                    </button>
-
-                    <div className="h-[15px]" />
-                </div>
-            </div>
-        </div>
-    );
+      <div className="h-[15px]" />
+    </div>
+  );
 }

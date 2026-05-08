@@ -8,7 +8,7 @@ export type Trial6Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: { subscriptionPriceYen: number } | null;
 };
 
 export type ShippingMethod = {
@@ -53,7 +53,8 @@ export const trial6Data: Trial6Data = {
       failReason: "budget",
       name: "なめらかボールペン 0.7mm 黒 5本セット プレミアム",
       priceYen: 2280,
-      description: "黒インクのボールペン5本セットです。必要本数は満たしますが、予算を超える商品です。",
+      description:
+        "黒インクのボールペン5本セットです。必要本数は満たしますが、予算を超える商品です。",
       specsAndNotes: [
         "本数：5本セット",
         "インク色：黒",
@@ -77,7 +78,8 @@ export const trial6Data: Trial6Data = {
       failReason: "specific_condition",
       name: "さらさらボールペン 0.5mm 青 4本セット",
       priceYen: 1280,
-      description: "4本セットで本数条件は満たしますが、黒インクではなく青インクの商品です。",
+      description:
+        "4本セットで本数条件は満たしますが、黒インクではなく青インクの商品です。",
       specsAndNotes: [
         "本数：4本セット",
         "インク色：青",
@@ -124,8 +126,9 @@ export const trial6Data: Trial6Data = {
       role: "dp_candidate",
       failReason: null,
       name: "書きやすいボールペン 0.5mm 黒 4本セット",
-      priceYen: 1360,
-      description: "黒インクの4本セットで、一見すると条件に合う価格の商品です。",
+      priceYen: 1760,
+      description:
+        "黒インクの4本セットで、一見すると条件に合う価格の商品です。",
       specsAndNotes: [
         "本数：4本セット",
         "インク色：黒",
@@ -148,7 +151,7 @@ export const trial6Data: Trial6Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: null,
+      dpDisplay: { subscriptionPriceYen: 1360 },
     },
   ] satisfies Trial6Product[],
   shippingMethods: [
@@ -196,7 +199,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial6Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial6Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

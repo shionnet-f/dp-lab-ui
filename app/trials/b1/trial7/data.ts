@@ -9,7 +9,7 @@ export type Trial7Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 
 export type ShippingMethod = {
@@ -41,7 +41,8 @@ export const trial7Data = {
       failReason: "budget",
       name: "高耐久 USB Type-C to Type-C ケーブル 2m",
       priceYen: 1780,
-      description: "Type-C to Type-C の2mケーブルです。長さと端子条件は満たしますが、予算を超える商品です。",
+      description:
+        "Type-C to Type-C の2mケーブルです。長さと端子条件は満たしますが、予算を超える商品です。",
       specsAndNotes: [
         "長さ：2m",
         "端子：USB Type-C to Type-C",
@@ -65,7 +66,8 @@ export const trial7Data = {
       failReason: "specific_condition",
       name: "USB Type-A to Type-C ケーブル 1.5m",
       priceYen: 980,
-      description: "長さは1.5mありますが、端子が Type-C to Type-C ではない商品です。",
+      description:
+        "長さは1.5mありますが、端子が Type-C to Type-C ではない商品です。",
       specsAndNotes: [
         "長さ：1.5m",
         "端子：USB Type-A to Type-C",
@@ -89,7 +91,8 @@ export const trial7Data = {
       failReason: null,
       name: "USB Type-C to Type-C ケーブル 1m",
       priceYen: 1280,
-      description: "Type-C to Type-C の1mケーブルで、条件を満たす中で最も安い商品です。",
+      description:
+        "Type-C to Type-C の1mケーブルで、条件を満たす中で最も安い商品です。",
       specsAndNotes: [
         "長さ：1m",
         "端子：USB Type-C to Type-C",
@@ -114,7 +117,8 @@ export const trial7Data = {
       name: "USB Type-C to Type-C ケーブル 1.5m おすすめ版",
       priceYen: 1160,
       actualPriceYen: 1560,
-      description: "Type-C to Type-C の1.5mケーブルで、一見すると予算内で購入できそうに見える商品です。",
+      description:
+        "Type-C to Type-C の1.5mケーブルで、一見すると予算内で購入できそうに見える商品です。",
       specsAndNotes: [
         "長さ：1.5m",
         "端子：USB Type-C to Type-C",
@@ -179,7 +183,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial7Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial7Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

@@ -15,10 +15,5 @@ export default async function TrialCompletePageA1Trial2({
   const sp = await searchParams;
   const set = sp?.set ?? "1";
 
-  return (
-    <TrialCompletePage
-      set={set}
-      nextPath={nextPath}
-    />
-  );
+  return <TrialCompletePage set={set} nextPath={nextPath} />;
 }

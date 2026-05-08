@@ -7,7 +7,7 @@ import { trackAction } from "@/app/actions/track";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
-const checkoutPath = getTrialPath("a1", "trial1-1", "checkout");
+const checkoutPath = getTrialPath("b1", "trial1-1", "checkout");
 
 export default function ProductPageA1Trial2() {
   const searchParams = useSearchParams();
@@ -53,7 +53,13 @@ export default function ProductPageA1Trial2() {
               product={product}
               set={set}
               checkoutPath={checkoutPath}
-              dpArea={product.dpDisplay}
+              dpArea={
+                product.dpDisplay ? (
+                  <div className="flex h-full items-center justify-center border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold leading-[42px] text-orange-700">
+                    <p className="truncate">{product.dpDisplay}</p>
+                  </div>
+                ) : undefined
+              }
             />
           ))}
         </section>

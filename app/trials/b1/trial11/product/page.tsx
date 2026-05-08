@@ -1,69 +1,86 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { trial11Data, type Trial11Product } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+
+const checkoutPath = getTrialPath("b1", "trial11", "checkout");
+
+type DetailKind = "description" | "spec" | "confirm" | null;
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
 }
 
-type DetailKind = "description" | "spec" | "confirm" | null;
-
-function NestedInfoModal({
-  open,
-  title,
-  body,
-  onClose,
-}: {
+type NestedInfoModalProps = {
   open: boolean;
   title: string;
   body: string[];
   onClose: () => void;
-}) {
+};
+
+function NestedInfoModal({ open, title, body, onClose }: NestedInfoModalProps) {
   if (!open) return null;
 
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/35 p-6">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
-          <h4 className="text-base font-semibold text-gray-900">{title}</h4>
+    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/35">
+      <div className="h-[420px] w-[560px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
+        <div className="flex h-[70px] items-center justify-between border-b border-gray-200 px-[40px]">
+          <h4 className="text-[18px] font-semibold text-gray-900">{title}</h4>
+
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
+            className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] text-gray-700"
           >
             閉じる
           </button>
         </div>
 
-        <div className="space-y-2 px-5 py-5 text-sm leading-7 text-gray-700">
-          {body.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
+        <div className="h-[350px] overflow-y-auto px-[40px] py-[30px] text-[14px] leading-[24px] text-gray-700">
+          <div className="space-y-[12px]">
+            {body.map((line: string) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-type ProductDetailModalProps = {
+type ProductDetailModalB1Trial11Props = {
   product: Trial11Product;
   set: string;
 };
 
-function ProductDetailModal({ product, set }: ProductDetailModalProps) {
+function ProductDetailModalB1Trial11({
+  product,
+  set,
+}: ProductDetailModalB1Trial11Props) {
   const dialogId = useId();
+  const router = useRouter();
   const [openInner, setOpenInner] = useState<DetailKind>(null);
 
   return (
     <>
       <button
         type="button"
-        className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
+        className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
         onClick={() => {
-          const el = document.getElementById(dialogId) as HTMLDialogElement | null;
+          trackAction({
+            page: "product",
+            type: "view_detail",
+            meta: {},
+            payload: { productId: product.id },
+          });
+
+          const el = document.getElementById(
+            dialogId,
+          ) as HTMLDialogElement | null;
           el?.showModal();
         }}
       >
@@ -72,110 +89,194 @@ function ProductDetailModal({ product, set }: ProductDetailModalProps) {
 
       <dialog
         id={dialogId}
-        className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30"
+        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden p-0 backdrop:bg-black/70"
       >
-        <div className="relative mx-auto rounded-2xl bg-white">
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
+        <div className="relative h-full w-full overflow-hidden bg-white">
+          <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[60px]">
+            <h2 className="text-[24px] font-semibold text-gray-900">
+              商品詳細
+            </h2>
+
             <button
               type="button"
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
+              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
-                const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-                el?.close();
+                trackAction({
+                  page: "product",
+                  type: "close_detail",
+                  meta: {},
+                  payload: { productId: product.id },
+                });
+
                 setOpenInner(null);
+
+                const el = document.getElementById(
+                  dialogId,
+                ) as HTMLDialogElement | null;
+                el?.close();
               }}
             >
               閉じる
             </button>
           </div>
 
-          <div className="grid grid-cols-[1fr_1fr] gap-8 px-6 py-6">
-            <div className="grid grid-rows-[260px_150px_150px] gap-5">
-              <section className="rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full items-center justify-center text-sm text-gray-400">
-                  画像エリア
-                </div>
+          <div className="flex h-[790px] overflow-hidden px-[60px]">
+            <div className="flex w-[400px] flex-col">
+              <div className="h-[60px]" />
+
+              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-100 text-[14px] text-gray-400">
+                画像エリア
               </section>
 
-              <button
-                type="button"
-                onClick={() => setOpenInner("description")}
-                className="overflow-hidden rounded-xl border-2 border-gray-300 p-4 text-left"
-              >
-                <div className="flex h-full flex-col">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <h3 className="text-sm font-semibold text-gray-900">商品説明</h3>
-                    <span className="text-xs text-gray-500">クリックして詳細を表示</span>
-                  </div>
-                  <div className="text-sm leading-6 text-gray-600">
-                    商品の特徴や用途に関する説明があります。
-                  </div>
-                </div>
-              </button>
+              <div className="h-[60px]" />
 
               <button
                 type="button"
-                onClick={() => setOpenInner("spec")}
-                className="overflow-hidden rounded-xl border-2 border-gray-300 p-4 text-left"
+                onClick={() => {
+                  setOpenInner("description");
+
+                  trackAction({
+                    page: "product",
+                    type: "open_nested_detail",
+                    meta: {},
+                    payload: {
+                      productId: product.id,
+                      detailKind: "description",
+                    },
+                  });
+                }}
+                className="h-[160px] overflow-hidden border border-gray-300 p-[16px] text-left"
               >
-                <div className="flex h-full flex-col">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <h3 className="text-sm font-semibold text-gray-900">仕様・補足</h3>
-                    <span className="text-xs text-gray-500">クリックして詳細を表示</span>
-                  </div>
-                  <div className="text-sm leading-6 text-gray-600">
-                    サイズや表示形式に関する案内があります。
-                  </div>
+                <div className="flex h-[24px] items-center justify-between">
+                  <h3 className="text-[16px] font-semibold leading-[24px] text-gray-900">
+                    商品説明
+                  </h3>
+                  <span className="text-[12px] text-gray-500">
+                    クリックして詳細を表示
+                  </span>
                 </div>
+
+                <div className="mt-[12px] h-[92px] overflow-hidden text-[14px] leading-[22px] text-gray-600"></div>
+              </button>
+
+              <div className="h-[60px]" />
+
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenInner("spec");
+
+                  trackAction({
+                    page: "product",
+                    type: "open_nested_detail",
+                    meta: {},
+                    payload: {
+                      productId: product.id,
+                      detailKind: "spec",
+                    },
+                  });
+                }}
+                className="h-[160px] overflow-hidden border border-gray-300 p-[16px] text-left"
+              >
+                <div className="flex h-[24px] items-center justify-between">
+                  <h3 className="text-[16px] font-semibold leading-[24px] text-gray-900">
+                    仕様・補足
+                  </h3>
+                  <span className="text-[12px] text-gray-500">
+                    クリックして詳細を表示
+                  </span>
+                </div>
+
+                <div className="mt-[12px] h-[92px] overflow-hidden text-[14px] leading-[22px] text-gray-600"></div>
               </button>
             </div>
 
-            <div className="grid grid-rows-[160px_140px_120px_1fr] gap-5">
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col justify-start">
-                  <h3 className="text-2xl font-bold leading-tight text-gray-900">{product.name}</h3>
-                  <div className="mt-3 text-2xl font-semibold text-gray-900">¥{yen(product.priceYen)}</div>
-                </div>
-              </section>
+            <div className="w-[60px]" />
+
+            <div className="flex w-[400px] flex-col">
+              <div className="h-[60px]" />
+
+              <div className="h-[35px]" aria-hidden="true" />
+
+              <div className="h-[60px]" />
+
+              <h3 className="h-[35px] overflow-hidden text-[20px] font-bold leading-[35px] text-gray-900">
+                {product.name}
+              </h3>
+
+              <div className="h-[60px]" />
+
+              <p className="h-[35px] text-[22px] font-semibold leading-[35px] text-gray-900">
+                ¥{yen(product.priceYen)}
+              </p>
+
+              <div className="h-[60px]" />
 
               <button
                 type="button"
-                onClick={() => setOpenInner("confirm")}
-                className="overflow-hidden rounded-xl border-2 border-gray-300 p-4 text-left"
+                onClick={() => {
+                  setOpenInner("confirm");
+
+                  trackAction({
+                    page: "product",
+                    type: "open_nested_detail",
+                    meta: {},
+                    payload: {
+                      productId: product.id,
+                      detailKind: "confirm",
+                    },
+                  });
+                }}
+                className="h-[120px] overflow-hidden border border-gray-300 p-[16px] text-left"
               >
-                <div className="flex h-full flex-col">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <h4 className="text-sm font-semibold text-gray-900">購入前の確認</h4>
-                    <span className="text-xs text-gray-500">クリックして詳細を表示</span>
-                  </div>
-                  <div className="text-sm leading-6 text-gray-700">
-                    購入時に確認しておきたい事項があります。
-                  </div>
+                <div className="flex h-[24px] items-center justify-between">
+                  <h4 className="text-[16px] font-semibold leading-[24px] text-gray-900">
+                    購入前の確認
+                  </h4>
+                  <span className="text-[12px] text-gray-500">
+                    クリックして詳細を表示
+                  </span>
                 </div>
+
+                <div className="mt-[12px] h-[56px] overflow-hidden text-[14px] leading-[22px] text-gray-700"></div>
               </button>
 
-              <section className="overflow-hidden rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full flex-col">
-                  <h4 className="mb-3 text-sm font-semibold text-gray-900">配送に関わる情報</h4>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    {product.deliveryInfo.map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </div>
+              <div className="h-[60px]" />
+
+              <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
+                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                  配送に関わる情報
+                </h4>
+
+                <div className="text-[14px] leading-[22px] text-gray-700">
+                  {product.deliveryInfo.map((line: string) => (
+                    <div key={line}>{line}</div>
+                  ))}
                 </div>
               </section>
 
-              <section className="rounded-xl border-2 border-gray-300 p-4">
-                <div className="flex h-full items-end">
-                  <Link
-                    href={`/trials/b1/trial11/checkout?productId=${product.id}&set=${set}`}
-                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-3 text-sm font-medium text-white"
-                  >
-                    この商品を選ぶ
-                  </Link>
-                </div>
-              </section>
+              <div className="h-[60px]" />
+
+              <button
+                type="button"
+                className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                onClick={async () => {
+                  await trackAction({
+                    page: "product",
+                    type: "product_select",
+                    meta: {},
+                    payload: { productId: product.id },
+                  });
+
+                  router.push(
+                    `${checkoutPath}?set=${set}&productId=${product.id}`,
+                  );
+                }}
+              >
+                購入へ
+              </button>
+
+              <div className="h-[60px]" />
             </div>
           </div>
 
@@ -188,12 +289,14 @@ function ProductDetailModal({ product, set }: ProductDetailModalProps) {
             ]}
             onClose={() => setOpenInner(null)}
           />
+
           <NestedInfoModal
             open={openInner === "spec"}
             title="仕様・補足の詳細"
             body={product.specsAndNotes}
             onClose={() => setOpenInner(null)}
           />
+
           <NestedInfoModal
             open={openInner === "confirm"}
             title="購入前の確認の詳細"
@@ -206,32 +309,58 @@ function ProductDetailModal({ product, set }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product, set }: { product: Trial11Product; set: string }) {
+type ProductCardB1Trial11Props = {
+  product: Trial11Product;
+  set: string;
+};
+
+function ProductCardB1Trial11({ product, set }: ProductCardB1Trial11Props) {
+  const router = useRouter();
+
   return (
-    <article className="h-[360px] rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="grid h-full grid-rows-[128px_64px_44px_40px] gap-4">
-        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-          画像エリア
+    <article className="h-[378px] w-[550px] rounded-md border border-gray-200 bg-white shadow-sm">
+      <div className="flex h-full flex-col px-[60px]">
+        <div className="h-[15px]" />
+
+        <h2 className="h-[42px] overflow-hidden text-[20px] font-semibold leading-[42px] text-gray-900">
+          {product.name}
+        </h2>
+
+        <div className="h-[60px]" />
+
+        <p className="h-[42px] overflow-hidden text-[22px] font-semibold leading-[42px] text-gray-900">
+          ¥{yen(product.priceYen)}
+        </p>
+
+        <div className="h-[60px]" />
+
+        <div className="h-[42px] overflow-hidden">
+          <div className="h-full w-full" aria-hidden="true" />
         </div>
 
-        <div className="grid h-16 grid-rows-[1fr_auto] overflow-hidden">
-          <h2 className="line-clamp-2 text-base font-semibold leading-5 text-gray-900">{product.name}</h2>
-          <p className="text-base font-medium leading-5 text-gray-800">¥{yen(product.priceYen)}</p>
-        </div>
+        <div className="h-[60px]" />
 
-        <div className="h-11 overflow-hidden text-xs leading-5 text-gray-500">
-          詳しい情報は商品詳細内の各項目から確認できます
-        </div>
+        <div className="grid h-[42px] grid-cols-2 gap-[60px]">
+          <ProductDetailModalB1Trial11 product={product} set={set} />
 
-        <div className="grid h-10 grid-cols-2 gap-2">
-          <ProductDetailModal product={product} set={set} />
-          <Link
-            href={`/trials/b1/trial11/checkout?productId=${product.id}&set=${set}`}
-            className="flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
+          <button
+            className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+            onClick={async () => {
+              await trackAction({
+                page: "product",
+                type: "product_select",
+                meta: {},
+                payload: { productId: product.id },
+              });
+
+              router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
+            }}
           >
             購入へ
-          </Link>
+          </button>
         </div>
+
+        <div className="h-[15px]" />
       </div>
     </article>
   );
@@ -239,27 +368,55 @@ function ProductCard({ product, set }: { product: Trial11Product; set: string })
 
 export default function ProductPageB1Trial11() {
   const searchParams = useSearchParams();
-  const set = searchParams.get("set") ?? "1";
+  const set = searchParams.get("set");
+
+  const didTrack = useRef(false);
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "product",
+      type: "page_view",
+      meta: {},
+      payload: {},
+    });
+  }, []);
+
+  if (!set) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+          URLに set がありません。
+        </div>
+      </main>
+    );
+  }
+
+  const products: Trial11Product[] = trial11Data.products;
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial11Data.purchaseConditions.budgetYen}円以内、
-          {trial11Data.purchaseConditions.quantityCondition}、
-          {trial11Data.purchaseConditions.specificCondition}
-        </div>
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
+        <TrialPageHeader
+          purchaseConditions={trial11Data.purchaseConditions}
+          title="商品一覧"
+        />
 
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">商品一覧</h1>
-        </header>
-
-        <section className="grid flex-1 grid-cols-2 gap-8">
-          {trial11Data.products.map((product) => (
-            <ProductCard key={product.id} product={product} set={set} />
+        {/* 商品カード領域：378px + 60px + 378px */}
+        <section className="mx-auto grid h-[816px] w-[1160px] grid-cols-2 grid-rows-[378px_378px] gap-x-[60px] gap-y-[60px] overflow-hidden">
+          {products.map((product: Trial11Product) => (
+            <ProductCardB1Trial11
+              key={product.id}
+              product={product}
+              set={set}
+            />
           ))}
         </section>
+
+        {/* 99pxの空間 */}
+        <div className="h-[99px]" />
       </div>
     </main>
   );

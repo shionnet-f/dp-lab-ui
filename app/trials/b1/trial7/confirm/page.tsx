@@ -1,14 +1,22 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import {
   getOptionsByIds,
   getProductById,
   getShippingById,
   trial7Data,
 } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
+import { ConfirmShippingSection } from "@/app/trials/_components/a1TrialComponents/ConfirmShippingSection";
+import { ConfirmOptionSection } from "@/app/trials/_components/a1TrialComponents/ConfirmOptionSection";
+
+const checkoutPath = getTrialPath("b1", "trial7", "checkout");
+const completePath = getTrialPath("b1", "trial7", "complete");
 
 function yen(n: number) {
   return new Intl.NumberFormat("ja-JP").format(n);
@@ -17,219 +25,255 @@ function yen(n: number) {
 export default function ConfirmPageB1Trial7() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const [error, setError] = useState(false);
+  const didTrack = useRef(false);
 
   const productId = searchParams.get("productId") ?? undefined;
-  const shipping = searchParams.get("shipping") ?? undefined;
-  const optionKeys = searchParams.getAll("options");
+  const shippingId = searchParams.get("shipping") ?? undefined;
+  const optionIds = searchParams.getAll("options");
   const set = searchParams.get("set");
+
+  const selectedProduct = getProductById(productId);
+  const selectedShipping = getShippingById(shippingId);
+  const selectedOptions = getOptionsByIds(optionIds);
+
+  /*
+    trial7のDP：
+    - 商品ページではサブスク価格を提示
+    - confirmで「サブスク価格であること」を提示
+    - 購入金額は通常価格 priceYen で計算
+  */
+  const subscriptionPriceYen =
+    selectedProduct.actualPriceYen ?? selectedProduct.priceYen;
+
+  const productPriceYen = selectedProduct.priceYen;
+  const shippingPriceYen = selectedShipping?.priceYen ?? 0;
+  const optionTotalYen = selectedOptions.reduce(
+    (sum, option) => sum + option.priceYen,
+    0,
+  );
+  const totalYen = productPriceYen + shippingPriceYen + optionTotalYen;
+
+  const isSubscriptionDisplay = selectedProduct.actualPriceYen !== undefined;
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    trackAction({
+      page: "confirm",
+      type: "page_view",
+      meta: {},
+      payload: {
+        productId,
+        shippingId,
+        optionIds,
+        subscriptionPriceYen,
+        productPriceYen,
+        shippingPriceYen,
+        optionTotalYen,
+        totalYen,
+        isSubscriptionDisplay,
+      },
+    });
+  }, [
+    productId,
+    shippingId,
+    optionIds,
+    subscriptionPriceYen,
+    productPriceYen,
+    shippingPriceYen,
+    optionTotalYen,
+    totalYen,
+    isSubscriptionDisplay,
+  ]);
 
   if (!set) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
           URLに set がありません。
         </div>
       </main>
     );
   }
 
-  const selectedProduct = getProductById(productId);
-  const shippingInfo = getShippingById(shipping);
-  const selectedOptions = getOptionsByIds(optionKeys);
-
-  const effectiveProductPrice =
-    selectedProduct.actualPriceYen ?? selectedProduct.priceYen;
-  const shippingPrice = shippingInfo?.priceYen ?? 0;
-  const optionTotal = selectedOptions.reduce(
-    (sum, option) => sum + option.priceYen,
-    0,
-  );
-  const total = effectiveProductPrice + shippingPrice + optionTotal;
-
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
-  if (shipping) backParams.set("shipping", shipping);
-  optionKeys.forEach((option) => backParams.append("options", option));
+  backParams.set("shipping", shippingId ?? "");
+
+  optionIds.forEach((optionId) => {
+    backParams.append("options", optionId);
+  });
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
-  if (shipping) completeParams.set("shipping", shipping);
-  optionKeys.forEach((option) => completeParams.append("options", option));
+  completeParams.set("shipping", shippingId ?? "");
 
-  const handleSubmit = () => {
-    if (!shippingInfo) {
+  optionIds.forEach((optionId) => {
+    completeParams.append("options", optionId);
+  });
+
+  async function handleSubmit() {
+    if (!selectedShipping) {
       setError(true);
 
       window.setTimeout(() => {
         setError(false);
-      }, 2500);
+      }, 1800);
 
       return;
     }
 
-    router.push(`/trials/b1/trial7/complete?${completeParams.toString()}`);
-  };
+    await trackAction({
+      page: "confirm",
+      type: "confirm_submit",
+      meta: {},
+      payload: {
+        productId,
+        shippingId,
+        optionIds,
+        subscriptionPriceYen,
+        productPriceYen,
+        shippingPriceYen,
+        optionTotalYen,
+        totalYen,
+        isSubscriptionDisplay,
+      },
+    });
 
-  const isSubscriptionPrice =
-    typeof selectedProduct.actualPriceYen === "number";
+    router.push(`${completePath}?${completeParams.toString()}`);
+  }
+
+  async function handleBack() {
+    await trackAction({
+      page: "confirm",
+      type: "confirm_back",
+      meta: {},
+      payload: {
+        productId,
+        shippingId,
+        optionIds,
+        subscriptionPriceYen,
+        productPriceYen,
+        shippingPriceYen,
+        optionTotalYen,
+        totalYen,
+        isSubscriptionDisplay,
+      },
+    });
+
+    router.push(`${checkoutPath}?${backParams.toString()}`);
+  }
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial7Data.purchaseConditions.budgetYen}円以内、
-          {trial7Data.purchaseConditions.quantityCondition}、
-          {trial7Data.purchaseConditions.specificCondition}
+    <main className="h-[1080px] overflow-hidden bg-gray-50">
+      {error && (
+        <div className="fixed left-1/2 top-6 z-50 -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-6 py-3 text-sm font-semibold text-red-700 shadow-lg">
+          配送方法を選択してください
         </div>
+      )}
 
-        <header className="mb-6 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
-        </header>
+      <div className="mx-auto h-[1080px] w-[1200px] bg-gray-50">
+        <TrialPageHeader
+          purchaseConditions={trial7Data.purchaseConditions}
+          title="最終確認"
+        />
 
-        {error && (
-          <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
-            配送方法を選択してください
+        {/* 915pxのメイン領域 */}
+        <div className="flex h-[915px] w-[1200px] gap-[60px]">
+          {/* 左側 */}
+          <div className="h-[805px] w-[620px]">
+            {/* ご注文商品：275px */}
+            <OrderItemPanel product={selectedProduct} />
+
+            {/* 60pxの空間 */}
+            <div className="h-[60px]" />
+
+            {/* 配送方法：145px */}
+            <ConfirmShippingSection shippingMethod={selectedShipping} />
+
+            {/* 60pxの空間 */}
+            <div className="h-[60px]" />
+
+            {/* 選択したオプション：275px */}
+            <ConfirmOptionSection selectedOptions={selectedOptions} />
           </div>
-        )}
 
-        <div className="grid flex-1 grid-rows-[520px_120px] gap-6">
-          <section className="grid h-full grid-cols-[1.5fr_1fr] gap-6">
-            <div className="grid h-full grid-rows-[180px_110px_1fr] gap-6">
-              <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="mb-4 text-base font-semibold text-gray-900">
-                  ご注文商品
-                </h2>
+          {/* 右側：支払い金額 */}
+          <article className="flex h-[805px] w-[520px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div className="flex-1">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
+                お支払い金額
+              </h2>
 
-                <div className="flex h-[calc(100%-2rem)] gap-4">
-                  <div className="flex h-full w-28 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-                    画像エリア
+              <div className="rounded-md border border-gray-200 p-4">
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">商品価格</span>
+                    <span className="text-gray-900">
+                      ¥{yen(productPriceYen)}
+                    </span>
                   </div>
 
-                  <div className="min-w-0 flex-1">
-                    <div className="h-[60px] overflow-hidden text-sm font-medium leading-5 text-gray-900">
-                      {selectedProduct.name}
-                    </div>
-                    <div className="mt-3 text-base font-semibold text-gray-900">
-                      ¥{yen(selectedProduct.priceYen)}
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">送料</span>
+                    <span className="text-gray-900">
+                      ¥{yen(shippingPriceYen)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">オプション料金</span>
+                    <span className="text-gray-900">
+                      ¥{yen(optionTotalYen)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+                    <span className="font-semibold text-gray-900">合計</span>
+                    <span className="text-3xl font-bold text-gray-900">
+                      ¥{yen(totalYen)}
+                    </span>
                   </div>
                 </div>
-              </article>
-
-              <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="mb-4 text-base font-semibold text-gray-900">
-                  配送方法
-                </h2>
-
-                <div className="text-sm text-gray-700">
-                  {shippingInfo
-                    ? `${shippingInfo.name} / ¥${yen(shippingInfo.priceYen)}`
-                    : "未選択"}
-                </div>
-              </article>
-
-              <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                <h2 className="mb-4 text-base font-semibold text-gray-900">
-                  選択したオプション
-                </h2>
-
-                <div className="space-y-3 text-sm text-gray-700">
-                  {selectedOptions.length > 0 ? (
-                    selectedOptions.slice(0, 2).map((option) => (
-                      <div
-                        key={option.id}
-                        className="flex items-center justify-between rounded-md border border-gray-200 px-4 py-3"
-                      >
-                        <span className="truncate pr-4">{option.name}</span>
-                        <span className="shrink-0">
-                          +¥{yen(option.priceYen)}
-                        </span>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="rounded-md border border-gray-200 px-4 py-3 text-gray-500">
-                      選択されたオプションはありません
-                    </div>
-                  )}
-                </div>
-              </article>
-            </div>
-
-            <div className="grid h-full grid-rows-[1fr_auto] overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <div>
-                <h2 className="mb-4 text-base font-semibold text-gray-900">
-                  お支払い金額
-                </h2>
-
-                <div className="rounded-md border border-gray-200 p-4">
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">商品価格</span>
-                      <span className="text-gray-900">
-                        ¥{yen(effectiveProductPrice)}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">送料</span>
-                      <span className="text-gray-900">
-                        ¥{yen(shippingPrice)}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">オプション料金</span>
-                      <span className="text-gray-900">¥{yen(optionTotal)}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between border-t border-gray-200 pt-3">
-                      <span className="font-semibold text-gray-900">合計</span>
-                      <span className="text-3xl font-bold text-gray-900">
-                        ¥{yen(total)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {isSubscriptionPrice ? (
-                  <div className="mt-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm leading-6 text-gray-700">
-                    表示されていた商品価格 ¥{yen(selectedProduct.priceYen)}{" "}
-                    は定期お届けコース利用時の価格です。通常購入価格は ¥
-                    {yen(effectiveProductPrice)} です。
-                  </div>
-                ) : null}
               </div>
 
-              <div className="grid gap-3 pt-6">
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="w-full rounded-md bg-black px-4 py-3 text-sm font-medium text-white"
-                >
-                  購入を確定する
-                </button>
+              {isSubscriptionDisplay && (
+                <>
+                  <div className="h-[60px]" />
 
-                <Link
-                  href={`/trials/b1/trial7/checkout?${backParams.toString()}`}
-                  className="block w-full rounded-md border border-gray-300 px-4 py-3 text-center text-sm text-gray-700"
-                >
-                  戻る
-                </Link>
-              </div>
+                  <div className="h-[120px] overflow-hidden rounded-md border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-700">
+                    <p>
+                      商品ページで表示されていた価格 ¥
+                      {yen(subscriptionPriceYen)} は、定期お届けコースを
+                      利用した場合の価格です。
+                    </p>
+                    <p>今回の通常購入価格は ¥{yen(productPriceYen)} です。</p>
+                  </div>
+                </>
+              )}
             </div>
-          </section>
 
-          <article className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-3 text-base font-semibold text-gray-900">
-              注意事項
-            </h2>
+            <div className="flex flex-col gap-[60px] pb-[15px]">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="h-[50px] w-full rounded-md bg-black px-4 text-sm font-medium text-white"
+              >
+                購入を確定する
+              </button>
 
-            <div className="rounded-md bg-gray-50 px-4 py-3 text-sm text-gray-600">
-              購入確定後は、注文内容の変更やキャンセルができない場合があります。配送方法・追加オプション・金額を確認したうえで、購入を確定してください。
+              <button
+                type="button"
+                onClick={handleBack}
+                className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm text-gray-700"
+              >
+                戻る
+              </button>
             </div>
           </article>
         </div>
