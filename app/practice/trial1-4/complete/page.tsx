@@ -1,4 +1,4 @@
-import { TrialCompletePage } from "@/app/trials/_components/TrialCompletePage";
+import { TrialCompletePage } from "@/app/practice/_components/TrialCompletePage";
 
 type Props = {
   searchParams?: Promise<{

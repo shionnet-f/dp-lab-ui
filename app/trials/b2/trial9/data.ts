@@ -114,8 +114,9 @@ export function getProductById(productId?: string) {
 }
 
 export function getShippingMethodsForProduct(productId?: string) {
-  const fallbackProductId = productId && trial9Data.shippingMethodsByProduct[productId] ? productId : trial9Data.products[0].id;
-  return trial9Data.shippingMethodsByProduct[fallbackProductId] ?? [];
+  const shippingMethodsByProduct = trial9Data.shippingMethodsByProduct as Record<string, ShippingMethod[]>;
+  const fallbackProductId = productId && shippingMethodsByProduct[productId] ? productId : trial9Data.products[0].id;
+  return shippingMethodsByProduct[fallbackProductId] ?? [];
 }
 
 export function getShippingById(productId?: string, shippingId?: string) {

@@ -5,13 +5,11 @@ import { useRouter } from "next/navigation";
 type TrialCompletePageProps = {
     set: string;
     nextPath: string;
-    nextParams?: Record<string, string>;
 };
 
 export function TrialCompletePage({
     set,
     nextPath,
-    nextParams,
 }: TrialCompletePageProps) {
     const router = useRouter();
 
@@ -30,11 +28,6 @@ export function TrialCompletePage({
                         const params = new URLSearchParams();
                         params.set("set", set);
 
-                        if (nextParams) {
-                            Object.entries(nextParams).forEach(([key, value]) => {
-                                params.set(key, value);
-                            });
-                        }
 
                         router.push(`${nextPath}?${params.toString()}`);
                     }}

@@ -12,6 +12,7 @@ function yen(n: number) {
 type ProductDetailModalProps = {
   product: Trial2Product;
   set: string;
+  trial: string;
 };
 
 type HiddenSectionProps = {
@@ -56,7 +57,7 @@ function HiddenSection({ title, items, contentHeightClassName, wrapperClassName 
   );
 }
 
-function ProductDetailModal({ product, set }: ProductDetailModalProps) {
+function ProductDetailModal({ product, set, trial }: ProductDetailModalProps) {
   const dialogId = `product-dialog-${product.id}`;
 
   function openDialog() {
@@ -132,7 +133,7 @@ function ProductDetailModal({ product, set }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product, set }: { product: Trial2Product; set: string }) {
+function ProductCard({ product, set, trial }: { product: Trial2Product; set: string; trial: string }) {
   return (
     <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
       <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">

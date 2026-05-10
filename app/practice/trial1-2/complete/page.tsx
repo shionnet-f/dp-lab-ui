@@ -1,4 +1,4 @@
-import { TrialCompletePage } from "@/app/trials/_components/TrialCompletePage";
+import { TrialCompletePage } from "@/app/practice/_components/TrialCompletePage";
 import { getPracticePath } from "@/app/trials/_lib/path";
 
 type Props = {

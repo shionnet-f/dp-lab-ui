@@ -1,4 +1,4 @@
-import { TrialStartPage } from "@/app/trials/_components/TrialStartPage";
+import { TrialStartPage } from "@/app/practice/_components/TrialStartPage";
 import { practice1_1Data } from "../data";
 import { getPracticePath } from "@/app/trials/_lib/path";
 

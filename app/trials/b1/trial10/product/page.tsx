@@ -16,11 +16,13 @@ function yen(n: number) {
 type ProductDetailModalB1Trial10Props = {
   product: Trial10Product;
   set: string;
+  trial: string;
 };
 
 function ProductDetailModalB1Trial10({
   product,
   set,
+  trial,
 }: ProductDetailModalB1Trial10Props) {
   const dialogId = useId();
   const router = useRouter();
@@ -195,9 +197,14 @@ function ProductDetailModalB1Trial10({
 type ProductCardB1Trial10Props = {
   product: Trial10Product;
   set: string;
+  trial: string;
 };
 
-function ProductCardB1Trial10({ product, set }: ProductCardB1Trial10Props) {
+function ProductCardB1Trial10({
+  product,
+  set,
+  trial,
+}: ProductCardB1Trial10Props) {
   const router = useRouter();
 
   return (
@@ -224,7 +231,11 @@ function ProductCardB1Trial10({ product, set }: ProductCardB1Trial10Props) {
         <div className="h-[60px]" />
 
         <div className="grid h-[42px] grid-cols-2 gap-[60px]">
-          <ProductDetailModalB1Trial10 product={product} set={set} trial={trial} />
+          <ProductDetailModalB1Trial10
+            product={product}
+            set={set}
+            trial={trial}
+          />
 
           <button
             className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
@@ -236,7 +247,9 @@ function ProductCardB1Trial10({ product, set }: ProductCardB1Trial10Props) {
                 payload: { productId: product.id },
               });
 
-              router.push(`${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`);
+              router.push(
+                `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
+              );
             }}
           >
             購入へ
@@ -295,6 +308,7 @@ export default function ProductPageB1Trial10() {
               key={product.id}
               product={product}
               set={set}
+              trial={trial}
             />
           ))}
         </section>

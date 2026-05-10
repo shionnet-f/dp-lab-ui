@@ -2,12 +2,12 @@
 
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
-import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { TrialPageHeader } from "@/app/practice/_components/TrialPageHeader";
 import { getPracticePath } from "@/app/trials/_lib/path";
-import { ConfirmOrderItemPanel } from "@/app/trials/_components/a2TrialComponents/ConfirmOrderItemPanel";
-import { ConfirmShippingSection } from "@/app/trials/_components/a2TrialComponents/ConfirmShippingSection";
-import { ConfirmOptionSection } from "@/app/trials/_components/a2TrialComponents/ConfirmOptionSection";
-import { ConfirmSummaryPanel } from "@/app/trials/_components/a2TrialComponents/ConfirmSummaryPanel";
+import { ConfirmOrderItemPanel } from "@/app/practice/_components/a2TrialComponents/ConfirmOrderItemPanel";
+import { ConfirmShippingSection } from "@/app/practice/_components/a2TrialComponents/ConfirmShippingSection";
+import { ConfirmOptionSection } from "@/app/practice/_components/a2TrialComponents/ConfirmOptionSection";
+import { ConfirmSummaryPanel } from "@/app/practice/_components/a2TrialComponents/ConfirmSummaryPanel";
 import {
   getOptionsByIds,
   getProductById,

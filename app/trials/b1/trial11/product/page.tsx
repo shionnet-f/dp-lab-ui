@@ -55,11 +55,13 @@ function NestedInfoModal({ open, title, body, onClose }: NestedInfoModalProps) {
 type ProductDetailModalB1Trial11Props = {
   product: Trial11Product;
   set: string;
+  trial: string;
 };
 
 function ProductDetailModalB1Trial11({
   product,
   set,
+  trial,
 }: ProductDetailModalB1Trial11Props) {
   const dialogId = useId();
   const router = useRouter();
@@ -312,9 +314,14 @@ function ProductDetailModalB1Trial11({
 type ProductCardB1Trial11Props = {
   product: Trial11Product;
   set: string;
+  trial: string;
 };
 
-function ProductCardB1Trial11({ product, set }: ProductCardB1Trial11Props) {
+function ProductCardB1Trial11({
+  product,
+  set,
+  trial,
+}: ProductCardB1Trial11Props) {
   const router = useRouter();
 
   return (
@@ -341,7 +348,11 @@ function ProductCardB1Trial11({ product, set }: ProductCardB1Trial11Props) {
         <div className="h-[60px]" />
 
         <div className="grid h-[42px] grid-cols-2 gap-[60px]">
-          <ProductDetailModalB1Trial11 product={product} set={set} trial={trial} />
+          <ProductDetailModalB1Trial11
+            product={product}
+            set={set}
+            trial={trial}
+          />
 
           <button
             className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
@@ -353,7 +364,9 @@ function ProductCardB1Trial11({ product, set }: ProductCardB1Trial11Props) {
                 payload: { productId: product.id },
               });
 
-              router.push(`${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`);
+              router.push(
+                `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
+              );
             }}
           >
             購入へ
@@ -412,6 +425,7 @@ export default function ProductPageB1Trial11() {
               key={product.id}
               product={product}
               set={set}
+              trial={trial}
             />
           ))}
         </section>

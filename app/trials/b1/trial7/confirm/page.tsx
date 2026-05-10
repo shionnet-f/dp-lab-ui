@@ -103,7 +103,7 @@ export default function ConfirmPageB1Trial7() {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
-  backParams.set("trial", trial);
+  if (trial) backParams.set("trial", trial);
   backParams.set("shipping", shippingId ?? "");
 
   optionIds.forEach((optionId) => {
@@ -113,7 +113,7 @@ export default function ConfirmPageB1Trial7() {
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
-  completeParams.set("trial", trial);
+  if (trial) completeParams.set("trial", trial);
   completeParams.set("shipping", shippingId ?? "");
 
   optionIds.forEach((optionId) => {

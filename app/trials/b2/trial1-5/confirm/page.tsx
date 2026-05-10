@@ -41,14 +41,14 @@ export default function ConfirmPageB2Trial1_5() {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
-  backParams.set("trial", trial);
+  if (trial) backParams.set("trial", trial);
   if (shipping) backParams.set("shipping", shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
-  completeParams.set("trial", trial);
+  if (trial) completeParams.set("trial", trial);
   if (shipping) completeParams.set("shipping", shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 

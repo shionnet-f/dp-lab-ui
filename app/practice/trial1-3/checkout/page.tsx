@@ -2,11 +2,11 @@
 
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
-import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { TrialPageHeader } from "@/app/practice/_components/TrialPageHeader";
 import { getPracticePath } from "@/app/trials/_lib/path";
-import { OrderItemPanel } from "@/app/trials/_components/a2TrialComponents/CheckoutOrderItemPanel";
-import { ShippingMethodSection } from "@/app/trials/_components/a2TrialComponents/ShippingMethodSection";
-import { OptionSection } from "@/app/trials/_components/a2TrialComponents/OptionSection";
+import { OrderItemPanel } from "@/app/practice/_components/a2TrialComponents/CheckoutOrderItemPanel";
+import { ShippingMethodSection } from "@/app/practice/_components/a2TrialComponents/ShippingMethodSection";
+import { OptionSection } from "@/app/practice/_components/a2TrialComponents/OptionSection";
 import { getProductById, practice1_3Data } from "../data";
 
 const confirmPath = getPracticePath("trial1-3", "confirm");

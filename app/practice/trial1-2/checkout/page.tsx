@@ -3,10 +3,10 @@
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, practice1_2Data } from "../data";
-import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
-import { ShippingMethodSection } from "@/app/trials/_components/a1TrialComponents/ShippingMethodSection";
-import { OptionSection } from "@/app/trials/_components/a1TrialComponents/OptionSection";
-import { OrderSummaryPanel } from "@/app/trials/_components/a1TrialComponents/OrderSummaryPanel";
+import { TrialPageHeader } from "@/app/practice/_components/TrialPageHeader";
+import { ShippingMethodSection } from "@/app/practice/_components/a1TrialComponents/ShippingMethodSection";
+import { OptionSection } from "@/app/practice/_components/a1TrialComponents/OptionSection";
+import { OrderSummaryPanel } from "@/app/practice/_components/a1TrialComponents/OrderSummaryPanel";
 import { getPracticePath } from "@/app/trials/_lib/path";
 
 const confirmPath = getPracticePath("trial1-2", "confirm");

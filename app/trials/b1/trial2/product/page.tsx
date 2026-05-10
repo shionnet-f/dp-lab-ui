@@ -16,11 +16,13 @@ function yen(n: number) {
 type ProductDetailModalB1Trial2Props = {
   product: Trial2Product;
   set: string;
+  trial: string;
 };
 
 function ProductDetailModalB1Trial2({
   product,
   set,
+  trial,
 }: ProductDetailModalB1Trial2Props) {
   const dialogId = useId();
   const router = useRouter();
@@ -228,9 +230,10 @@ function ProductDetailModalB1Trial2({
 type ProductCardB1Trial2Props = {
   product: Trial2Product;
   set: string;
+  trial: string;
 };
 
-function ProductCardB1Trial2({ product, set }: ProductCardB1Trial2Props) {
+function ProductCardB1Trial2({ product, set, trial }: ProductCardB1Trial2Props) {
   const router = useRouter();
 
   return (

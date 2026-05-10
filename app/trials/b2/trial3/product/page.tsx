@@ -94,7 +94,7 @@ function ProductDetailModal({ product, set, trial }: ProductDetailModalProps) {
   );
 }
 
-function ProductCard({ product, set }: { product: Trial3Product; set: string }) {
+function ProductCard({ product, set, trial }: { product: Trial3Product; set: string; trial: string }) {
   return (
     <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
       <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">

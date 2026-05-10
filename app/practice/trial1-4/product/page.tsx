@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { ProductCard } from "@/app/trials/_components/a2TrialComponents/ProductCard";
+import { ProductCard } from "@/app/practice/_components/a2TrialComponents/ProductCard";
 import { practice1_4Data } from "../data";
 import { getPracticePath } from "@/app/trials/_lib/path";
-import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { TrialPageHeader } from "@/app/practice/_components/TrialPageHeader";
 
 const checkoutPath = getPracticePath("trial1-4", "checkout");
 

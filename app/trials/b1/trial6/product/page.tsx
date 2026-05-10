@@ -20,11 +20,13 @@ function getDisplayPriceYen(product: Trial6Product) {
 type ProductDetailModalB1Trial6Props = {
   product: Trial6Product;
   set: string;
+  trial: string;
 };
 
 function ProductDetailModalB1Trial6({
   product,
   set,
+  trial,
 }: ProductDetailModalB1Trial6Props) {
   const dialogId = useId();
   const router = useRouter();
@@ -203,9 +205,10 @@ function ProductDetailModalB1Trial6({
 type ProductCardB1Trial6Props = {
   product: Trial6Product;
   set: string;
+  trial: string;
 };
 
-function ProductCardB1Trial6({ product, set }: ProductCardB1Trial6Props) {
+function ProductCardB1Trial6({ product, set, trial }: ProductCardB1Trial6Props) {
   const router = useRouter();
   const displayPriceYen = getDisplayPriceYen(product);
 

@@ -8,11 +8,11 @@ import {
   getShippingById,
   practice1_2Data,
 } from "../data";
-import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
-import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
-import { ConfirmShippingSection } from "@/app/trials/_components/a1TrialComponents/ConfirmShippingSection";
-import { ConfirmOptionSection } from "@/app/trials/_components/a1TrialComponents/ConfirmOptionSection";
-import { ConfirmSummaryPanel } from "@/app/trials/_components/a1TrialComponents/ConfirmSummaryPanel";
+import { TrialPageHeader } from "@/app/practice/_components/TrialPageHeader";
+import { OrderItemPanel } from "@/app/practice/_components/a1TrialComponents/OrderItemPanel";
+import { ConfirmShippingSection } from "@/app/practice/_components/a1TrialComponents/ConfirmShippingSection";
+import { ConfirmOptionSection } from "@/app/practice/_components/a1TrialComponents/ConfirmOptionSection";
+import { ConfirmSummaryPanel } from "@/app/practice/_components/a1TrialComponents/ConfirmSummaryPanel";
 import { getPracticePath } from "@/app/trials/_lib/path";
 
 const completePath = getPracticePath("trial1-2", "complete");

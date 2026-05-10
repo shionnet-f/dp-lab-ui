@@ -25,6 +25,7 @@ type Props = {
     shipping?: string;
     options?: string | string[];
     set?: string;
+    trial?: string;
   }>;
 };
 
@@ -44,6 +45,7 @@ export default function ConfirmPageA2Trial1_5({ searchParams }: Props) {
   const shippingId = sp?.shipping;
   const optionIds = normalizeOptions(sp?.options);
   const set = sp?.set;
+  const trial = sp?.trial;
 
   useEffect(() => {
     if (didTrack.current) return;
@@ -82,7 +84,7 @@ export default function ConfirmPageA2Trial1_5({ searchParams }: Props) {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
-  backParams.set("trial", trial);
+  if (trial) backParams.set("trial", trial);
   backParams.set("shipping", shippingId ?? "");
   optionIds.forEach((id) => {
     backParams.append("options", id);
@@ -91,7 +93,7 @@ export default function ConfirmPageA2Trial1_5({ searchParams }: Props) {
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
-  completeParams.set("trial", trial);
+  if (trial) completeParams.set("trial", trial);
   completeParams.set("shipping", shippingId ?? "");
   optionIds.forEach((id) => {
     completeParams.append("options", id);

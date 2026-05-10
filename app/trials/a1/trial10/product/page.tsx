@@ -70,12 +70,14 @@ function PriceBlock({
 type ProductDetailModalProps = {
   product: Trial10Product;
   set: string;
+  trial: string;
   showDiscount: boolean;
 };
 
 function ProductDetailModal({
   product,
   set,
+  trial,
   showDiscount,
 }: ProductDetailModalProps) {
   const dialogId = useId();
@@ -253,9 +255,10 @@ function ProductDetailModal({
 type ProductCardProps = {
   product: Trial10Product;
   set: string;
+  trial: string;
 };
 
-function ProductCard({ product, set }: ProductCardProps) {
+function ProductCard({ product, set, trial }: ProductCardProps) {
   const router = useRouter();
   const dp = product.dpDisplay;
   const showDiscount = Boolean(dp?.isDiscountTarget);
@@ -292,6 +295,7 @@ function ProductCard({ product, set }: ProductCardProps) {
           <ProductDetailModal
             product={product}
             set={set}
+            trial={trial}
             showDiscount={showDiscount}
           />
 

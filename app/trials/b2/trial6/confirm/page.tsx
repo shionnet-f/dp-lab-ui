@@ -15,6 +15,7 @@ type Props = {
     shipping?: string;
     options?: string | string[];
     set?: string;
+    trial?: string;
   }>;
 };
 
@@ -31,6 +32,7 @@ export default function ConfirmPageB2Trial6({ searchParams }: Props) {
   const shippingInfo = getShippingById(sp?.shipping);
   const optionKeys = normalizeOptions(sp?.options);
   const set = sp?.set;
+  const trial = sp?.trial;
   const selectedOptions = getOptionsByIds(optionKeys);
 
   const shippingPrice = shippingInfo?.priceYen ?? 0;
@@ -40,14 +42,14 @@ export default function ConfirmPageB2Trial6({ searchParams }: Props) {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   if (set) backParams.set("set", set);
-  backParams.set("trial", trial);
+  if (trial) backParams.set("trial", trial);
   if (sp?.shipping) backParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => backParams.append("options", option));
 
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   if (set) completeParams.set("set", set);
-  completeParams.set("trial", trial);
+  if (trial) completeParams.set("trial", trial);
   if (sp?.shipping) completeParams.set("shipping", sp.shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 

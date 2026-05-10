@@ -18,9 +18,10 @@ type Trial9Product = (typeof trial9Data.products)[number];
 type ProductCardProps = {
   product: Trial9Product;
   set: string;
+  trial: string;
 };
 
-function ProductCard({ product, set }: ProductCardProps) {
+function ProductCard({ product, set, trial }: ProductCardProps) {
   const router = useRouter();
   const dialogId = useId();
 
