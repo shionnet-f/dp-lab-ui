@@ -44,7 +44,7 @@ export const trial3Data: Trial3Data = {
   },
   products: [
     {
-      id: "a1-t3-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "2ドア冷蔵庫 大容量モデル",
@@ -62,7 +62,7 @@ export const trial3Data: Trial3Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t3-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "小型冷蔵庫 直冷式モデル",
@@ -80,7 +80,7 @@ export const trial3Data: Trial3Data = {
       dpDisplay: { rating: 4.7, reviewCount: 186 },
     },
     {
-      id: "a1-t3-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "2ドア冷蔵庫 ベーシックモデル",
@@ -98,7 +98,7 @@ export const trial3Data: Trial3Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t3-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "2ドア冷蔵庫 人気モデル",

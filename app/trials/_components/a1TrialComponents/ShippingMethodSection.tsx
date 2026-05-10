@@ -1,6 +1,7 @@
 "use client";
 
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 type ShippingMethod = {
     id: string;
@@ -13,6 +14,8 @@ type ShippingMethodSectionProps = {
     shippingMethods: ShippingMethod[];
     selectedShipping: string | null;
     onChangeShipping: (id: string) => void;
+    set: string;
+    trial: string;
 };
 
 function yen(n: number) {
@@ -23,7 +26,17 @@ export function ShippingMethodSection({
     shippingMethods,
     selectedShipping,
     onChangeShipping,
+    set,
+    trial,
 }: ShippingMethodSectionProps) {
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
+
     return (
         <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="h-[15px]" />
@@ -44,9 +57,14 @@ export function ShippingMethodSection({
                             onChange={() => {
                                 onChangeShipping(method.id);
 
-                                trackAction({
+                                const baseLog = createLogBase();
+
+                                void trackAction({
+                                    ...baseLog,
+                                    phase: "main",
                                     page: "checkout",
                                     type: "shipping_select",
+                                    meta: {},
                                     payload: {
                                         shippingId: method.id,
                                         price: method.priceYen,

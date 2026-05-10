@@ -45,7 +45,7 @@ export const trial6Data: Trial6Data = {
   },
   products: [
     {
-      id: "a1-t6-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "大容量 洗濯洗剤 詰め替え 2.2kg",
@@ -64,7 +64,7 @@ export const trial6Data: Trial6Data = {
       dpDisplay: { showCountdown: true },
     },
     {
-      id: "a1-t6-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "洗濯洗剤 詰め替え 2.0kg フローラル",
@@ -83,7 +83,7 @@ export const trial6Data: Trial6Data = {
       dpDisplay: { showCountdown: true },
     },
     {
-      id: "a1-t6-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "無香料 洗濯洗剤 詰め替え 2.0kg",
@@ -102,7 +102,7 @@ export const trial6Data: Trial6Data = {
       dpDisplay: { showCountdown: true },
     },
     {
-      id: "a1-t6-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "無香料 洗濯洗剤 濃縮タイプ 2.1kg",

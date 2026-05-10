@@ -9,6 +9,7 @@ export type Trial2Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: { label: string } | null;
+  hiddenDetailsTitle?: string;
 };
 
 export type ShippingMethod = {
@@ -26,6 +27,8 @@ export type AddonOption = {
 };
 
 export type Trial2Data = {
+  trialId: string;
+  dpType: string;
   purchaseConditions: {
     budgetYen: number;
     quantityCondition: string;
@@ -37,70 +40,141 @@ export type Trial2Data = {
 };
 
 export const trial2Data: Trial2Data = {
+  trialId: "b2-trial2",
+  dpType: "商品詳細 dialog の中でさらに詳細を隠す",
   purchaseConditions: {
-    budgetYen: 600,
-    quantityCondition: "4ロール以上であること",
-    specificCondition: "1ロール70カット以上であること",
+    budgetYen: 1000,
+    quantityCondition: "12ロール以上であること",
+    specificCondition: "ダブルタイプであること",
   },
   products: [
     {
-      id: "b2-t2-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "キッチンペーパー 6ロール 80カット プレミアム",
-      priceYen: 680,
-      description: "6ロール入りで1ロールあたり80カットのキッチンペーパーです。購入条件は満たしますが予算を超えます。",
-      specsAndNotes: ["内容：6ロール", "1ロールあたり：80カット", "タイプ：パルプ素材"],
-      prePurchaseCheck: ["予算内に収まるか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
+      name: "トイレットペーパー ダブル 12ロール プレミアム",
+      priceYen: 1080,
+      description: "浴室やトイレ空間になじみやすい、やわらかな使い心地のダブルタイプです。12ロール入りの商品です。",
+      specsAndNotes: [
+        "入数：12ロール",
+        "タイプ：ダブル",
+        "紙幅：114mm",
+        "香り付き",
+      ],
+      hiddenDetailsTitle: "さらに詳細",
+      prePurchaseCheck: [
+        "必要なロール数とタイプを確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
     },
     {
-      id: "b2-t2-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "キッチンペーパー 4ロール 60カット ベーシック",
-      priceYen: 398,
-      description: "4ロール入りのキッチンペーパーです。価格は安いですが、1ロールあたりのカット数が条件を満たしません。",
-      specsAndNotes: ["内容：4ロール", "1ロールあたり：60カット", "タイプ：再生紙"],
-      prePurchaseCheck: ["購入条件のカット数を満たしているか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
+      name: "トイレットペーパー シングル 12ロール",
+      priceYen: 698,
+      description: "12ロール入りで価格は抑えめですが、シングルタイプの商品です。",
+      specsAndNotes: [
+        "入数：12ロール",
+        "タイプ：シングル",
+        "紙幅：114mm",
+        "無香料",
+      ],
+      hiddenDetailsTitle: "さらに詳細",
+      prePurchaseCheck: [
+        "ダブルタイプかどうかを確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
     },
     {
-      id: "b2-t2-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
-      name: "キッチンペーパー 4ロール 70カット スタンダード",
-      priceYen: 498,
-      description: "4ロール入りで1ロールあたり70カットのキッチンペーパーです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["内容：4ロール", "1ロールあたり：70カット", "タイプ：パルプ素材"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
+      name: "トイレットペーパー ダブル 12ロール ベーシック",
+      priceYen: 728,
+      description: "日常使いしやすいダブルタイプの12ロール商品です。条件を満たす中で最も安い商品です。",
+      specsAndNotes: [
+        "入数：12ロール",
+        "タイプ：ダブル",
+        "紙幅：114mm",
+        "無香料",
+      ],
+      hiddenDetailsTitle: "さらに詳細",
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
     },
     {
-      id: "b2-t2-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
-      name: "キッチンペーパー 5ロール 75カット やわらか",
-      priceYen: 560,
-      description: "5ロール入りで1ロールあたり75カットのキッチンペーパーです。条件は満たしますが、正解商品よりやや高い商品です。",
-      specsAndNotes: ["内容：5ロール", "1ロールあたり：75カット", "タイプ：やわらかパルプ"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: { label: "詳細情報あり" },
+      name: "トイレットペーパー ダブル 12ロール やわらか仕上げ",
+      priceYen: 860,
+      description: "ダブルタイプの12ロール商品です。条件を満たしますが、正解商品より少し高い価格です。",
+      specsAndNotes: [
+        "入数：12ロール",
+        "タイプ：ダブル",
+        "紙幅：114mm",
+        "やわらか仕上げ",
+      ],
+      hiddenDetailsTitle: "さらに詳細",
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
     },
-  ] satisfies Trial2Product[],
+  ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
-  ] satisfies ShippingMethod[],
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 400,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "日時指定便",
+      priceYen: 500,
+      shortDescription: "希望日時にあわせてお届け",
+    },
+  ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
-  ] satisfies AddonOption[],
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 100,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "まとめ買い保護包装",
+      priceYen: 150,
+      shortDescription: "輸送時に商品を保護する包装を追加します",
+    },
+  ],
 };
 
 export function getProductById(productId?: string) {
@@ -114,5 +188,3 @@ export function getShippingById(shippingId?: string) {
 export function getOptionsByIds(optionIds: string[]) {
   return trial2Data.options.filter((option) => optionIds.includes(option.id));
 }
-
-export default trial2Data;

@@ -49,7 +49,7 @@ export const trial5Data: Trial5Data = {
   },
   products: [
     {
-      id: "b1-t5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "エナジースパーク 350ml×24本 プレミアム",
@@ -77,7 +77,7 @@ export const trial5Data: Trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "エナジーチャージ 350ml×24本 すっきりタイプ",
@@ -105,7 +105,7 @@ export const trial5Data: Trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "エナジーブースト 350ml×24本 スタンダード",
@@ -133,7 +133,7 @@ export const trial5Data: Trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "エナジーブースト 350ml×30本 ロングケース",

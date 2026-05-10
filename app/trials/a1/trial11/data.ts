@@ -45,7 +45,7 @@ export const trial11Data: Trial11Data = {
   },
   products: [
     {
-      id: "a1-t11-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "ノンシリコン シャンプー 500ml×2本 プレミアムセット",
@@ -68,7 +68,7 @@ export const trial11Data: Trial11Data = {
       dpDisplay: { showFreeShipping: false },
     },
     {
-      id: "a1-t11-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "シャンプー 500ml×2本 しっとりセット",
@@ -91,7 +91,7 @@ export const trial11Data: Trial11Data = {
       dpDisplay: { showFreeShipping: true },
     },
     {
-      id: "a1-t11-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "ノンシリコン シャンプー 500ml×2本 ベーシックセット",
@@ -114,7 +114,7 @@ export const trial11Data: Trial11Data = {
       dpDisplay: { showFreeShipping: false },
     },
     {
-      id: "a1-t11-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "ノンシリコン シャンプー 500ml×2本 人気セット",

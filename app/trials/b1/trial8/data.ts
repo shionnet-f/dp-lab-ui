@@ -35,7 +35,7 @@ export const trial8Data = {
   },
   products: [
     {
-      id: "b1-t8-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "炭酸水 500ml×24本 無糖 プレミアム",
@@ -60,7 +60,7 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t8-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "quantity_condition",
       name: "炭酸水 500ml×20本 無糖",
@@ -85,7 +85,7 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t8-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "炭酸水 500ml×24本 無糖",
@@ -110,7 +110,7 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t8-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: "specific_condition",
       name: "炭酸水 500ml×24本 クリアテイスト",

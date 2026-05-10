@@ -33,7 +33,7 @@ export const trial5Data = {
   },
   products: [
     {
-      id: "a2-t5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "食器用洗剤 詰め替え 2.2L 大容量",
@@ -56,7 +56,7 @@ export const trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "食器用洗剤 本体 2.4L ファミリーサイズ",
@@ -79,7 +79,7 @@ export const trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "食器用洗剤 詰め替え 2.0L ベーシック",
@@ -102,7 +102,7 @@ export const trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "食器用洗剤 詰め替え 2.1L 速乾クリア",

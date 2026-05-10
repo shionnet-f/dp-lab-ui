@@ -9,6 +9,7 @@ import {
   trial1_5Data,
 } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
 import { ConfirmShippingSection } from "@/app/trials/_components/a1TrialComponents/ConfirmShippingSection";
@@ -22,6 +23,16 @@ const checkoutPath = getTrialPath("b1", "trial1-5", "checkout");
 export default function ConfirmPageB1Trial1_5() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
   const [error, setError] = useState(false);
 
   const productId = searchParams.get("productId") ?? undefined;
@@ -37,9 +48,11 @@ export default function ConfirmPageB1Trial1_5() {
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "confirm",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial1-5" },
       payload: {},
     });
   }, []);
@@ -79,9 +92,26 @@ export default function ConfirmPageB1Trial1_5() {
   if (shipping) completeParams.set("shipping", shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedShipping) {
       setError(true);
+
+      void trackAction({
+        ...createLogBase(),
+        phase: "main",
+        page: "confirm",
+        type: "confirm_submit_missing_shipping",
+        meta: { implTrialId: "trial1-5" },
+        payload: {
+        productId: selectedProduct.id,
+        shippingId: shipping,
+        optionIds: optionKeys,
+        productPriceYen: selectedProduct.priceYen,
+        shippingPriceYen: shippingPrice,
+        optionTotalYen: optionTotal,
+        totalYen: total,
+      },
+      });
 
       window.setTimeout(() => {
         setError(false);
@@ -89,6 +119,23 @@ export default function ConfirmPageB1Trial1_5() {
 
       return;
     }
+
+    await trackAction({
+      ...createLogBase(),
+      phase: "main",
+      page: "confirm",
+      type: "confirm_submit",
+      meta: { implTrialId: "trial1-5" },
+      payload: {
+        productId: selectedProduct.id,
+        shippingId: shipping,
+        optionIds: optionKeys,
+        productPriceYen: selectedProduct.priceYen,
+        shippingPriceYen: shippingPrice,
+        optionTotalYen: optionTotal,
+        totalYen: total,
+      },
+    });
 
     router.push(`${completePath}?${completeParams.toString()}`);
   };
@@ -134,9 +181,10 @@ export default function ConfirmPageB1Trial1_5() {
             shippingPriceYen={shippingPrice}
             optionTotalYen={optionTotal}
             totalYen={total}
-            completePath={`${completePath}?${completeParams.toString()}`}
             backPath={`${checkoutPath}?${backParams.toString()}`}
             onSubmit={handleSubmit}
+            set={set}
+            trial={trial}
           />
         </section>
       </div>

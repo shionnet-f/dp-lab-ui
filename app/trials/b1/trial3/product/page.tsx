@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/app/trials/_components/a1TrialComponents/ProductCard";
 import { trial3Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
@@ -17,14 +18,26 @@ export default function ProductPageB1Trial3() {
 
   const didTrack = useRef(false);
 
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "product",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial3" },
       payload: {},
     });
   }, []);

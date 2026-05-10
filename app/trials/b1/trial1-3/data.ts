@@ -44,7 +44,7 @@ export const trial1_3Data: Trial1_3Data = {
   },
   products: [
     {
-      id: "a1-t1-3-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "モバイルバッテリー 12000mAh 急速充電対応",
@@ -67,7 +67,7 @@ export const trial1_3Data: Trial1_3Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-3-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "モバイルバッテリー 10000mAh Micro USB対応",
@@ -90,7 +90,7 @@ export const trial1_3Data: Trial1_3Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-3-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "モバイルバッテリー 10000mAh USB-C ベーシック",
@@ -113,7 +113,7 @@ export const trial1_3Data: Trial1_3Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-3-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "モバイルバッテリー 12000mAh USB-C スリムモデル",

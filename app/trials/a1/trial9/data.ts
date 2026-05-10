@@ -50,7 +50,7 @@ export const trial9Data: Trial9Data = {
   },
   products: [
     {
-      id: "a1-t9-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "天然水 500ml×24本 プレミアムケース",
@@ -73,7 +73,7 @@ export const trial9Data: Trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t9-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "天然水 350ml×24本 スタンダードケース",
@@ -96,7 +96,7 @@ export const trial9Data: Trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t9-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "天然水 500ml×24本 ベーシックケース",
@@ -119,7 +119,7 @@ export const trial9Data: Trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t9-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: "quantity_condition",
       name: "天然水 人気ケース",

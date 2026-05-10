@@ -1,40 +1,14 @@
-import Link from "next/link";
-import trial1_4Data from "../data";
+import { TrialStartPage } from "@/app/trials/_components/TrialStartPage";
+import { trial1_4Data } from "../data";
+import { getTrialPath } from "@/app/trials/_lib/path";
 
-type Props = {
-  searchParams?: Promise<{
-    set?: string;
-    trial?: string;
-  }>;
-};
+const nextPath = getTrialPath("b2", "trial1-4", "product");
 
-export default async function StartPageB2Trial1_4({ searchParams }: Props) {
-  const sp = await searchParams;
-  const set = sp?.set ?? "1";
-  const trial = sp?.trial ?? "1";
+export default function StartPageB2Trial14() {
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
-      <div className="w-full max-w-xl space-y-6 rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <h1 className="text-xl font-bold text-gray-900">試行開始</h1>
-
-        <p className="text-sm text-gray-600">
-          次のページで商品を選び、購入手続きを行ってください。
-        </p>
-
-        <div className="z-10 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial1_4Data.purchaseConditions.budgetYen}円以内、
-          {trial1_4Data.purchaseConditions.quantityCondition}、
-          {trial1_4Data.purchaseConditions.specificCondition}
-        </div>
-
-        <Link
-          href={`/trials/b2/trial1-4/product?set=${set}&trial=${trial}`}
-          className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
-        >
-          試行を開始する
-        </Link>
-      </div>
-    </main>
+    <TrialStartPage
+      purchaseConditions={trial1_4Data.purchaseConditions}
+      nextPath={nextPath}
+    />
   );
 }

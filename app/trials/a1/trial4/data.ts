@@ -44,7 +44,7 @@ export const trial4Data: Trial4Data = {
   },
   products: [
     {
-      id: "a1-t4-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "フルHDモニター 24インチ スピーカー内蔵",
@@ -63,7 +63,7 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t4-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "quantity_condition",
       name: "省スペースモニター 21.5インチ",
@@ -82,7 +82,7 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t4-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "スタンダードモニター 23.8インチ",
@@ -101,7 +101,7 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t4-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "人気モニター 24インチ ベゼルレス",

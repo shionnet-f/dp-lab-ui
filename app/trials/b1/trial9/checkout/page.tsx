@@ -4,6 +4,7 @@ import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, getShippingPrice, trial9Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
@@ -44,14 +45,26 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial9" },
       payload: {
         productId: selectedProduct.id,
       },
@@ -88,9 +101,11 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
             e.preventDefault();
 
             await trackAction({
+              ...createLogBase(),
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
-              meta: {},
+              meta: { implTrialId: "trial9" },
               payload: {
                 productId: selectedProduct.id,
                 shippingId: shipping,
@@ -158,9 +173,11 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
                           setShipping(method.id);
 
                           trackAction({
+                            ...createLogBase(),
+                            phase: "main",
                             page: "checkout",
                             type: "shipping_select",
-                            meta: {},
+                            meta: { implTrialId: "trial9" },
                             payload: {
                               productId: selectedProduct.id,
                               shippingId: method.id,
@@ -224,9 +241,11 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
                           toggleOption(option.id);
 
                           trackAction({
+                            ...createLogBase(),
+                            phase: "main",
                             page: "checkout",
                             type: "option_toggle",
-                            meta: {},
+                            meta: { implTrialId: "trial9" },
                             payload: {
                               optionId: option.id,
                               selected: !selected,
@@ -303,9 +322,11 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
               type="button"
               onClick={async () => {
                 await trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "checkout",
                   type: "checkout_back",
-                  meta: {},
+                  meta: { implTrialId: "trial9" },
                   payload: {
                     productId: selectedProduct.id,
                   },

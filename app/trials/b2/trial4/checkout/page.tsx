@@ -1,279 +1,47 @@
 "use client";
 
-import Link from "next/link";
-import { use, useState } from "react";
-import { getProductById, trial4Data, type ShippingMethod, type AddonOption } from "../data";
-
-function yen(n: number) {
-  return new Intl.NumberFormat("ja-JP").format(n);
+import { use, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { trackAction } from "@/app/actions/track";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { OrderItemPanel } from "@/app/trials/_components/a2TrialComponents/CheckoutOrderItemPanel";
+import { getProductById, trial4Data } from "../data";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+  if (trialsIndex >= 0) return segments[trialsIndex + 2] ?? null;
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
 }
 
-type Props = {
-  searchParams: Promise<{
-    productId?: string;
-    shipping?: string;
-    options?: string | string[];
-    set?: string;
-    trial?: string;
-  }>;
-};
+const confirmPath = getTrialPath("b2", "trial4", "confirm");
+const productPath = getTrialPath("b2", "trial4", "product");
 
-function normalizeOptions(options?: string | string[]) {
-  if (!options) return [];
-  return Array.isArray(options) ? options : [options];
-}
-
-function openDialog(dialogId: string) {
-  const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-  el?.showModal();
-}
-
-function closeDialog(dialogId: string) {
-  const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-  el?.close();
-}
-
-function PricingOverviewDialog({
-  dialogId,
-  title,
-  items,
-  pricePrefix,
-}: {
-  dialogId: string;
-  title: string;
-  items: Array<{ id: string; name: string; shortDescription: string; priceYen: number }>;
-  pricePrefix: string;
-}) {
-  return (
-    <dialog id={dialogId} className="m-auto w-full max-w-lg rounded-2xl p-0 backdrop:bg-black/30">
-      <div className="rounded-2xl bg-white">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-          <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-          <button
-            type="button"
-            onClick={() => closeDialog(dialogId)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700"
-          >
-            閉じる
-          </button>
-        </div>
-
-        <div className="space-y-3 px-6 py-5 text-sm text-gray-600">
-          {items.map((item) => (
-            <div key={item.id} className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <div className="font-medium text-gray-800">{item.name}</div>
-                  <div className="mt-1 text-xs leading-5 text-gray-500">{item.shortDescription}</div>
-                </div>
-                <div className="shrink-0 text-sm font-medium text-gray-700">
-                  {pricePrefix}¥{yen(item.priceYen)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </dialog>
-  );
-}
-
-function ShippingOptionCard({
-  method,
-  checked,
-  onChange,
-}: {
-  method: ShippingMethod;
-  checked: boolean;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-      <input
-        type="radio"
-        name="shippingRadio"
-        value={method.id}
-        checked={checked}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      <div className="min-w-0">
-        <div className="font-medium text-gray-700">{method.name}</div>
-        <div className="text-gray-500">{method.shortDescription}</div>
-      </div>
-    </label>
-  );
-}
-
-function AddonOptionCard({
-  option,
-  checked,
-  onToggle,
-}: {
-  option: AddonOption;
-  checked: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <label className="flex items-start gap-3 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
-      <input type="checkbox" checked={checked} onChange={onToggle} />
-      <div className="min-w-0">
-        <div className="font-medium text-gray-700">{option.name}</div>
-        <div className="text-gray-500">{option.shortDescription}</div>
-      </div>
-    </label>
-  );
-}
+type Props = { searchParams: Promise<{ productId?: string; shipping?: string; options?: string | string[]; set?: string; trial?: string; }>; };
+function normalizeOptions(options?: string | string[]) { if (!options) return []; return Array.isArray(options) ? options : [options]; }
+function yen(n: number) { return new Intl.NumberFormat("ja-JP").format(n); }
 
 export default function CheckoutPageB2Trial4({ searchParams }: Props) {
-  const sp = use(searchParams);
-  const selectedProduct = getProductById(sp?.productId);
-  const set = sp?.set;
-  const trial = sp?.trial;
-  const [shipping, setShipping] = useState<string>(sp?.shipping ?? "");
-  const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options));
-
-  function toggleOption(value: string) {
-    setOptions((prev) =>
-      prev.includes(value) ? prev.filter((o) => o !== value) : [...prev, value],
-    );
-  }
-
-  if (!set || !trial) {
-    return (
-      <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
-          URLに set または trial がありません。
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial4Data.purchaseConditions.budgetYen}円以内、
-          {trial4Data.purchaseConditions.quantityCondition}、
-          {trial4Data.purchaseConditions.specificCondition}
-        </div>
-
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">購入手続き</h1>
-        </header>
-
-        <form
-          action="/trials/b2/trial4/confirm"
-          method="GET"
-          className="grid flex-1 grid-rows-[172px_minmax(0,300px)_auto] gap-6"
-        >
-          <input type="hidden" name="productId" value={selectedProduct.id} />
-          <input type="hidden" name="set" value={set} />
-          <input type="hidden" name="trial" value={trial} />
-          <input type="hidden" name="shipping" value={shipping} />
-          {options.map((o) => (
-            <input key={o} type="hidden" name="options" value={o} />
-          ))}
-
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm">
-            <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">
-              <div className="flex h-24 w-[120px] items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                画像
-              </div>
-
-              <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">{selectedProduct.name}</div>
-                <div className="mt-3 text-base text-gray-600">商品価格：¥{yen(selectedProduct.priceYen)}</div>
-                <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
-              </div>
-
-              <div className="text-sm text-gray-400">注文商品</div>
+  const sp = use(searchParams); const selectedProduct = getProductById(sp?.productId); const set = sp?.set; const trial = sp?.trial;
+  const [shipping, setShipping] = useState<string | null>(sp?.shipping ?? null); const [options, setOptions] = useState<string[]>(normalizeOptions(sp?.options)); const [dialog, setDialog] = useState<null | { title: string; priceYen: number; description: string }>(null);
+  const didTrack = useRef(false); const router = useRouter();
+  function createLogBase() { const p = new URLSearchParams(); if (set) p.set("set", set); if (trial) p.set("trial", trial); return getClientLogBase({ searchParams: p }); }
+  useEffect(() => { if (didTrack.current) return; didTrack.current = true; const baseLog = createLogBase(); void trackAction({ ...baseLog, phase: "main", page: "checkout", type: "page_view", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id } }); }, []);
+  function toggleOption(id: string) { setOptions(prev => prev.includes(id) ? prev.filter(v => v !== id) : [...prev, id]); }
+  const selectedShippingMethod = trial4Data.shippingMethods.find((method) => method.id === shipping) ?? null;
+  const selectedOptionItems = trial4Data.options.filter((option) => options.includes(option.id));
+  const productPrice = selectedProduct.priceYen; const shippingPrice = selectedShippingMethod?.priceYen ?? 0; const optionTotalPrice = selectedOptionItems.reduce((sum, option) => sum + option.priceYen, 0); const totalPrice = productPrice + shippingPrice + optionTotalPrice;
+  if (!set || !trial) return <main className="flex h-screen items-center justify-center bg-gray-50"><div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">URLに set または trial がありません。</div></main>;
+  return <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50"><div className="h-full w-full"><TrialPageHeader purchaseConditions={trial4Data.purchaseConditions} title="購入手続き" />{dialog && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="w-[520px] rounded-xl bg-white p-6 shadow-xl">
+              <h3 className="text-[20px] font-bold text-gray-900">{dialog.title}</h3>
+              <p className="mt-4 text-[16px] text-gray-700">{dialog.description}</p>
+              <p className="mt-4 text-[24px] font-bold text-gray-900">¥{yen(dialog.priceYen)}</p>
+              <button type="button" onClick={() => setDialog(null)} className="mt-6 h-[42px] w-full border border-gray-300 bg-white font-semibold text-gray-700">閉じる</button>
             </div>
-          </section>
-
-          <section className="grid min-h-0 grid-cols-2 gap-5">
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="text-sm font-medium text-gray-500">配送方法</h2>
-                <button
-                  type="button"
-                  onClick={() => openDialog("shipping-pricing-overview")}
-                  className="text-xs text-gray-400 underline underline-offset-2"
-                >
-                  詳細を見る
-                </button>
-              </div>
-
-              <div className="space-y-2 text-sm text-gray-600">
-                {trial4Data.shippingMethods.map((method) => (
-                  <ShippingOptionCard
-                    key={method.id}
-                    method={method}
-                    checked={shipping === method.id}
-                    onChange={setShipping}
-                  />
-                ))}
-              </div>
-            </article>
-
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="text-sm font-medium text-gray-500">追加オプション</h2>
-                <button
-                  type="button"
-                  onClick={() => openDialog("option-pricing-overview")}
-                  className="text-xs text-gray-400 underline underline-offset-2"
-                >
-                  詳細を見る
-                </button>
-              </div>
-
-              <div className="space-y-2 text-sm text-gray-600">
-                {trial4Data.options.map((option) => (
-                  <AddonOptionCard
-                    key={option.id}
-                    option={option}
-                    checked={options.includes(option.id)}
-                    onToggle={() => toggleOption(option.id)}
-                  />
-                ))}
-              </div>
-            </article>
-          </section>
-
-          <section className="px-2 py-4 shrink-0">
-            <div className="grid h-full grid-cols-2 gap-3">
-              <Link
-                href={`/trials/b2/trial4/product?set=${set}&trial=${trial}`}
-                className="flex h-11 items-center justify-center rounded-md border border-gray-300 bg-white px-5 text-sm font-medium text-gray-700 shadow-sm"
-              >
-                商品一覧へ戻る
-              </Link>
-
-              <button
-                type="submit"
-                className="h-11 rounded-md bg-black px-5 text-sm font-medium text-white shadow-sm"
-              >
-                次へ進む
-              </button>
-            </div>
-          </section>
-        </form>
-      </div>
-
-      <PricingOverviewDialog
-        dialogId="shipping-pricing-overview"
-        title="配送方法の料金形態"
-        items={trial4Data.shippingMethods}
-        pricePrefix="送料："
-      />
-
-      <PricingOverviewDialog
-        dialogId="option-pricing-overview"
-        title="追加オプションの料金形態"
-        items={trial4Data.options}
-        pricePrefix="追加料金：+"
-      />
-    </main>
-  );
+          </div>
+        )}<form onSubmit={async (e) => { e.preventDefault(); const baseLog = createLogBase(); await trackAction({ ...baseLog, phase: "main", page: "checkout", type: "checkout_submit", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id, productPrice, shippingId: shipping, shippingPrice, optionIds: options, optionTotalPrice, totalPrice } }); const params = new URLSearchParams(); params.set("productId", selectedProduct.id); params.set("set", set); params.set("trial", trial); params.set("shipping", shipping ?? ""); options.forEach(id => params.append("options", id)); router.push(`${confirmPath}?${params.toString()}`); }} className="mx-auto h-[915px] w-[1160px] overflow-hidden"><OrderItemPanel product={selectedProduct} /><div className="h-[60px]"/><section className="grid h-[438px] w-[1160px] grid-cols-[550px_550px] gap-[60px] overflow-hidden"><article className="h-full overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm"><h2 className="text-base font-semibold text-gray-900">配送方法</h2><p className="mt-2 text-sm text-gray-500">金額は「料金詳細」から確認できます</p><div className="mt-[42px] space-y-[32px]">{trial4Data.shippingMethods.map((method) => <label key={method.id} className="flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700"><input type="radio" name="shippingRadio" checked={shipping === method.id} onChange={() => { setShipping(method.id); const baseLog = createLogBase(); void trackAction({ ...baseLog, phase: "main", page: "checkout", type: "shipping_select", meta: { implTrialId: getImplTrialId() }, payload: { shippingId: method.id, priceYen: method.priceYen } }); }}/><div className="min-w-0 flex-1"><div className="font-medium text-gray-900">{method.name}</div><div className="truncate text-gray-600">{method.shortDescription}</div></div><button type="button" className="h-[30px] border border-gray-300 bg-white px-3 text-[13px] font-semibold text-gray-700" onClick={() => setDialog({ title: method.name, priceYen: method.priceYen, description: method.shortDescription })}>料金詳細</button></label>)}</div></article><article className="h-full overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm"><h2 className="text-base font-semibold text-gray-900">追加オプション</h2><p className="mt-2 text-sm text-gray-500">金額は「料金詳細」から確認できます</p><div className="mt-[42px] space-y-[32px]">{trial4Data.options.map((option) => { const selected = options.includes(option.id); return <label key={option.id} className="flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700"><input type="checkbox" checked={selected} onChange={() => { toggleOption(option.id); const baseLog = createLogBase(); void trackAction({ ...baseLog, phase: "main", page: "checkout", type: "option_toggle", meta: { implTrialId: getImplTrialId() }, payload: { optionId: option.id, selected: !selected, priceYen: option.priceYen } }); }}/><div className="min-w-0 flex-1"><div className="font-medium text-gray-900">{option.name}</div><div className="truncate text-gray-600">{option.shortDescription}</div></div><button type="button" className="h-[30px] border border-gray-300 bg-white px-3 text-[13px] font-semibold text-gray-700" onClick={() => setDialog({ title: option.name, priceYen: option.priceYen, description: option.shortDescription })}>料金詳細</button></label>; })}</div></article></section><div className="h-[60px]"/><div className="flex h-[60px] w-[1160px] items-center gap-[60px]"><button type="button" onClick={async () => { const baseLog = createLogBase(); await trackAction({ ...baseLog, phase: "main", page: "checkout", type: "checkout_back", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id } }); router.push(`${productPath}?set=${set}&trial=${trial}`); }} className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700">商品一覧へ戻る</button><button type="submit" className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[16px] font-semibold text-white">次へ進む</button></div><div className="h-[137px]"/></form></div></main>;
 }

@@ -7,6 +7,18 @@ import { trial2Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a2Index = segments.indexOf("a2");
+  return a2Index >= 0 ? segments[a2Index + 1] ?? null : null;
+}
 
 const checkoutPath = getTrialPath("a2", "trial2", "checkout");
 
@@ -21,10 +33,14 @@ export default function ProductPageA2Trial2() {
     if (didTrack.current) return;
     didTrack.current = true;
 
+    const baseLog = getClientLogBase({ searchParams });
+
     void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "product",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);

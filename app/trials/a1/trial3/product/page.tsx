@@ -4,8 +4,21 @@ import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/app/trials/_components/a1TrialComponents/ProductCard";
 import { trial3Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a1Index = segments.indexOf("a1");
+  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+}
 
 const checkoutPath = getTrialPath("a1", "trial3", "checkout");
 
@@ -19,10 +32,14 @@ export default function ProductPageA1Trial3() {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    const baseLog = getClientLogBase({ searchParams });
+
+    void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "product",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);

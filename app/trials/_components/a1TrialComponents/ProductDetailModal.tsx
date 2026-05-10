@@ -4,6 +4,7 @@ import { useId } from "react";
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 type ProductForDetailModal = {
   id: string;
@@ -41,15 +42,28 @@ export function ProductDetailModal({
   const showViewer = Boolean(dpArea || product.dpDisplay);
   const viewerText = product.dpDisplay?.label;
 
+  function createBaseLog() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   return (
     <>
       <button
         type="button"
         className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
         onClick={() => {
-          trackAction({
+          const baseLog = createBaseLog();
+
+          void trackAction({
+            ...baseLog,
+            phase: "main",
             page: "product",
             type: "view_detail",
+            meta: {},
             payload: { productId: product.id },
           });
 
@@ -76,9 +90,14 @@ export function ProductDetailModal({
               type="button"
               className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
-                trackAction({
+                const baseLog = createBaseLog();
+
+                void trackAction({
+                  ...baseLog,
+                  phase: "main",
                   page: "product",
                   type: "close_detail",
+                  meta: {},
                   payload: { productId: product.id },
                 });
 
@@ -190,10 +209,18 @@ export function ProductDetailModal({
               <button
                 className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
                 onClick={async () => {
+                  const baseLog = createBaseLog();
+
                   await trackAction({
+                    ...baseLog,
+                    phase: "main",
                     page: "product",
                     type: "product_select",
-                    payload: { productId: product.id },
+                    meta: {},
+                    payload: {
+                      productId: product.id,
+                      source: "detail_modal",
+                    },
                   });
 
                   router.push(

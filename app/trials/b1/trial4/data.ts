@@ -44,7 +44,7 @@ export const trial4Data: Trial4Data = {
   },
   products: [
     {
-      id: "b1-t4-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "A4 横罫ノート 10冊パック プレミアム",
@@ -68,7 +68,7 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t4-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "A4 無地ノート 10冊パック",
@@ -92,7 +92,7 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t4-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "A4 横罫ノート 10冊パック ベーシック",
@@ -116,7 +116,7 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t4-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "A4 横罫ノート 12冊パック しっかり製本",

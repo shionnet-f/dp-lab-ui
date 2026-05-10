@@ -44,7 +44,7 @@ export const trial2Data: Trial2Data = {
   },
   products: [
     {
-      id: "a1-t2-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "高速通信対応LANケーブル",
@@ -62,7 +62,7 @@ export const trial2Data: Trial2Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t2-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "家庭用LANケーブル",
@@ -80,7 +80,7 @@ export const trial2Data: Trial2Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t2-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "LANケーブル スタンダードモデル",
@@ -98,7 +98,7 @@ export const trial2Data: Trial2Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t2-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "LANケーブル 高速モデル",

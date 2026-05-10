@@ -26,27 +26,32 @@ export type AddonOption = {
 };
 
 export const trial8Data = {
+  trialId: "b2-trial8",
+  dpType: "商品名は購入条件に近く見えるが商品詳細を見ると実は条件とずれる",
   purchaseConditions: {
-    budgetYen: 2000,
-    quantityCondition: "1回あたり24本以上届くこと",
-    specificCondition: "単発購入ではなく定期契約であること",
+    budgetYen: 1500,
+    quantityCondition: "500ml×24本以上であること",
+    specificCondition: "無糖であること",
   },
   products: [
     {
-      id: "b2-t8-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "天然水 定期便 24本 毎月お届け プレミアム",
-      priceYen: 2180,
-      description: "1回あたり24本が届く定期便です。条件は満たしますが、予算を超える商品です。",
+      name: "炭酸水 500ml×24本 無糖 プレミアム",
+      priceYen: 1780,
+      description:
+        "500ml×24本の無糖炭酸水です。購入条件は満たしますが、予算を超える商品です。",
       specsAndNotes: [
         "内容量：500ml×24本",
-        "契約形態：毎月お届けの定期契約",
-        "お届け単位：1回あたり24本",
+        "種類：炭酸水",
+        "味：無糖・プレーン",
+        "ケース販売商品です",
+        "高温・直射日光を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "予算内に収まるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "容量・本数・味の条件が合っているか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -55,42 +60,48 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t8-p2",
+      id: "p2",
       role: "condition_ng",
-      failReason: "specific_condition",
-      name: "天然水 おトク便 24本コース",
-      priceYen: 1760,
-      description: "商品名は定期便のように見えますが、実際は今回限りの単発購入商品です。",
+      failReason: "quantity_condition",
+      name: "炭酸水 500ml×20本 無糖",
+      priceYen: 1180,
+      description:
+        "無糖の炭酸水ですが、20本入りのため購入条件の本数を満たさない商品です。",
       specsAndNotes: [
-        "内容量：500ml×24本",
-        "契約形態：単発購入（継続契約ではありません）",
-        "お届け単位：1回限り24本",
+        "内容量：500ml×20本",
+        "種類：炭酸水",
+        "味：無糖・プレーン",
+        "ケース販売商品です",
+        "高温・直射日光を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "単発購入ではなく定期契約の商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "容量・本数・味の条件が合っているか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: { label: "おトク便" },
+      dpDisplay: null,
     },
     {
-      id: "b2-t8-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
-      name: "天然水 定期便 24本 ベーシック",
-      priceYen: 1580,
-      description: "条件を満たす中で最も安い定期契約の天然水です。",
+      name: "炭酸水 500ml×24本 無糖",
+      priceYen: 1280,
+      description:
+        "500ml×24本の無糖炭酸水で、購入条件を満たす中で最も安い商品です。",
       specsAndNotes: [
         "内容量：500ml×24本",
-        "契約形態：毎月お届けの定期契約",
-        "お届け単位：1回あたり24本",
+        "種類：炭酸水",
+        "味：無糖・プレーン",
+        "ケース販売商品です",
+        "日常使いしやすい標準的な商品です",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "容量・本数・味の条件が合っているか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -99,20 +110,24 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t8-p4",
+      id: "p4",
       role: "dp_candidate",
-      failReason: null,
-      name: "天然水 定期便 24本 すっきり飲み口",
-      priceYen: 1890,
-      description: "条件は満たしますが、正解商品よりやや高い定期契約の天然水です。",
+      failReason: "specific_condition",
+      name: "炭酸水 500ml×24本 クリアテイスト",
+      priceYen: 1380,
+      description:
+        "商品名だけ見ると条件に近く見えますが、詳細を見ると無糖ではない商品です。",
       specsAndNotes: [
         "内容量：500ml×24本",
-        "契約形態：毎月お届けの定期契約",
-        "お届け単位：1回あたり24本",
+        "種類：炭酸飲料",
+        "味：レモン風味・微糖",
+        "甘さを少し加えた飲みやすい仕上がりです",
+        "ケース販売商品です",
+        "高温・直射日光を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "商品名だけで判断せず、仕様や味の表記を確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -122,26 +137,54 @@ export const trial8Data = {
     },
   ] satisfies Trial8Product[],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 220,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 480,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "日時指定便",
+      priceYen: 320,
+      shortDescription: "受け取り日時を指定できます",
+    },
   ] satisfies ShippingMethod[],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 180,
+      shortDescription: "簡易ギフト包装を追加します",
+    },
+    {
+      id: "bag",
+      name: "手提げ袋を追加",
+      priceYen: 80,
+      shortDescription: "持ち運び用の手提げ袋を追加します",
+    },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial8Data.products.find((product) => product.id === productId) ?? trial8Data.products[0];
+  return (
+    trial8Data.products.find((product) => product.id === productId) ??
+    trial8Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial8Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial8Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {
   return trial8Data.options.filter((option) => optionIds.includes(option.id));
 }
-
-export default trial8Data;

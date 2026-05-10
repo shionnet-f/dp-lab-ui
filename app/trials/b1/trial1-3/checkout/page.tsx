@@ -3,6 +3,7 @@ import { use, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial1_3Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { ShippingMethodSection } from "@/app/trials/_components/a1TrialComponents/ShippingMethodSection";
 import { OptionSection } from "@/app/trials/_components/a1TrialComponents/OptionSection";
@@ -41,14 +42,26 @@ export default function CheckoutPageB1Trial1_3({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial1-3" },
       payload: {},
     });
   }, []);
@@ -83,8 +96,11 @@ export default function CheckoutPageB1Trial1_3({ searchParams }: Props) {
             e.preventDefault();
 
             await trackAction({
+              ...createLogBase(),
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
+              meta: { implTrialId: "trial1-3" },
               payload: {
                 productId: selectedProduct.id,
                 shippingId: shipping,
@@ -121,6 +137,8 @@ export default function CheckoutPageB1Trial1_3({ searchParams }: Props) {
               shippingMethods={trial1_3Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              set={set}
+              trial={trial}
             />
 
             {/* 60pxの空間 */}
@@ -131,6 +149,8 @@ export default function CheckoutPageB1Trial1_3({ searchParams }: Props) {
               options={trial1_3Data.options}
               selectedOptions={options}
               onToggleOption={toggleOption}
+              set={set}
+              trial={trial}
             />
           </div>
 

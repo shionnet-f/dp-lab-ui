@@ -35,7 +35,7 @@ export const trial9Data = {
   },
   products: [
     {
-      id: "b1-t9-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "不織布マスク 120枚 使い捨て プレミアム",
@@ -60,7 +60,7 @@ export const trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t9-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "不織布風マスク 100枚 再利用タイプ",
@@ -85,7 +85,7 @@ export const trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t9-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "不織布マスク 100枚 使い捨て ベーシック",
@@ -110,7 +110,7 @@ export const trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t9-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "不織布マスク 100枚 使い捨て お買い得版",
@@ -172,10 +172,10 @@ export const trial9Data = {
 } as const;
 
 const SHIPPING_PRICE_TABLE = {
-  "b1-t9-p1": { standard: 260, express: 560, scheduled: 420 },
-  "b1-t9-p2": { standard: 240, express: 540, scheduled: 400 },
-  "b1-t9-p3": { standard: 300, express: 600, scheduled: 460 },
-  "b1-t9-p4": { standard: 540, express: 840, scheduled: 700 },
+  "p1": { standard: 260, express: 560, scheduled: 420 },
+  "p2": { standard: 240, express: 540, scheduled: 400 },
+  "p3": { standard: 300, express: 600, scheduled: 460 },
+  "p4": { standard: 540, express: 840, scheduled: 700 },
 } as const;
 
 export function getProductById(productId?: string) {

@@ -30,7 +30,7 @@ export const trial3Data = {
   },
   products: [
     {
-      id: "a2-t3-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "ワイヤレスイヤホン ノイズキャンセリング Pro",
@@ -48,7 +48,7 @@ export const trial3Data = {
       dpDisplay: { label: "★4.7", subLabel: "(421)" },
     },
     {
-      id: "a2-t3-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "完全ワイヤレスイヤホン 有線充電限定モデル",
@@ -66,7 +66,7 @@ export const trial3Data = {
       dpDisplay: { label: "★4.1", subLabel: "(88)" },
     },
     {
-      id: "a2-t3-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "ワイヤレスイヤホン Bluetooth対応 ベーシック",
@@ -84,7 +84,7 @@ export const trial3Data = {
       dpDisplay: { label: "★3.9", subLabel: "(64)" },
     },
     {
-      id: "a2-t3-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "ワイヤレスイヤホン Bluetooth対応 高評価モデル",

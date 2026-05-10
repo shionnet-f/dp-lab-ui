@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trial11Data, type Trial11Product } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
@@ -65,6 +66,16 @@ function ProductDetailModalB1Trial11({
 }: ProductDetailModalB1Trial11Props) {
   const dialogId = useId();
   const router = useRouter();
+
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
   const [openInner, setOpenInner] = useState<DetailKind>(null);
 
   return (
@@ -74,9 +85,11 @@ function ProductDetailModalB1Trial11({
         className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
         onClick={() => {
           trackAction({
+            ...createLogBase(),
+            phase: "main",
             page: "product",
             type: "view_detail",
-            meta: {},
+            meta: { implTrialId: "trial11" },
             payload: { productId: product.id },
           });
 
@@ -104,9 +117,11 @@ function ProductDetailModalB1Trial11({
               className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
                 trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "product",
                   type: "close_detail",
-                  meta: {},
+                  meta: { implTrialId: "trial11" },
                   payload: { productId: product.id },
                 });
 
@@ -138,9 +153,11 @@ function ProductDetailModalB1Trial11({
                   setOpenInner("description");
 
                   trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "product",
                     type: "open_nested_detail",
-                    meta: {},
+                    meta: { implTrialId: "trial11" },
                     payload: {
                       productId: product.id,
                       detailKind: "description",
@@ -169,9 +186,11 @@ function ProductDetailModalB1Trial11({
                   setOpenInner("spec");
 
                   trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "product",
                     type: "open_nested_detail",
-                    meta: {},
+                    meta: { implTrialId: "trial11" },
                     payload: {
                       productId: product.id,
                       detailKind: "spec",
@@ -220,9 +239,11 @@ function ProductDetailModalB1Trial11({
                   setOpenInner("confirm");
 
                   trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "product",
                     type: "open_nested_detail",
-                    meta: {},
+                    meta: { implTrialId: "trial11" },
                     payload: {
                       productId: product.id,
                       detailKind: "confirm",
@@ -264,9 +285,11 @@ function ProductDetailModalB1Trial11({
                 className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
                 onClick={async () => {
                   await trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "product",
                     type: "product_select",
-                    meta: {},
+                    meta: { implTrialId: "trial11" },
                     payload: { productId: product.id },
                   });
 
@@ -323,6 +346,14 @@ function ProductCardB1Trial11({
   trial,
 }: ProductCardB1Trial11Props) {
   const router = useRouter();
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   return (
     <article className="h-[378px] w-[550px] rounded-md border border-gray-200 bg-white shadow-sm">
@@ -358,9 +389,11 @@ function ProductCardB1Trial11({
             className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
             onClick={async () => {
               await trackAction({
+                ...createLogBase(),
+                phase: "main",
                 page: "product",
                 type: "product_select",
-                meta: {},
+                meta: { implTrialId: "trial11" },
                 payload: { productId: product.id },
               });
 
@@ -385,15 +418,25 @@ export default function ProductPageB1Trial11() {
   const trial = searchParams.get("trial");
 
   const didTrack = useRef(false);
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "product",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial11" },
       payload: {},
     });
   }, []);

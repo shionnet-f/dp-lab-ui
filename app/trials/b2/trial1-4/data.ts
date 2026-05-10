@@ -1,4 +1,4 @@
-export type Trial14Product = {
+export type Trial1_4Product = {
   id: string;
   role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
   failReason: "budget" | "quantity_condition" | "specific_condition" | null;
@@ -10,105 +10,167 @@ export type Trial14Product = {
   deliveryInfo: string[];
   dpDisplay?: { label: string } | null;
 };
+
 export type ShippingMethod = {
   id: string;
   name: string;
   priceYen: number;
   shortDescription: string;
 };
+
 export type AddonOption = {
   id: string;
   name: string;
   priceYen: number;
   shortDescription: string;
 };
-export type Trial1_4Data = {
+
+export const trial1_4Data = {
+  purchaseConditions: {
+    budgetYen: 700,
+    quantityCondition: "200ml以上であること",
+    specificCondition: "肌用であること",
+  },
+  products: [
+    {
+      id: "p1",
+      role: "budget_over",
+      failReason: "budget",
+      name: "肌用虫よけスプレー 250ml プレミアム",
+      priceYen: 780,
+      description:
+        "肌に使える虫よけスプレーです。条件は満たしますが予算を超えています。",
+      specsAndNotes: ["内容量：250ml", "用途：肌用", "タイプ：スプレー式"],
+      prePurchaseCheck: [
+        "必要な容量と用途を確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
+    },
+    {
+      id: "p2",
+      role: "condition_ng",
+      failReason: "specific_condition",
+      name: "虫よけスプレー 220ml 衣類用",
+      priceYen: 560,
+      description: "容量は満たしますが、肌用ではなく衣類・空間向けの商品です。",
+      specsAndNotes: [
+        "内容量：220ml",
+        "用途：衣類・空間用",
+        "タイプ：スプレー式",
+      ],
+      prePurchaseCheck: [
+        "肌用であることを確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
+    },
+    {
+      id: "p3",
+      role: "correct",
+      failReason: null,
+      name: "肌用虫よけスプレー 200ml",
+      priceYen: 620,
+      description:
+        "外出時に使いやすい肌用虫よけスプレーです。条件を満たす中で最も安い商品です。",
+      specsAndNotes: ["内容量：200ml", "用途：肌用", "タイプ：スプレー式"],
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
+    },
+    {
+      id: "p4",
+      role: "dp_candidate",
+      failReason: null,
+      name: "肌用虫よけスプレー 230ml",
+      priceYen: 680,
+      description:
+        "肌に使える虫よけスプレーです。条件は満たしますが、正解商品より少し高い商品です。",
+      specsAndNotes: ["内容量：230ml", "用途：肌用", "タイプ：スプレー式"],
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
+    },
+  ],
+  shippingMethods: [
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    },
+  ],
+  options: [
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
+  ],
+} satisfies {
   purchaseConditions: {
     budgetYen: number;
     quantityCondition: string;
     specificCondition: string;
   };
-  products: Trial14Product[];
+  products: Trial1_4Product[];
   shippingMethods: ShippingMethod[];
   options: AddonOption[];
 };
-export const trial1_4Data: Trial1_4Data = {
-  purchaseConditions: {
-    budgetYen: 800,
-    quantityCondition: "60日分以上であること",
-    specificCondition: "亜鉛を主成分とすること",
-  },
-  products: [
-    {
-      id: "b2-trial1-4-p1",
-      role: "budget_over",
-      failReason: "budget",
-      name: "亜鉛サプリ 90日分 プレミアム",
-      priceYen: 980,
-      description: "90日分の亜鉛サプリです。条件は満たしますが予算を超えます。",
-      specsAndNotes: ["内容量：90日分", "主成分：亜鉛", "形状：タブレット"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
-    },
-    {
-      id: "b2-trial1-4-p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "マルチミネラルサプリ 60日分",
-      priceYen: 620,
-      description: "60日分ですが、主成分が亜鉛ではないサプリです。",
-      specsAndNotes: ["内容量：60日分", "主成分：マグネシウム", "形状：タブレット"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
-    },
-    {
-      id: "b2-trial1-4-p3",
-      role: "correct",
-      failReason: null,
-      name: "亜鉛サプリ 60日分 ベーシック",
-      priceYen: 698,
-      description: "条件を満たす中で最も安い亜鉛サプリです。",
-      specsAndNotes: ["内容量：60日分", "主成分：亜鉛", "形状：タブレット"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
-    },
-    {
-      id: "b2-trial1-4-p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "亜鉛サプリ 75日分 スタンダード",
-      priceYen: 760,
-      description: "条件は満たしますが、正解商品よりやや高い亜鉛サプリです。",
-      specsAndNotes: ["内容量：75日分", "主成分：亜鉛", "形状：タブレット"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
-      dpDisplay: null,
-    },
-  ],
-  shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
-  ],
-  options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
-  ],
-};
 
 export function getProductById(productId?: string) {
-  return trial1_4Data.products.find((product) => product.id === productId) ?? trial1_4Data.products[0];
+  return (
+    trial1_4Data.products.find((product) => product.id === productId) ??
+    trial1_4Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial1_4Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial1_4Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {
   return trial1_4Data.options.filter((option) => optionIds.includes(option.id));
 }
-
-export default trial1_4Data;

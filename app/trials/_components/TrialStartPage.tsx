@@ -3,6 +3,18 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+}
 
 type PurchaseConditions = {
     budgetYen: number;
@@ -25,18 +37,21 @@ export function TrialStartPage({
 
     const didTrack = useRef(false);
     const router = useRouter();
-
     useEffect(() => {
         if (didTrack.current) return;
         didTrack.current = true;
 
-        void trackAction({
+        const baseLog = getClientLogBase({ searchParams });
+
+        trackAction({
+            ...baseLog,
+            phase: "main",
             page: "start",
             type: "page_view",
-            meta: {},
+            meta: { implTrialId: getImplTrialId() },
             payload: {},
         });
-    }, []);
+    }, [searchParams]);
 
     return (
         <main className="w-[1920px] h-[1080px] overflow-hidden bg-gray-50 flex items-center justify-center">
@@ -65,10 +80,14 @@ export function TrialStartPage({
                     <button
                         className="inline-flex h-[72px] w-[240px] items-center justify-center border border-black bg-black text-[28px] font-medium leading-none text-white"
                         onClick={async () => {
+                            const baseLog = getClientLogBase({ searchParams });
+
                             await trackAction({
+                                ...baseLog,
+                                phase: "main",
                                 page: "start",
                                 type: "trial_start",
-                                meta: {},
+                                meta: { implTrialId: getImplTrialId() },
                                 payload: {},
                             });
 

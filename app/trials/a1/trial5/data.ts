@@ -44,7 +44,7 @@ export const trial5Data: Trial5Data = {
   },
   products: [
     {
-      id: "a1-t5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "ティッシュペーパー 大容量セット",
@@ -62,7 +62,7 @@ export const trial5Data: Trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "ティッシュペーパー まとめ買いセット",
@@ -80,7 +80,7 @@ export const trial5Data: Trial5Data = {
       dpDisplay: { label: "タイムセール 残り18分" },
     },
     {
-      id: "a1-t5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "ティッシュペーパー 標準セット",
@@ -98,7 +98,7 @@ export const trial5Data: Trial5Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "ティッシュペーパー 人気セット",

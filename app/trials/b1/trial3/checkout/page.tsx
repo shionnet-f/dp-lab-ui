@@ -4,6 +4,7 @@ import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial3Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
@@ -36,13 +37,25 @@ type ShippingMethodSectionHiddenPriceProps = {
   shippingMethods: ShippingMethod[];
   selectedShipping: string | null;
   onChangeShipping: (id: string) => void;
+  set: string;
+  trial: string;
 };
 
 function ShippingMethodSectionHiddenPrice({
   shippingMethods,
   selectedShipping,
   onChangeShipping,
+  set,
+  trial,
 }: ShippingMethodSectionHiddenPriceProps) {
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   return (
     <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
       <div className="h-[15px]" />
@@ -64,8 +77,11 @@ function ShippingMethodSectionHiddenPrice({
                 onChangeShipping(method.id);
 
                 trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "checkout",
                   type: "shipping_select",
+                  meta: { implTrialId: "trial3" },
                   payload: {
                     shippingId: method.id,
                   },
@@ -99,13 +115,25 @@ type OptionSectionHiddenPriceProps = {
   options: OptionItem[];
   selectedOptions: string[];
   onToggleOption: (id: string) => void;
+  set: string;
+  trial: string;
 };
 
 function OptionSectionHiddenPrice({
   options,
   selectedOptions,
   onToggleOption,
+  set,
+  trial,
 }: OptionSectionHiddenPriceProps) {
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   return (
     <article className="h-[312px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
       <div className="h-[15px]" />
@@ -131,8 +159,11 @@ function OptionSectionHiddenPrice({
                   onToggleOption(option.id);
 
                   trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "checkout",
                     type: "option_toggle",
+                    meta: { implTrialId: "trial3" },
                     payload: {
                       optionId: option.id,
                       selected: !selected,
@@ -172,14 +203,26 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial3" },
       payload: {},
     });
   }, []);
@@ -214,9 +257,11 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
             e.preventDefault();
 
             await trackAction({
+              ...createLogBase(),
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
-              meta: {},
+              meta: { implTrialId: "trial3" },
               payload: {
                 productId: selectedProduct.id,
                 shippingId: shipping,
@@ -254,6 +299,8 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
               shippingMethods={trial3Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              set={set}
+              trial={trial}
             />
 
             {/* 60pxの空間 */}
@@ -264,6 +311,8 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
               options={trial3Data.options}
               selectedOptions={options}
               onToggleOption={toggleOption}
+              set={set}
+              trial={trial}
             />
           </div>
 
@@ -314,8 +363,11 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
               type="button"
               onClick={async () => {
                 await trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "checkout",
                   type: "checkout_back",
+                  meta: { implTrialId: "trial3" },
                 });
 
                 router.push(`${productPath}?set=${set}&trial=${trial}`);

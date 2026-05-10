@@ -4,6 +4,7 @@ import { use, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial4Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { getTrialPath } from "@/app/trials/_lib/path";
 
@@ -33,14 +34,26 @@ type DetailDialogButtonProps = {
   title: string;
   rows: Array<{ label: string; value: string }>;
   detailType: "shipping" | "option";
+  set: string;
+  trial: string;
 };
 
 function DetailDialogButton({
   title,
   rows,
   detailType,
+  set,
+  trial,
 }: DetailDialogButtonProps) {
   const dialogId = useId();
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   return (
     <>
@@ -49,9 +62,11 @@ function DetailDialogButton({
         className="h-[30px] rounded-md border border-gray-300 px-3 text-[12px] font-medium text-gray-700"
         onClick={() => {
           void trackAction({
+            ...createLogBase(),
+            phase: "main",
             page: "checkout",
             type: "open_price_detail",
-            meta: {},
+            meta: { implTrialId: "trial4" },
             payload: {
               detailType,
             },
@@ -79,9 +94,11 @@ function DetailDialogButton({
               className="h-[36px] w-[88px] rounded-md border border-gray-300 text-[14px] text-gray-700"
               onClick={() => {
                 void trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "checkout",
                   type: "close_price_detail",
-                  meta: {},
+                  meta: { implTrialId: "trial4" },
                   payload: {
                     detailType,
                   },
@@ -132,13 +149,25 @@ type ShippingMethodSectionHiddenDetailProps = {
   shippingMethods: ShippingMethod[];
   selectedShipping: string | null;
   onChangeShipping: (id: string) => void;
+  set: string;
+  trial: string;
 };
 
 function ShippingMethodSectionHiddenDetail({
   shippingMethods,
   selectedShipping,
   onChangeShipping,
+  set,
+  trial,
 }: ShippingMethodSectionHiddenDetailProps) {
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   const shippingDetailRows = shippingMethods.map((method) => ({
     label: method.name,
     value: `¥${yen(method.priceYen)}`,
@@ -155,6 +184,8 @@ function ShippingMethodSectionHiddenDetail({
           title="配送方法の料金詳細"
           rows={shippingDetailRows}
           detailType="shipping"
+          set={set}
+          trial={trial}
         />
       </div>
 
@@ -171,9 +202,11 @@ function ShippingMethodSectionHiddenDetail({
                 onChangeShipping(method.id);
 
                 void trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "checkout",
                   type: "shipping_select",
-                  meta: {},
+                  meta: { implTrialId: "trial4" },
                   payload: {
                     shippingId: method.id,
                   },
@@ -207,13 +240,25 @@ type OptionSectionHiddenDetailProps = {
   options: OptionItem[];
   selectedOptions: string[];
   onToggleOption: (id: string) => void;
+  set: string;
+  trial: string;
 };
 
 function OptionSectionHiddenDetail({
   options,
   selectedOptions,
   onToggleOption,
+  set,
+  trial,
 }: OptionSectionHiddenDetailProps) {
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   const optionDetailRows = options.map((option) => ({
     label: option.name,
     value: `+¥${yen(option.priceYen)}`,
@@ -232,6 +277,8 @@ function OptionSectionHiddenDetail({
           title="追加オプションの料金詳細"
           rows={optionDetailRows}
           detailType="option"
+          set={set}
+          trial={trial}
         />
       </div>
 
@@ -250,9 +297,11 @@ function OptionSectionHiddenDetail({
                   onToggleOption(option.id);
 
                   void trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "checkout",
                     type: "option_toggle",
-                    meta: {},
+                    meta: { implTrialId: "trial4" },
                     payload: {
                       optionId: option.id,
                       selected: !selected,
@@ -292,14 +341,26 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     void trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial4" },
       payload: {},
     });
   }, []);
@@ -334,9 +395,11 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
             e.preventDefault();
 
             await trackAction({
+              ...createLogBase(),
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
-              meta: {},
+              meta: { implTrialId: "trial4" },
               payload: {
                 productId: selectedProduct.id,
                 shippingId: shipping,
@@ -374,6 +437,8 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
               shippingMethods={trial4Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              set={set}
+              trial={trial}
             />
 
             {/* 60pxの空間 */}
@@ -384,6 +449,8 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
               options={trial4Data.options}
               selectedOptions={options}
               onToggleOption={toggleOption}
+              set={set}
+              trial={trial}
             />
           </div>
 
@@ -432,9 +499,11 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
               type="button"
               onClick={async () => {
                 await trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "checkout",
                   type: "checkout_back",
-                  meta: {},
+                  meta: { implTrialId: "trial4" },
                   payload: {},
                 });
 

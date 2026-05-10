@@ -48,7 +48,7 @@ export const trial7Data: Trial7Data = {
   },
   products: [
     {
-      id: "a1-t7-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "母の日 カーネーション鉢植え 5号 プレミアム",
@@ -70,7 +70,7 @@ export const trial7Data: Trial7Data = {
       },
     },
     {
-      id: "a1-t7-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "母の日 フラワーギフト 5号 ピンクアレンジ",
@@ -91,7 +91,7 @@ export const trial7Data: Trial7Data = {
       },
     },
     {
-      id: "a1-t7-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "母の日 カーネーション鉢植え 5号 ベーシック",
@@ -110,7 +110,7 @@ export const trial7Data: Trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t7-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "母の日 カーネーション鉢植え 5号 人気セット",

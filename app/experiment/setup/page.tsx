@@ -16,13 +16,21 @@ export default function ExperimentSetupPage() {
   const canStart = trimmedParticipantId.length > 0;
 
   const previewPlan = useMemo(
-    () => createExperimentPlan(trimmedParticipantId || "未入力", setOrder),
+    () =>
+      createExperimentPlan(
+        trimmedParticipantId || "未入力",
+        setOrder,
+        "preview-session",
+      ),
     [setOrder, trimmedParticipantId],
   );
 
   function handleConfirm() {
     if (!canStart) return;
-    const plan = createExperimentPlan(trimmedParticipantId, setOrder);
+
+    const sessionId = crypto.randomUUID();
+    const plan = createExperimentPlan(trimmedParticipantId, setOrder, sessionId);
+
     saveExperimentPlan(plan);
     router.push("/experiment/gate?step=set1");
   }

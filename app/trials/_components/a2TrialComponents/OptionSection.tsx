@@ -1,6 +1,18 @@
 "use client";
 
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+}
 
 type OptionItem = {
     id: string;
@@ -13,6 +25,8 @@ type OptionSectionProps = {
     options: OptionItem[];
     selectedOptions: string[];
     onToggleOption: (id: string) => void;
+    set: string;
+    trial: string;
 };
 
 function yen(n: number) {
@@ -23,7 +37,16 @@ export function OptionSection({
     options,
     selectedOptions,
     onToggleOption,
+    set,
+    trial,
 }: OptionSectionProps) {
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
     return (
         <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="h-[15px]" />
@@ -48,9 +71,14 @@ export function OptionSection({
                                 onChange={() => {
                                     onToggleOption(option.id);
 
+                                    const baseLog = createLogBase();
+
                                     void trackAction({
+                                        ...baseLog,
+                                        phase: "main",
                                         page: "checkout",
                                         type: "option_toggle",
+                                        meta: { implTrialId: getImplTrialId() },
                                         payload: {
                                             optionId: option.id,
                                             selected: !selected,

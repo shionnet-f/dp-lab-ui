@@ -33,7 +33,7 @@ export const trial1_4Data = {
   },
   products: [
     {
-      id: "b1-t1-4-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "肌用虫よけスプレー 250ml プレミアム",
@@ -52,7 +52,7 @@ export const trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t1-4-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "虫よけスプレー 220ml 衣類用",
@@ -74,7 +74,7 @@ export const trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t1-4-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "肌用虫よけスプレー 200ml",
@@ -93,7 +93,7 @@ export const trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t1-4-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "肌用虫よけスプレー 230ml",

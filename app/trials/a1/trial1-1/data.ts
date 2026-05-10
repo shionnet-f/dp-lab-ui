@@ -44,7 +44,7 @@ export const trial1_1Data: Trial1_1Data = {
   },
   products: [
     {
-      id: "a1-t1-1-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "柔軟剤 詰め替え 1400ml プレミアム",
@@ -63,7 +63,7 @@ export const trial1_1Data: Trial1_1Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-1-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "柔軟剤 本体ボトル 1200ml",
@@ -82,7 +82,7 @@ export const trial1_1Data: Trial1_1Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-1-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "柔軟剤 詰め替え 1200ml ベーシック",
@@ -101,7 +101,7 @@ export const trial1_1Data: Trial1_1Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-1-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "柔軟剤 詰め替え 1300ml しっとりタイプ",

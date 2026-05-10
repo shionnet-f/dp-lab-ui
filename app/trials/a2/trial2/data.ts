@@ -30,7 +30,7 @@ export const trial2Data = {
   },
   products: [
     {
-      id: "a2-t2-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "HDMIケーブル 3m 4K対応 高耐久モデル",
@@ -48,7 +48,7 @@ export const trial2Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t2-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "HDMIケーブル 2m フルHD対応",
@@ -66,7 +66,7 @@ export const trial2Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t2-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "HDMIケーブル 2m 4K対応 ベーシック",
@@ -84,7 +84,7 @@ export const trial2Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t2-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "HDMIケーブル 2.5m 4K対応 人気モデル",

@@ -9,8 +9,13 @@ export type Trial7Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: {
-    rankingLabel: string;
-    awardLabel: string;
+    label?: string;
+    subscriptionPriceYen?: number;
+    showFreeShipping?: boolean;
+    kind?: string;
+    initialSeconds?: number;
+    rankingLabel?: string;
+    awardLabel?: string;
   } | null;
 };
 
@@ -36,7 +41,7 @@ export const trial7Data = {
   },
   products: [
     {
-      id: "a2-t7-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "敬老の日 生花アレンジメント 華やかオレンジ",
@@ -59,7 +64,7 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t7-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "敬老の日 プリザーブドフラワーアレンジ ピンク",
@@ -82,7 +87,7 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t7-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "敬老の日 生花アレンジメント やさしい彩り",
@@ -105,7 +110,7 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t7-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "敬老の日 生花アレンジメント 感謝の華",

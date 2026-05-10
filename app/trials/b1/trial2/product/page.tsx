@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trial2Data, type Trial2Product } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 
@@ -26,6 +27,16 @@ function ProductDetailModalB1Trial2({
 }: ProductDetailModalB1Trial2Props) {
   const dialogId = useId();
   const router = useRouter();
+
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
   const [isExtraOpen, setIsExtraOpen] = useState(false);
 
   return (
@@ -35,9 +46,11 @@ function ProductDetailModalB1Trial2({
         className="flex h-[42px] w-[180px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
         onClick={async () => {
           await trackAction({
+            ...createLogBase(),
+            phase: "main",
             page: "product",
             type: "view_detail",
-            meta: {},
+            meta: { implTrialId: "trial2" },
             payload: { productId: product.id },
           });
 
@@ -66,9 +79,11 @@ function ProductDetailModalB1Trial2({
               className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
                 void trackAction({
+                  ...createLogBase(),
+                  phase: "main",
                   page: "product",
                   type: "close_detail",
-                  meta: {},
+                  meta: { implTrialId: "trial2" },
                   payload: { productId: product.id },
                 });
 
@@ -118,11 +133,13 @@ function ProductDetailModalB1Trial2({
                       setIsExtraOpen(next);
 
                       void trackAction({
+                        ...createLogBase(),
+                        phase: "main",
                         page: "product",
                         type: next
                           ? "open_hidden_detail"
                           : "close_hidden_detail",
-                        meta: {},
+                        meta: { implTrialId: "trial2" },
                         payload: { productId: product.id },
                       });
                     }}
@@ -201,12 +218,14 @@ function ProductDetailModalB1Trial2({
                 className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
                 onClick={async () => {
                   await trackAction({
+                    ...createLogBase(),
+                    phase: "main",
                     page: "product",
                     type: "product_select",
-                    meta: {},
+                    meta: { implTrialId: "trial2" },
                     payload: {
                       productId: product.id,
-                      source: "dialog",
+                      source: "detail_modal",
                     },
                   });
 
@@ -235,6 +254,14 @@ type ProductCardB1Trial2Props = {
 
 function ProductCardB1Trial2({ product, set, trial }: ProductCardB1Trial2Props) {
   const router = useRouter();
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   return (
     <article className="h-[378px] w-[550px] overflow-hidden border border-gray-300 bg-white px-[60px]">
@@ -264,12 +291,14 @@ function ProductCardB1Trial2({ product, set, trial }: ProductCardB1Trial2Props) 
           className="flex h-[42px] w-[180px] items-center justify-center bg-black text-[16px] font-semibold text-white"
           onClick={async () => {
             await trackAction({
+              ...createLogBase(),
+              phase: "main",
               page: "product",
               type: "product_select",
-              meta: {},
+              meta: { implTrialId: "trial2" },
               payload: {
                 productId: product.id,
-                source: "card",
+                source: "product_card",
               },
             });
 
@@ -291,15 +320,25 @@ export default function ProductPageB1Trial2() {
   const trial = searchParams.get("trial");
 
   const didTrack = useRef(false);
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "product",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial2" },
       payload: {},
     });
   }, []);

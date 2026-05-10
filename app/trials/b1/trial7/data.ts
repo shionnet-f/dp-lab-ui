@@ -36,7 +36,7 @@ export const trial7Data = {
   },
   products: [
     {
-      id: "b1-t7-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "高耐久 USB Type-C to Type-C ケーブル 2m",
@@ -61,7 +61,7 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t7-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "USB Type-A to Type-C ケーブル 1.5m",
@@ -86,7 +86,7 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t7-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "USB Type-C to Type-C ケーブル 1m",
@@ -111,7 +111,7 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t7-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "USB Type-C to Type-C ケーブル 1.5m おすすめ版",

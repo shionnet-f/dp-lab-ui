@@ -37,7 +37,7 @@ export const trial9Data = {
   },
   products: [
     {
-      id: "a2-t9-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "緑茶 500ml×24本 上質ブレンド",
@@ -59,7 +59,7 @@ export const trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t9-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "緑茶 350ml×24本 すっきり仕立て",
@@ -81,7 +81,7 @@ export const trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t9-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "緑茶 500ml×24本 スタンダード",
@@ -103,7 +103,7 @@ export const trial9Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t9-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: "quantity_condition",
       name: "緑茶 お買い得パック",

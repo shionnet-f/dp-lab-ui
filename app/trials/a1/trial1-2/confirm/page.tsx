@@ -9,12 +9,25 @@ import {
   trial1_2Data,
 } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
 import { ConfirmShippingSection } from "@/app/trials/_components/a1TrialComponents/ConfirmShippingSection";
 import { ConfirmOptionSection } from "@/app/trials/_components/a1TrialComponents/ConfirmOptionSection";
 import { ConfirmSummaryPanel } from "@/app/trials/_components/a1TrialComponents/ConfirmSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
+
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a1Index = segments.indexOf("a1");
+  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+}
 
 const completePath = getTrialPath("a1", "trial1-2", "complete");
 const checkoutPath = getTrialPath("a1", "trial1-2", "checkout");
@@ -36,10 +49,14 @@ export default function ConfirmPageA1Trial1_2() {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    const baseLog = getClientLogBase({ searchParams });
+
+    void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "confirm",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);
@@ -79,9 +96,28 @@ export default function ConfirmPageA1Trial1_2() {
   if (shipping) completeParams.set("shipping", shipping);
   optionKeys.forEach((option) => completeParams.append("options", option));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const baseLog = getClientLogBase({ searchParams });
+
     if (!selectedShipping) {
       setError(true);
+
+      void trackAction({
+        ...baseLog,
+        phase: "main",
+        page: "confirm",
+        type: "confirm_submit_missing_shipping",
+        meta: { implTrialId: getImplTrialId() },
+        payload: {
+          productId: selectedProduct.id,
+          shippingId: shipping,
+          optionIds: optionKeys,
+          productPriceYen: selectedProduct.priceYen,
+          shippingPriceYen: shippingPrice,
+          optionTotalYen: optionTotal,
+          totalYen: total,
+        },
+      });
 
       window.setTimeout(() => {
         setError(false);
@@ -89,6 +125,23 @@ export default function ConfirmPageA1Trial1_2() {
 
       return;
     }
+
+    await trackAction({
+      ...baseLog,
+      phase: "main",
+      page: "confirm",
+      type: "confirm_submit",
+      meta: { implTrialId: getImplTrialId() },
+      payload: {
+        productId: selectedProduct.id,
+        shippingId: shipping,
+        optionIds: optionKeys,
+        productPriceYen: selectedProduct.priceYen,
+        shippingPriceYen: shippingPrice,
+        optionTotalYen: optionTotal,
+        totalYen: total,
+      },
+    });
 
     router.push(`${completePath}?${completeParams.toString()}`);
   };
@@ -134,9 +187,10 @@ export default function ConfirmPageA1Trial1_2() {
             shippingPriceYen={shippingPrice}
             optionTotalYen={optionTotal}
             totalYen={total}
-            completePath={`${completePath}?${completeParams.toString()}`}
             backPath={`${checkoutPath}?${backParams.toString()}`}
             onSubmit={handleSubmit}
+            set={set}
+            trial={trial}
           />
         </section>
       </div>
