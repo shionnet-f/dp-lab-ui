@@ -41,7 +41,7 @@ export const trial1_2Data: Trial1_2Data = {
   },
   products: [
     {
-      id: "a2-t1-2-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "30L 半透明 ゴミ袋 100枚×3個セット",
@@ -53,7 +53,7 @@ export const trial1_2Data: Trial1_2Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-2-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "30L 透明 ゴミ袋 100枚×2個セット",
@@ -65,7 +65,7 @@ export const trial1_2Data: Trial1_2Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-2-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "30L 半透明 ゴミ袋 50枚×4個セット",
@@ -77,7 +77,7 @@ export const trial1_2Data: Trial1_2Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-2-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "30L 半透明 ゴミ袋 70枚×3個セット",

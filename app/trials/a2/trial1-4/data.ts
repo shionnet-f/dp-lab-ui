@@ -30,7 +30,7 @@ export const trial1_4Data = {
   },
   products: [
     {
-      id: "a2-t1-4-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "マルチビタミン 120日分 プレミアム",
@@ -42,7 +42,7 @@ export const trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-4-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "ビタミンC 90日分",
@@ -54,7 +54,7 @@ export const trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-4-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "マルチビタミン 90日分 ベーシック",
@@ -66,7 +66,7 @@ export const trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-4-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "マルチビタミン 100日分 スタンダード",

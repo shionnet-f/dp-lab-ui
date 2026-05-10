@@ -33,7 +33,7 @@ export const trial6Data = {
   },
   products: [
     {
-      id: "a2-t6-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "衣類用漂白剤 450ml×3本 しっかり消臭",
@@ -56,7 +56,7 @@ export const trial6Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t6-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "キッチン用漂白剤 500ml×3本 まとめ買い",
@@ -79,7 +79,7 @@ export const trial6Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t6-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "衣類用漂白剤 400ml×3本 ベーシック",
@@ -102,7 +102,7 @@ export const trial6Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t6-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "衣類用漂白剤 420ml×3本 抗菌プラス",

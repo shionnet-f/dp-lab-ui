@@ -34,7 +34,7 @@ export const trial8Data = {
   },
   products: [
     {
-      id: "a1-t8-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "黒烏龍茶 350ml×24本 プレミアムケース",
@@ -53,7 +53,7 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t8-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "quantity_condition",
       name: "黒烏龍茶 350ml×12本 ハーフケース",
@@ -72,7 +72,7 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t8-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "黒烏龍茶 350ml×24本 スタンダードケース",
@@ -91,7 +91,7 @@ export const trial8Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t8-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "黒烏龍茶 350ml×24本 人気ケース",

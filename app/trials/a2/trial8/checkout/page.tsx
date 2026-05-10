@@ -8,6 +8,18 @@ import { getTrialPath } from "@/app/trials/_lib/path";
 import { OrderItemPanel } from "@/app/trials/_components/a2TrialComponents/CheckoutOrderItemPanel";
 import { OptionSection } from "@/app/trials/_components/a2TrialComponents/OptionSection";
 import { getProductById, trial8Data } from "../data";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a2Index = segments.indexOf("a2");
+  return a2Index >= 0 ? segments[a2Index + 1] ?? null : null;
+}
 
 const confirmPath = getTrialPath("a2", "trial8", "confirm");
 const productPath = getTrialPath("a2", "trial8", "product");
@@ -33,6 +45,8 @@ type RelativeShippingMethodSectionProps = {
   shippingMethods: ShippingMethod[];
   selectedShipping: string | null;
   onChangeShipping: (id: string) => void;
+  set: string;
+  trial: string;
 };
 
 function yen(n: number) {
@@ -62,7 +76,16 @@ function RelativeShippingMethodSection({
   shippingMethods,
   selectedShipping,
   onChangeShipping,
+  set,
+  trial,
 }: RelativeShippingMethodSectionProps) {
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
   // 真ん中の配送方法を基準にする
   // standard: 500円, express: 800円, scheduled: 700円 の場合
   // express が ¥0 表示になる
@@ -99,9 +122,14 @@ function RelativeShippingMethodSection({
                 onChange={() => {
                   onChangeShipping(method.id);
 
+                  const baseLog = createLogBase();
+
                   void trackAction({
+                    ...baseLog,
+                    phase: "main",
                     page: "checkout",
                     type: "shipping_select",
+                    meta: { implTrialId: getImplTrialId() },
                     payload: {
                       shippingId: method.id,
 
@@ -163,14 +191,27 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
+    const baseLog = createLogBase();
+
     void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);
@@ -224,9 +265,14 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
           onSubmit={async (e) => {
             e.preventDefault();
 
+            const baseLog = createLogBase();
+
             await trackAction({
+              ...baseLog,
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
+              meta: { implTrialId: getImplTrialId() },
               payload: {
                 productId: selectedProduct.id,
                 productPrice,
@@ -281,12 +327,16 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
               shippingMethods={trial8Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              set={set}
+              trial={trial}
             />
 
             <OptionSection
               options={trial8Data.options}
               selectedOptions={options}
               onToggleOption={toggleOption}
+              set={set}
+              trial={trial}
             />
           </section>
 
@@ -298,9 +348,14 @@ export default function CheckoutPageA2Trial8({ searchParams }: Props) {
             <button
               type="button"
               onClick={async () => {
+                const baseLog = createLogBase();
+
                 await trackAction({
+                  ...baseLog,
+                  phase: "main",
                   page: "checkout",
                   type: "checkout_back",
+                  meta: { implTrialId: getImplTrialId() },
                   payload: {
                     productId: selectedProduct.id,
                   },

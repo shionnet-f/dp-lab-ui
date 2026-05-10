@@ -3,11 +3,24 @@ import { use, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial1_4Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { ShippingMethodSection } from "@/app/trials/_components/a1TrialComponents/ShippingMethodSection";
 import { OptionSection } from "@/app/trials/_components/a1TrialComponents/OptionSection";
 import { OrderSummaryPanel } from "@/app/trials/_components/a1TrialComponents/OrderSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
+
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a1Index = segments.indexOf("a1");
+  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+}
 
 const confirmPath = getTrialPath("a1", "trial1-4", "confirm")
 const productPath = getTrialPath("a1", "trial1-4", "product");
@@ -41,14 +54,27 @@ export default function CheckoutPageA1Trial1_4({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    const baseLog = createLogBase();
+
+    void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);
@@ -83,9 +109,14 @@ export default function CheckoutPageA1Trial1_4({ searchParams }: Props) {
           onSubmit={async (e) => {
             e.preventDefault();
 
+            const baseLog = createLogBase();
+
             await trackAction({
+              ...baseLog,
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
+              meta: { implTrialId: getImplTrialId() },
               payload: {
                 productId: selectedProduct.id,
                 shippingId: shipping,
@@ -122,6 +153,8 @@ export default function CheckoutPageA1Trial1_4({ searchParams }: Props) {
               shippingMethods={trial1_4Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              set={set}
+              trial={trial}
             />
 
             {/* 60pxの空間 */}
@@ -132,6 +165,8 @@ export default function CheckoutPageA1Trial1_4({ searchParams }: Props) {
               options={trial1_4Data.options}
               selectedOptions={options}
               onToggleOption={toggleOption}
+              set={set}
+              trial={trial}
             />
           </div>
 

@@ -49,7 +49,7 @@ export const trial10Data: Trial10Data = {
   },
   products: [
     {
-      id: "a1-t10-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "アルカリ乾電池 単3 24本 プレミアムパック",
@@ -72,7 +72,7 @@ export const trial10Data: Trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t10-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "マンガン乾電池 単3 20本 お買い得パック",
@@ -99,7 +99,7 @@ export const trial10Data: Trial10Data = {
       },
     },
     {
-      id: "a1-t10-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "アルカリ乾電池 単3 20本 ベーシックパック",
@@ -122,7 +122,7 @@ export const trial10Data: Trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t10-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "アルカリ乾電池 単3 24本 人気パック",

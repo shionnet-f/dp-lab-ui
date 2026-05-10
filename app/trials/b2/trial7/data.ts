@@ -4,11 +4,12 @@ export type Trial7Product = {
   failReason: "budget" | "quantity_condition" | "specific_condition" | null;
   name: string;
   priceYen: number;
+  actualPriceYen?: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 
 export type ShippingMethod = {
@@ -26,27 +27,32 @@ export type AddonOption = {
 };
 
 export const trial7Data = {
+  trialId: "b2-trial7",
+  dpType: "最終確認ページで初めてサブスク価格と分かるようにする",
   purchaseConditions: {
     budgetYen: 1500,
-    quantityCondition: "64GB以上であること",
-    specificCondition: "USB 3.0以上に対応していること",
+    quantityCondition: "1m以上であること",
+    specificCondition: "USB Type-C to Type-Cであること",
   },
   products: [
     {
-      id: "b2-t7-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "USBメモリ 128GB USB 3.2 プレミアム",
-      priceYen: 1680,
-      description: "128GBでUSB 3.2に対応したUSBメモリです。条件は満たしますが、予算を超える商品です。",
+      name: "高耐久 USB Type-C to Type-C ケーブル 2m",
+      priceYen: 1780,
+      description:
+        "Type-C to Type-C の2mケーブルです。長さと端子条件は満たしますが、予算を超える商品です。",
       specsAndNotes: [
-        "容量：128GB",
-        "対応規格：USB 3.2 Gen1",
-        "端子：USB Type-A",
+        "長さ：2m",
+        "端子：USB Type-C to Type-C",
+        "急速充電対応",
+        "ナイロン編み込み被覆",
+        "データ転送対応",
       ],
       prePurchaseCheck: [
-        "予算内に収まるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "長さと端子形状が条件に合うか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -55,20 +61,23 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t7-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "USBメモリ 64GB USB 2.0 スタンダード",
+      name: "USB Type-A to Type-C ケーブル 1.5m",
       priceYen: 980,
-      description: "64GBのUSBメモリですが、USB 2.0対応で条件を満たさない商品です。",
+      description:
+        "長さは1.5mありますが、端子が Type-C to Type-C ではない商品です。",
       specsAndNotes: [
-        "容量：64GB",
-        "対応規格：USB 2.0",
-        "端子：USB Type-A",
+        "長さ：1.5m",
+        "端子：USB Type-A to Type-C",
+        "急速充電対応",
+        "一般的な充電用ケーブルです",
+        "データ転送対応",
       ],
       prePurchaseCheck: [
-        "USB 3.0以上に対応しているか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "端子形状が条件に合っているか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -77,20 +86,23 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t7-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
-      name: "USBメモリ 64GB USB 3.0 ベーシック",
-      priceYen: 1180,
-      description: "条件を満たす中で最も安いUSBメモリです。",
+      name: "USB Type-C to Type-C ケーブル 1m",
+      priceYen: 1280,
+      description:
+        "Type-C to Type-C の1mケーブルで、条件を満たす中で最も安い商品です。",
       specsAndNotes: [
-        "容量：64GB",
-        "対応規格：USB 3.0",
-        "端子：USB Type-A",
+        "長さ：1m",
+        "端子：USB Type-C to Type-C",
+        "急速充電対応",
+        "データ転送対応",
+        "日常使い向けの標準的なケーブルです",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "長さと端子形状が条件に合うか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -99,20 +111,25 @@ export const trial7Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t7-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
-      name: "USBメモリ 128GB USB 3.1 高速転送",
-      priceYen: 1380,
-      description: "条件は満たしますが、正解商品よりやや高いUSBメモリです。",
+      name: "USB Type-C to Type-C ケーブル 1.5m おすすめ版",
+      priceYen: 1160,
+      actualPriceYen: 1560,
+      description:
+        "Type-C to Type-C の1.5mケーブルで、一見すると予算内で購入できそうに見える商品です。",
       specsAndNotes: [
-        "容量：128GB",
-        "対応規格：USB 3.1",
-        "端子：USB Type-A",
+        "長さ：1.5m",
+        "端子：USB Type-C to Type-C",
+        "急速充電対応",
+        "データ転送対応",
+        "やわらかい被覆で取り回ししやすい仕様です",
+        "在庫状況により発送時期が前後する場合があります",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "長さと端子形状が条件に合うか確認してから選択してください",
+        "購入手続き画面で配送方法や金額を確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -122,26 +139,55 @@ export const trial7Data = {
     },
   ] satisfies Trial7Product[],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 220,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 480,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "日時指定便",
+      priceYen: 320,
+      shortDescription: "受け取り日時を指定できます",
+    },
   ] satisfies ShippingMethod[],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 180,
+      shortDescription: "簡易ギフト包装を追加します",
+    },
+    {
+      id: "bag",
+      name: "手提げ袋を追加",
+      priceYen: 80,
+      shortDescription: "持ち運び用の手提げ袋を追加します",
+    },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial7Data.products.find((product) => product.id === productId) ?? trial7Data.products[0];
+  return (
+    trial7Data.products.find((product) => product.id === productId) ??
+    trial7Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial7Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial7Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {
   return trial7Data.options.filter((option) => optionIds.includes(option.id));
 }
-
-export default trial7Data;

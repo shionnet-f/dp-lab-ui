@@ -44,7 +44,7 @@ export const trial1_5Data: Trial1_5Data = {
   },
   products: [
     {
-      id: "b1-t1-5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "microSDXCカード 256GB 高速版",
@@ -63,7 +63,7 @@ export const trial1_5Data: Trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t1-5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "microSDHCカード 256GB相当モデル",
@@ -86,7 +86,7 @@ export const trial1_5Data: Trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t1-5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "microSDXCカード 256GB",
@@ -105,7 +105,7 @@ export const trial1_5Data: Trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t1-5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "microSDXCカード 512GB",

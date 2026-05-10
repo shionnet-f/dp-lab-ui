@@ -1,143 +1,60 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import trial5Data, { type Trial5Product } from "../data";
-
-function yen(n: number) {
-  return new Intl.NumberFormat("ja-JP").format(n);
+import { ProductDetailModal } from "@/app/trials/_components/a2TrialComponents/ProductDetailModal";
+import { trial5Data } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+  if (trialsIndex >= 0) return segments[trialsIndex + 2] ?? null;
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
 }
 
-type ProductDetailModalProps = {
-  product: Trial5Product;
-  set: string;
-  trial: string;
-};
-
-function ProductDetailModal({ product, set, trial }: ProductDetailModalProps) {
-  const dialogId = `product-dialog-${product.id}`;
-
-  function openDialog() {
-    const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-    el?.showModal();
-  }
-
-  function closeDialog() {
-    const el = document.getElementById(dialogId) as HTMLDialogElement | null;
-    el?.close();
-  }
-
-  const detailItems = [
-    product.description,
-    ...product.specsAndNotes,
-    ...product.prePurchaseCheck,
-    ...product.deliveryInfo,
-  ];
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={openDialog}
-        className="flex h-11 items-center justify-center rounded-md border border-gray-300 px-4 text-sm text-gray-700"
-      >
-        詳細を見る
-      </button>
-
-      <dialog id={dialogId} className="m-auto w-full max-w-4xl rounded-2xl p-0 backdrop:bg-black/30">
-        <div className="rounded-2xl bg-white">
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-gray-900">商品詳細</h2>
-            <button type="button" onClick={closeDialog} className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700">
-              閉じる
-            </button>
-          </div>
-
-          <div className="space-y-5 px-6 py-6">
-            <section className="rounded-xl border border-gray-200 p-5">
-              <div className="grid grid-cols-[160px_1fr] items-center gap-5">
-                <div className="flex h-28 w-40 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">画像エリア</div>
-
-                <div className="min-w-0">
-                  <div className="text-xl font-bold leading-tight text-gray-900">{product.name}</div>
-                  <div className="mt-2 text-xl font-semibold text-gray-900">¥{yen(product.priceYen)}</div>
-                </div>
-              </div>
-            </section>
-
-            <section className="rounded-xl border border-gray-200 p-5">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">詳細</h3>
-              <ul className="space-y-2 text-sm leading-6 text-gray-600">
-                {detailItems.map((item) => (
-                  <li key={item} className="pl-4 -indent-4">
-                    ・{item}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <div className="pt-1">
-              <Link href={`/trials/b2/trial5/checkout?productId=${product.id}&set=${set}&trial=${trial}`} className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white">
-                この商品を選ぶ
-              </Link>
-            </div>
-          </div>
-        </div>
-      </dialog>
-    </>
-  );
-}
-
-function ProductCard({ product, set, trial }: { product: Trial5Product; set: string; trial: string }) {
-  return (
-    <article className="h-[136px] rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
-      <div className="grid h-full grid-cols-[112px_1fr_260px] items-center gap-5">
-        <div className="flex h-20 w-28 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">画像</div>
-
-        <div className="min-w-0">
-          <h2 className="line-clamp-1 text-base font-semibold text-gray-900">{product.name}</h2>
-          <p className="mt-2 text-base font-medium text-gray-800">¥{yen(product.priceYen)}</p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 justify-self-end">
-          <ProductDetailModal product={product} set={set} trial={trial} />
-          <Link href={`/trials/b2/trial5/checkout?productId=${product.id}&set=${set}&trial=${trial}`} className="flex h-11 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white">
-            購入へ
-          </Link>
-        </div>
-      </div>
-    </article>
-  );
-}
+const checkoutPath = getTrialPath("b2", "trial5", "checkout");
 
 export default function ProductPageB2Trial5() {
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
   const trial = searchParams.get("trial");
+  const didTrack = useRef(false);
 
-  if (!set || !trial) {
-    return (
-      <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
-          URLに set または trial がありません。
-        </div>
-      </main>
-    );
-  }
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+    const baseLog = getClientLogBase({ searchParams });
+    void trackAction({ ...baseLog, phase: "main", page: "product", type: "page_view", meta: { implTrialId: getImplTrialId() }, payload: {} });
+  }, []);
+
+  if (!set || !trial) return <main className="flex h-screen items-center justify-center bg-gray-50"><div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">URLに set または trial がありません。</div></main>;
 
   return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial5Data.purchaseConditions.budgetYen}円以内、
-          {trial5Data.purchaseConditions.quantityCondition}、
-          {trial5Data.purchaseConditions.specificCondition}
-        </div>
-        <header className="mb-5 shrink-0"><h1 className="text-xl font-bold text-gray-900">商品一覧</h1></header>
-        <section className="grid flex-1 gap-5">
-          {trial5Data.products.map((product) => <ProductCard key={product.id} product={product} set={set} trial={trial} />)}
+    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
+        <TrialPageHeader purchaseConditions={trial5Data.purchaseConditions} title="商品一覧" />
+        <section className="mx-auto flex h-[820px] w-[1160px] flex-col gap-[60px] overflow-hidden">
+          {trial5Data.products.map((product) => (
+            <article key={product.id} className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
+              <div className="grid h-full grid-cols-[220px_580px_360px]">
+                <div className="flex h-full items-center justify-center pl-[60px]">
+                  <div className="flex h-[110px] w-[140px] items-center justify-center rounded-md bg-gray-100 text-[14px] text-gray-400">画像</div>
+                </div>
+                <div className="flex h-full min-w-0 items-center px-[20px]">
+                  <h2 className="truncate text-[22px] font-semibold text-gray-900">{product.name}</h2>
+                </div>
+                <div className="flex h-full items-center justify-center">
+                  <ProductDetailModal product={product} set={set} trial={trial} nextPath={checkoutPath} />
+                </div>
+              </div>
+            </article>
+          ))}
         </section>
+        <div className="h-[95px]" />
       </div>
     </main>
   );

@@ -36,7 +36,7 @@ export const trial10Data = {
   },
   products: [
     {
-      id: "b1-t10-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "フェイスタオル 5枚セット 綿100% プレミアム",
@@ -56,7 +56,7 @@ export const trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t10-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "フェイスタオル 5枚セット やわらか仕上げ",
@@ -76,7 +76,7 @@ export const trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t10-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "フェイスタオル 5枚セット 綿100% ベーシック",
@@ -96,7 +96,7 @@ export const trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t10-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "フェイスタオル 家庭用おまとめセット",

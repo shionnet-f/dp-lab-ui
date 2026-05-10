@@ -48,7 +48,7 @@ export const trial6Data: Trial6Data = {
   },
   products: [
     {
-      id: "b1-t6-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "なめらかボールペン 0.7mm 黒 5本セット プレミアム",
@@ -73,7 +73,7 @@ export const trial6Data: Trial6Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t6-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "さらさらボールペン 0.5mm 青 4本セット",
@@ -98,7 +98,7 @@ export const trial6Data: Trial6Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t6-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "スタンダードボールペン 0.5mm 黒 3本セット",
@@ -122,7 +122,7 @@ export const trial6Data: Trial6Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t6-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "書きやすいボールペン 0.5mm 黒 4本セット",

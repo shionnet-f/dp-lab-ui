@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { loadExperimentPlan } from "../_lib/storage";
 import type { ExperimentPlan, FixationPosition, SetIndex } from "../_lib/types";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { trialOrder } from "@/app/trials/_lib/trialOrder";
 
 const DURATION_SECONDS = 30;
+const DURATION_MS = DURATION_SECONDS * 1000;
 
 function isSetIndex(value: string | null): value is SetIndex {
   return value === "1" || value === "2" || value === "3";
@@ -48,6 +51,9 @@ export default function ExperimentFixationPage() {
   );
   const [remainingSeconds, setRemainingSeconds] = useState(DURATION_SECONDS);
 
+  const didLogStart = useRef(false);
+  const didLogEnd = useRef(false);
+
   const setParam = searchParams.get("set");
   const positionParam = searchParams.get("position");
 
@@ -64,10 +70,82 @@ export default function ExperimentFixationPage() {
   }, [plan, position, setIndex]);
 
   useEffect(() => {
-    if (!nextPath) return;
+    if (!plan || !setIndex || !position || !nextPath) return;
+    if (didLogStart.current) return;
+    didLogStart.current = true;
+
+    const logParams = new URLSearchParams();
+    logParams.set("set", setIndex);
+
+    const baseLog = getClientLogBase({ searchParams: logParams });
+    const taskSetId = plan.sets[setIndex].phase;
+
+    void trackAction({
+      ...baseLog,
+      phase: "fixation",
+      page: "fixation",
+      type: "page_view",
+      meta: {},
+      payload: {
+        setIndex,
+        taskSetId,
+        position,
+        label: getLabel(position, setIndex),
+        durationMs: DURATION_MS,
+        nextPath,
+      },
+    });
+
+    void trackAction({
+      ...baseLog,
+      phase: "fixation",
+      page: "fixation",
+      type: "fixation_start",
+      meta: {},
+      payload: {
+        setIndex,
+        taskSetId,
+        position,
+        label: getLabel(position, setIndex),
+        durationMs: DURATION_MS,
+        nextPath,
+      },
+    });
+  }, [nextPath, plan, position, searchParams, setIndex]);
+
+  useEffect(() => {
+    if (!plan || !setIndex || !position || !nextPath) return;
 
     if (remainingSeconds <= 0) {
-      router.push(nextPath);
+      if (didLogEnd.current) return;
+      didLogEnd.current = true;
+
+      const logParams = new URLSearchParams();
+      logParams.set("set", setIndex);
+
+      const baseLog = getClientLogBase({ searchParams: logParams });
+      const taskSetId = plan.sets[setIndex].phase;
+
+      void (async () => {
+        await trackAction({
+          ...baseLog,
+          phase: "fixation",
+          page: "fixation",
+          type: "fixation_end",
+          meta: {},
+          payload: {
+            setIndex,
+            taskSetId,
+            position,
+            label: getLabel(position, setIndex),
+            durationMs: DURATION_MS,
+            nextPath,
+          },
+        });
+
+        router.push(nextPath);
+      })();
+
       return;
     }
 
@@ -76,7 +154,7 @@ export default function ExperimentFixationPage() {
     }, 1000);
 
     return () => window.clearTimeout(timer);
-  }, [nextPath, remainingSeconds, router]);
+  }, [nextPath, plan, position, remainingSeconds, router, searchParams, setIndex]);
 
   if (plan === undefined) return null;
 

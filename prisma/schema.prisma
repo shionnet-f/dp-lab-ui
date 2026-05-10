@@ -14,21 +14,24 @@ model EventLog {
   sessionId     String?
   participantId String?
   phase         String?
-  taskVersion   String?
-  trialId       String?
-  setIndex      Int?
 
-  page      String
-  type      String
-  ts        BigInt
+  setIndex  Int?
+  taskSetId String?
+  trialNo   Int?
 
-  meta      Json
-  payload   Json
+  page String
+  type String
+  ts   BigInt
+
+  meta    Json
+  payload Json
 
   @@index([sessionId])
   @@index([participantId])
   @@index([phase])
-  @@index([trialId])
+  @@index([setIndex])
+  @@index([taskSetId])
+  @@index([trialNo])
   @@index([page])
   @@index([type])
   @@index([createdAt])

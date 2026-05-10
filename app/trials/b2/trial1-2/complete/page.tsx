@@ -8,7 +8,7 @@ type Props = {
   }>;
 };
 
-export default async function CompletePageB2Trial1_2({
+export default async function CompletePageB2Trial12({
   searchParams,
 }: Props) {
   const sp = await searchParams;
@@ -23,6 +23,7 @@ export default async function CompletePageB2Trial1_2({
   return (
     <TrialCompletePage
       set={set}
+      trial={trial}
       nextPath={next.nextPath}
       nextParams={next.nextParams}
     />

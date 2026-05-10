@@ -33,7 +33,7 @@ export const trial4Data = {
   },
   products: [
     {
-      id: "a2-t4-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "ドラム式洗濯乾燥機 8kg ハイグレード",
@@ -56,7 +56,7 @@ export const trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t4-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "全自動洗濯機 7kg スタンダード",
@@ -79,7 +79,7 @@ export const trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t4-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "洗濯乾燥機 6kg ベーシック",
@@ -102,7 +102,7 @@ export const trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t4-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "洗濯乾燥機 7kg 省エネモデル",

@@ -1,161 +1,40 @@
-import Link from "next/link";
-import { getOptionsByIds, getProductById, getShippingById, trial9Data } from "../data";
+"use client";
 
-function yen(n: number) {
-  return new Intl.NumberFormat("ja-JP").format(n);
+import { use, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { trackAction } from "@/app/actions/track";
+import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+import { getTrialPath } from "@/app/trials/_lib/path";
+import { ConfirmOrderItemPanel } from "@/app/trials/_components/a2TrialComponents/ConfirmOrderItemPanel";
+import { ConfirmShippingSection } from "@/app/trials/_components/a2TrialComponents/ConfirmShippingSection";
+import { ConfirmOptionSection } from "@/app/trials/_components/a2TrialComponents/ConfirmOptionSection";
+import { ConfirmSummaryPanel } from "@/app/trials/_components/a2TrialComponents/ConfirmSummaryPanel";
+import { getOptionsByIds, getProductById, getShippingById, getShippingPrice, trial9Data } from "../data";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+  if (trialsIndex >= 0) return segments[trialsIndex + 2] ?? null;
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
 }
 
-type Props = {
-  searchParams?: Promise<{
-    productId?: string;
-    shipping?: string;
-    options?: string | string[];
-  }>;
-};
+const completePath = getTrialPath("b2", "trial9", "complete");
+const checkoutPath = getTrialPath("b2", "trial9", "checkout");
 
-function normalizeOptions(options?: string | string[]) {
-  if (!options) return [];
-  return Array.isArray(options) ? options : [options];
-}
+type Props = { searchParams: Promise<{ productId?: string; shipping?: string; options?: string | string[]; set?: string; trial?: string; }>; };
+function normalizeOptions(options?: string | string[]) { if (!options) return []; return Array.isArray(options) ? options : [options]; }
 
-export default async function ConfirmPageB2Trial9({ searchParams }: Props) {
-  const sp = await searchParams;
-  const selectedProduct = getProductById(sp?.productId);
-  const shippingInfo = getShippingById(selectedProduct.id, sp?.shipping);
-  const optionKeys = normalizeOptions(sp?.options);
-  const selectedOptions = getOptionsByIds(optionKeys);
-
-  const shippingPrice = shippingInfo?.priceYen ?? 0;
-  const optionTotal = selectedOptions.reduce((sum, option) => sum + option.priceYen, 0);
-  const total = selectedProduct.priceYen + shippingPrice + optionTotal;
-
-  const backParams = new URLSearchParams();
-  backParams.set("productId", selectedProduct.id);
-  if (sp?.shipping) backParams.set("shipping", sp.shipping);
-  optionKeys.forEach((option) => backParams.append("options", option));
-
-  const completeParams = new URLSearchParams();
-  completeParams.set("productId", selectedProduct.id);
-  if (sp?.shipping) completeParams.set("shipping", sp.shipping);
-  optionKeys.forEach((option) => completeParams.append("options", option));
-
-  return (
-    <main className="h-screen overflow-hidden bg-gray-50 px-8 py-8">
-      <div className="mx-auto flex h-full max-w-6xl flex-col">
-        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-          <span className="font-semibold">購入条件：</span>
-          予算{trial9Data.purchaseConditions.budgetYen}円以内、
-          {trial9Data.purchaseConditions.quantityCondition}、
-          {trial9Data.purchaseConditions.specificCondition}
-        </div>
-
-        <header className="mb-5 shrink-0">
-          <h1 className="text-xl font-bold text-gray-900">最終確認</h1>
-        </header>
-
-        <div className="grid flex-1 grid-rows-[152px_228px_176px_120px_88px] gap-6">
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-6 shadow-sm">
-            <div className="grid h-full grid-cols-[120px_1fr_auto] items-center gap-6">
-              <div className="flex h-24 w-[120px] items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                画像
-              </div>
-
-              <div className="min-w-0">
-                <div className="truncate text-lg font-medium text-gray-800">{selectedProduct.name}</div>
-                <div className="mt-3 text-base text-gray-600">商品価格：¥{yen(selectedProduct.priceYen)}</div>
-                <div className="mt-2 text-sm text-gray-400">ご選択中の商品</div>
-              </div>
-
-              <div className="text-sm text-gray-400">注文商品</div>
-            </div>
-          </section>
-
-          <section className="grid h-full grid-cols-2 gap-5">
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">配送方法</h2>
-
-              <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                <div className="text-sm font-medium text-gray-700">{shippingInfo?.name ?? "未選択"}</div>
-                <div className="mt-1 text-sm text-gray-500">
-                  {shippingInfo ? `¥${yen(shippingInfo.priceYen)}` : "選択されていません"}
-                </div>
-              </div>
-            </article>
-
-            <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-              <h2 className="mb-4 text-sm font-medium text-gray-500">追加オプション</h2>
-
-              <div className="space-y-2">
-                {selectedOptions.length > 0 ? (
-                  selectedOptions.map((option) => (
-                    <div key={option.id} className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3">
-                      <div className="text-sm font-medium text-gray-700">{option.name}</div>
-                      <div className="mt-1 text-sm text-gray-500">+¥{yen(option.priceYen)}</div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-md border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-500">
-                    選択されたオプションはありません
-                  </div>
-                )}
-              </div>
-            </article>
-          </section>
-
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-            <div className="flex h-full flex-col justify-between">
-              <div className="space-y-2 text-sm text-gray-900">
-                <div className="flex items-center justify-between">
-                  <span>商品価格</span>
-                  <span>¥{yen(selectedProduct.priceYen)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>送料</span>
-                  <span>¥{yen(shippingPrice)}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span>オプション料金</span>
-                  <span>¥{yen(optionTotal)}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-gray-200 pt-3 text-sm">
-                <span className="font-semibold text-gray-900">最終金額</span>
-                <span className="text-2xl font-bold text-black">¥{yen(total)}</span>
-              </div>
-            </div>
-          </section>
-
-          <section className="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
-            <div className="flex h-full flex-col gap-3">
-              <Link
-                href={`/trials/b2/trial9/complete?${completeParams.toString()}`}
-                className="flex h-12 w-full items-center justify-center rounded-md bg-black px-5 text-sm font-medium text-white"
-              >
-                購入を確定する
-              </Link>
-
-              <Link
-                href={`/trials/b2/trial9/checkout?${backParams.toString()}`}
-                className="flex h-12 w-full items-center justify-center rounded-md border border-gray-300 bg-white px-5 text-sm font-medium text-gray-700"
-              >
-                戻る
-              </Link>
-            </div>
-          </section>
-
-          <section className="rounded-xl border border-gray-100 bg-gray-50 px-6 py-4">
-            <h2 className="mb-2 text-sm font-medium text-gray-400">注意事項</h2>
-
-            <div className="space-y-1 text-sm leading-5 text-gray-500">
-              <p>購入確定後は、注文内容の変更やキャンセルができない場合があります。</p>
-              <p>配送方法・追加オプション・最終金額を確認したうえで、購入を確定してください。</p>
-            </div>
-          </section>
-        </div>
-      </div>
-    </main>
-  );
+export default function ConfirmPageB2Trial9({ searchParams }: Props) {
+  const sp = use(searchParams); const router = useRouter(); const didTrack = useRef(false); const [error, setError] = useState(false);
+  const productId = sp?.productId; const shippingId = sp?.shipping; const optionIds = normalizeOptions(sp?.options); const set = sp?.set; const trial = sp?.trial;
+  function createLogBase() { const p = new URLSearchParams(); if (set) p.set("set", set); if (trial) p.set("trial", trial); return getClientLogBase({ searchParams: p }); }
+  const selectedProduct = getProductById(productId); const shippingInfo = getShippingById(shippingId); const selectedOptions = getOptionsByIds(optionIds);
+  const productPriceYen = selectedProduct.priceYen; const isDelayedSubscription = false; const displayedProductPriceYen = productPriceYen; const shippingPriceYen = getShippingPrice(selectedProduct.id, shippingId); const optionTotalYen = selectedOptions.reduce((sum, option) => sum + option.priceYen, 0); const totalYen = productPriceYen + shippingPriceYen + optionTotalYen;
+  useEffect(() => { if (didTrack.current) return; didTrack.current = true; const baseLog = createLogBase(); void trackAction({ ...baseLog, phase: "main", page: "confirm", type: "page_view", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id, shippingId, optionIds, displayedProductPriceYen, productPriceYen, shippingPriceYen, optionTotalYen, totalYen, isDelayedSubscription } }); }, []);
+  if (!set || !trial) return <main className="flex h-screen items-center justify-center bg-gray-50"><div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">URLに set または trial がありません。</div></main>;
+  const backParams = new URLSearchParams(); backParams.set("productId", selectedProduct.id); backParams.set("set", set); backParams.set("trial", trial); backParams.set("shipping", shippingId ?? ""); optionIds.forEach(id => backParams.append("options", id)); const completeParams = new URLSearchParams(backParams);
+  async function handleConfirmSubmit() { if (!shippingInfo) { setError(true); const baseLog = createLogBase(); void trackAction({ ...baseLog, phase: "main", page: "confirm", type: "confirm_submit_missing_shipping", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id, shippingId, optionIds, displayedProductPriceYen, productPriceYen, shippingPriceYen, optionTotalYen, totalYen, isDelayedSubscription } }); window.setTimeout(() => setError(false), 2500); return; } const baseLog = createLogBase(); await trackAction({ ...baseLog, phase: "main", page: "confirm", type: "confirm_submit", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id, shippingId, optionIds, displayedProductPriceYen, productPriceYen, shippingPriceYen, optionTotalYen, totalYen, isDelayedSubscription } }); router.push(`${completePath}?${completeParams.toString()}`); }
+  async function handleBack() { const baseLog = createLogBase(); await trackAction({ ...baseLog, phase: "main", page: "confirm", type: "confirm_back", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id, shippingId, optionIds, displayedProductPriceYen, productPriceYen, shippingPriceYen, optionTotalYen, totalYen, isDelayedSubscription } }); router.push(`${checkoutPath}?${backParams.toString()}`); }
+  return <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50"><div className="h-full w-full"><TrialPageHeader purchaseConditions={trial9Data.purchaseConditions} title="最終確認" />{error && <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">配送方法を選択してください</div>}<div className="mx-auto h-[810px] w-[1160px] overflow-hidden"><ConfirmOrderItemPanel product={selectedProduct} /><div className="h-[60px]"/><section className="grid h-[145px] w-[1160px] grid-cols-[550px_550px] gap-[60px] overflow-hidden"><ConfirmShippingSection shippingInfo={shippingInfo ? { ...shippingInfo, priceYen: shippingPriceYen } : null} /><ConfirmOptionSection selectedOptions={selectedOptions} optionTotalYen={optionTotalYen} /></section><div className="h-[60px]"/><div className="h-[250px] overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm"><ConfirmSummaryPanel productPriceYen={productPriceYen} shippingPriceYen={shippingPriceYen} optionTotalYen={optionTotalYen} totalYen={totalYen} /></div><div className="h-[60px]"/><div className="flex h-[60px] w-[1160px] items-center gap-[60px]"><button type="button" onClick={handleBack} className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700">戻る</button><button type="button" onClick={handleConfirmSubmit} className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[16px] font-semibold text-white">購入を確定する</button></div></div><div className="h-[105px]" /></div></main>;
 }

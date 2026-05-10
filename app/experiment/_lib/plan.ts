@@ -3,11 +3,13 @@ import type { ExperimentPlan, SetOrder } from "./types";
 export function createExperimentPlan(
   participantId: string,
   setOrder: SetOrder,
+  sessionId: string,
 ): ExperimentPlan {
   const trimmedParticipantId = participantId.trim();
 
   if (setOrder === "A_Ap_B") {
     return {
+      sessionId,
       participantId: trimmedParticipantId,
       setOrder,
       educationVersion: "A",
@@ -20,6 +22,7 @@ export function createExperimentPlan(
   }
 
   return {
+    sessionId,
     participantId: trimmedParticipantId,
     setOrder,
     educationVersion: "B",

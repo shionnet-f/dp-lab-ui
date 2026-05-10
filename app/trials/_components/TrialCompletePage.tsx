@@ -3,32 +3,58 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+}
 
 type TrialCompletePageProps = {
     set: string;
+    trial: string;
     nextPath: string;
     nextParams?: Record<string, string>;
 };
 
 export function TrialCompletePage({
     set,
+    trial,
     nextPath,
     nextParams,
 }: TrialCompletePageProps) {
     const didTrack = useRef(false);
     const router = useRouter();
 
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
+
     useEffect(() => {
         if (didTrack.current) return;
         didTrack.current = true;
 
+        const baseLog = createLogBase();
+
         void trackAction({
+            ...baseLog,
+            phase: "main",
             page: "complete",
             type: "page_view",
-            meta: {},
+            meta: { implTrialId: getImplTrialId() },
             payload: {},
         });
-    }, []);
+    }, [set, trial]);
 
     return (
         <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
@@ -42,10 +68,14 @@ export function TrialCompletePage({
                 <button
                     className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
                     onClick={async () => {
+                        const baseLog = createLogBase();
+
                         await trackAction({
+                            ...baseLog,
+                            phase: "main",
                             page: "complete",
                             type: "next_trial",
-                            meta: {},
+                            meta: { implTrialId: getImplTrialId() },
                             payload: {},
                         });
 

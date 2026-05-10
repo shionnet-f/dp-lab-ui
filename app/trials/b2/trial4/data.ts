@@ -8,7 +8,7 @@ export type Trial4Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
 
 export type ShippingMethod = {
@@ -38,22 +38,27 @@ export type Trial4Data = {
 
 export const trial4Data: Trial4Data = {
   purchaseConditions: {
-    budgetYen: 500,
-    quantityCondition: "A4サイズで100枚以上であること",
-    specificCondition: "30穴タイプであること",
+    budgetYen: 2000,
+    quantityCondition: "A4サイズで10冊以上であること",
+    specificCondition: "横罫であること",
   },
   products: [
     {
-      id: "b2-t4-p1",
-      role: "correct",
-      failReason: null,
-      name: "ルーズリーフ A4 100枚 30穴 ベーシック",
-      priceYen: 348,
+      id: "p1",
+      role: "budget_over",
+      failReason: "budget",
+      name: "A4 横罫ノート 10冊パック プレミアム",
+      priceYen: 2280,
       description:
-        "A4サイズ・100枚・30穴の条件を満たす中で、最も安いルーズリーフです。",
-      specsAndNotes: ["サイズ：A4", "枚数：100枚", "穴数：30穴"],
+        "A4サイズの横罫ノート10冊セットです。条件は満たしますが、予算を超える商品です。",
+      specsAndNotes: [
+        "サイズ：A4",
+        "罫線：横罫",
+        "入数：10冊",
+        "1冊あたり40枚",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
+        "予算内に収まるか確認してから選択してください",
         "購入手続き画面で配送方法や金額を最終確認できます",
       ],
       deliveryInfo: [
@@ -63,35 +68,21 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t4-p2",
-      role: "dp_candidate",
-      failReason: null,
-      name: "ルーズリーフ A4 120枚 30穴 しっかり紙質",
-      priceYen: 398,
-      description:
-        "条件は満たしますが、正解商品よりやや高いルーズリーフです。",
-      specsAndNotes: ["サイズ：A4", "枚数：120枚", "穴数：30穴"],
-      prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      dpDisplay: null,
-    },
-    {
-      id: "b2-t4-p3",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "ルーズリーフ A4 100枚 26穴 スタンダード",
-      priceYen: 298,
+      name: "A4 無地ノート 10冊パック",
+      priceYen: 1280,
       description:
-        "A4サイズで100枚ですが、30穴ではなく26穴タイプの商品です。",
-      specsAndNotes: ["サイズ：A4", "枚数：100枚", "穴数：26穴"],
+        "A4サイズで10冊入りのノートです。入数は満たしますが、横罫ではなく無地です。",
+      specsAndNotes: [
+        "サイズ：A4",
+        "罫線：無地",
+        "入数：10冊",
+        "1冊あたり30枚",
+      ],
       prePurchaseCheck: [
-        "30穴タイプであることを確認してから選択してください",
+        "横罫かどうかを確認してから選択してください",
         "購入手続き画面で配送方法や金額を最終確認できます",
       ],
       deliveryInfo: [
@@ -101,16 +92,21 @@ export const trial4Data: Trial4Data = {
       dpDisplay: null,
     },
     {
-      id: "b2-t4-p4",
-      role: "condition_ng",
-      failReason: "quantity_condition",
-      name: "ルーズリーフ A4 80枚 30穴 コンパクト",
-      priceYen: 268,
+      id: "p3",
+      role: "correct",
+      failReason: null,
+      name: "A4 横罫ノート 10冊パック ベーシック",
+      priceYen: 1380,
       description:
-        "30穴タイプですが、枚数が80枚のため条件を満たさない商品です。",
-      specsAndNotes: ["サイズ：A4", "枚数：80枚", "穴数：30穴"],
+        "A4サイズ・横罫・10冊入りの条件を満たす中で最も安い商品です。",
+      specsAndNotes: [
+        "サイズ：A4",
+        "罫線：横罫",
+        "入数：10冊",
+        "1冊あたり30枚",
+      ],
       prePurchaseCheck: [
-        "100枚以上であることを確認してから選択してください",
+        "条件に合う商品か確認してから選択してください",
         "購入手続き画面で配送方法や金額を最終確認できます",
       ],
       deliveryInfo: [
@@ -119,28 +115,81 @@ export const trial4Data: Trial4Data = {
       ],
       dpDisplay: null,
     },
-  ] satisfies Trial4Product[],
+    {
+      id: "p4",
+      role: "dp_candidate",
+      failReason: null,
+      name: "A4 横罫ノート 12冊パック しっかり製本",
+      priceYen: 1560,
+      description:
+        "A4サイズ・横罫・12冊入りの条件を満たす商品です。正解より少し高い設定です。",
+      specsAndNotes: [
+        "サイズ：A4",
+        "罫線：横罫",
+        "入数：12冊",
+        "1冊あたり30枚",
+      ],
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      dpDisplay: null,
+    },
+  ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 280, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 180, shortDescription: "受け取り日時を指定できます" },
-  ] satisfies ShippingMethod[],
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 220,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 520,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "日時指定便",
+      priceYen: 380,
+      shortDescription: "受け取り日時を指定できます",
+    },
+  ],
   options: [
-    { id: "cover", name: "表紙付きパック", priceYen: 120, shortDescription: "持ち運びに便利な表紙を追加します" },
-    { id: "divider", name: "インデックス仕切り", priceYen: 90, shortDescription: "仕切りシートを追加します" },
-  ] satisfies AddonOption[],
+    {
+      id: "cover",
+      name: "透明カバー追加",
+      priceYen: 180,
+      shortDescription: "ノート表紙を保護する透明カバーを付けます",
+    },
+    {
+      id: "divider",
+      name: "見出しインデックス追加",
+      priceYen: 120,
+      shortDescription: "ノート整理用の見出しインデックスを追加します",
+    },
+  ],
 };
 
 export function getProductById(productId?: string) {
-  return trial4Data.products.find((product) => product.id === productId) ?? trial4Data.products[0];
+  return (
+    trial4Data.products.find((product) => product.id === productId) ??
+    trial4Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial4Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial4Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {
   return trial4Data.options.filter((option) => optionIds.includes(option.id));
 }
-
-export default trial4Data;

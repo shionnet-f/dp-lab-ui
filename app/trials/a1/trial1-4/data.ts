@@ -44,7 +44,7 @@ export const trial1_4Data: Trial1_4Data = {
   },
   products: [
     {
-      id: "a1-t1-4-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "カイロ 貼らないタイプ 80枚 プレミアム",
@@ -63,7 +63,7 @@ export const trial1_4Data: Trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-4-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "カイロ 貼るタイプ 60枚 レギュラー",
@@ -82,7 +82,7 @@ export const trial1_4Data: Trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-4-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "カイロ 貼らないタイプ 60枚 ベーシック",
@@ -101,7 +101,7 @@ export const trial1_4Data: Trial1_4Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-4-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "カイロ 貼らないタイプ 72枚 温感長持ち",

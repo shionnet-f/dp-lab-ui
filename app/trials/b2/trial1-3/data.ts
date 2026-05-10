@@ -1,4 +1,4 @@
-export type Trial13Product = {
+export type Trial1_3Product = {
   id: string;
   role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
   failReason: "budget" | "quantity_condition" | "specific_condition" | null;
@@ -8,107 +8,184 @@ export type Trial13Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
-  dpDisplay?: { label: string } | null;
+  dpDisplay?: null;
 };
+
 export type ShippingMethod = {
   id: string;
   name: string;
   priceYen: number;
   shortDescription: string;
 };
+
 export type AddonOption = {
   id: string;
   name: string;
   priceYen: number;
   shortDescription: string;
 };
+
 export type Trial1_3Data = {
   purchaseConditions: {
     budgetYen: number;
     quantityCondition: string;
     specificCondition: string;
   };
-  products: Trial13Product[];
+  products: Trial1_3Product[];
   shippingMethods: ShippingMethod[];
   options: AddonOption[];
 };
+
 export const trial1_3Data: Trial1_3Data = {
   purchaseConditions: {
-    budgetYen: 1000,
-    quantityCondition: "封筒10枚以上を含むこと",
-    specificCondition: "便箋付きであること",
+    budgetYen: 4000,
+    quantityCondition: "10000mAh以上であること",
+    specificCondition: "USB-Cで充電できること",
   },
   products: [
     {
-      id: "b2-trial1-3-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "レターセット 封筒12枚 便箋24枚 プレミアム",
-      priceYen: 1180,
-      description: "封筒12枚と便箋24枚入りのレターセットです。条件は満たしますが予算を超えます。",
-      specsAndNotes: ["封筒：12枚", "便箋：24枚", "セット内容：シール付き"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      name: "モバイルバッテリー 12000mAh 急速充電対応",
+      priceYen: 4380,
+      description:
+        "外出先で使いやすい大容量モバイルバッテリーです。急速充電対応モデルです。",
+      specsAndNotes: [
+        "容量：12000mAh",
+        "充電端子：USB-C",
+        "出力：急速充電対応",
+      ],
+      prePurchaseCheck: [
+        "必要な容量と充電端子を確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
       dpDisplay: null,
     },
     {
-      id: "b2-trial1-3-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "メッセージカードセット 封筒10枚",
-      priceYen: 620,
-      description: "封筒は10枚ありますが、便箋が付いていない商品です。",
-      specsAndNotes: ["封筒：10枚", "便箋：なし", "セット内容：カード10枚"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      name: "モバイルバッテリー 10000mAh Micro USB対応",
+      priceYen: 2680,
+      description:
+        "日常使いしやすいモバイルバッテリーです。容量条件は満たしますがUSB-C充電ではありません。",
+      specsAndNotes: [
+        "容量：10000mAh",
+        "充電端子：Micro USB",
+        "出力：標準充電",
+      ],
+      prePurchaseCheck: [
+        "USB-Cで充電できるかを確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
       dpDisplay: null,
     },
     {
-      id: "b2-trial1-3-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
-      name: "レターセット 封筒10枚 便箋20枚 ベーシック",
-      priceYen: 780,
-      description: "条件を満たす中で最も安いレターセットです。",
-      specsAndNotes: ["封筒：10枚", "便箋：20枚", "セット内容：無地デザイン"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      name: "モバイルバッテリー 10000mAh USB-C ベーシック",
+      priceYen: 2980,
+      description:
+        "必要十分な容量を備えたUSB-C充電対応のモバイルバッテリーです。条件を満たす中で最も安い商品です。",
+      specsAndNotes: [
+        "容量：10000mAh",
+        "充電端子：USB-C",
+        "出力：標準充電",
+      ],
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
       dpDisplay: null,
     },
     {
-      id: "b2-trial1-3-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
-      name: "レターセット 封筒12枚 便箋16枚 フラワー",
-      priceYen: 860,
-      description: "条件は満たしますが、正解商品よりやや高いレターセットです。",
-      specsAndNotes: ["封筒：12枚", "便箋：16枚", "セット内容：花柄デザイン"],
-      prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
-      deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      name: "モバイルバッテリー 12000mAh USB-C スリムモデル",
+      priceYen: 3380,
+      description:
+        "持ち運びしやすいスリムタイプのモバイルバッテリーです。条件を満たす中ではやや高めの商品です。",
+      specsAndNotes: [
+        "容量：12000mAh",
+        "充電端子：USB-C",
+        "出力：急速充電対応",
+      ],
+      prePurchaseCheck: [
+        "条件に合う商品か確認してから選択してください",
+        "購入手続き画面で配送方法や金額を最終確認できます",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
       dpDisplay: null,
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
 export function getProductById(productId?: string) {
-  return trial1_3Data.products.find((product) => product.id === productId) ?? trial1_3Data.products[0];
+  return (
+    trial1_3Data.products.find((product) => product.id === productId) ??
+    trial1_3Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial1_3Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial1_3Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {
   return trial1_3Data.options.filter((option) => optionIds.includes(option.id));
 }
-
-export default trial1_3Data;

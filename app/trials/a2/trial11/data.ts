@@ -36,7 +36,7 @@ export const trial11Data = {
   },
   products: [
     {
-      id: "a2-t11-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "ボディソープ 詰め替え 1200ml 大容量パック",
@@ -58,7 +58,7 @@ export const trial11Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t11-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "ボディソープ 本体 1100ml ポンプタイプ",
@@ -80,7 +80,7 @@ export const trial11Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t11-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "ボディソープ 詰め替え 1000ml スタンダード",
@@ -102,7 +102,7 @@ export const trial11Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t11-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "ボディソープ 詰め替え 1100ml やさしい泡タイプ",

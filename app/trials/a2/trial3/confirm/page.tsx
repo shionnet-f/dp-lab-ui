@@ -15,6 +15,19 @@ import {
   getShippingById,
   trial3Data,
 } from "../data";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a2Index = segments.indexOf("a2");
+  return a2Index >= 0 ? segments[a2Index + 1] ?? null : null;
+}
 
 const completePath = getTrialPath("a2", "trial3", "complete");
 const checkoutPath = getTrialPath("a2", "trial3", "checkout");
@@ -47,14 +60,27 @@ export default function ConfirmPageA2Trial3({ searchParams }: Props) {
   const set = sp?.set;
   const trial = sp?.trial;
 
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
+    const baseLog = createLogBase();
+
     void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "confirm",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);
@@ -103,6 +129,25 @@ export default function ConfirmPageA2Trial3({ searchParams }: Props) {
     if (!shippingInfo) {
       setError(true);
 
+      const baseLog = createLogBase();
+
+      void trackAction({
+        ...baseLog,
+        phase: "main",
+        page: "confirm",
+        type: "confirm_submit_missing_shipping",
+        meta: { implTrialId: getImplTrialId() },
+        payload: {
+          productId: selectedProduct.id,
+          shippingId,
+          optionIds,
+          productPriceYen,
+          shippingPriceYen,
+          optionTotalYen,
+          totalYen,
+        },
+      });
+
       window.setTimeout(() => {
         setError(false);
       }, 2500);
@@ -110,9 +155,14 @@ export default function ConfirmPageA2Trial3({ searchParams }: Props) {
       return;
     }
 
+    const baseLog = createLogBase();
+
     await trackAction({
+      ...baseLog,
+      phase: "main",
       page: "confirm",
       type: "confirm_submit",
+      meta: { implTrialId: getImplTrialId() },
       payload: {
         productId: selectedProduct.id,
         shippingId,
@@ -128,9 +178,14 @@ export default function ConfirmPageA2Trial3({ searchParams }: Props) {
   }
 
   async function handleBack() {
+    const baseLog = createLogBase();
+
     await trackAction({
+      ...baseLog,
+      phase: "main",
       page: "confirm",
       type: "confirm_back",
+      meta: { implTrialId: getImplTrialId() },
       payload: {
         productId: selectedProduct.id,
         shippingId,

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 type ConfirmSummaryPanelProps = {
     productId?: string;
@@ -11,9 +12,10 @@ type ConfirmSummaryPanelProps = {
     shippingPriceYen: number;
     optionTotalYen: number;
     totalYen: number;
-    completePath: string;
     backPath: string;
     onSubmit: () => void;
+    set: string;
+    trial: string;
 };
 
 function yen(n: number) {
@@ -28,11 +30,20 @@ export function ConfirmSummaryPanel({
     shippingPriceYen,
     optionTotalYen,
     totalYen,
-    completePath,
     backPath,
     onSubmit,
+    set,
+    trial,
 }: ConfirmSummaryPanelProps) {
     const router = useRouter();
+
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
 
     return (
         <article className="h-[805px] w-[520px] overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm flex flex-col">
@@ -71,20 +82,7 @@ export function ConfirmSummaryPanel({
             <div className="flex flex-col gap-[60px] pb-[15px]">
                 <button
                     type="button"
-                    onClick={async () => {
-                        await trackAction({
-                            page: "confirm",
-                            type: "confirm_submit",
-                            payload: {
-                                productId,
-                                shippingId,
-                                optionIds,
-                                totalYen,
-                            },
-                        });
-
-                        onSubmit();
-                    }}
+                    onClick={onSubmit}
                     className="h-[50px] w-full rounded-md bg-black px-4 text-sm font-medium text-white"
                 >
                     購入を確定する
@@ -93,9 +91,14 @@ export function ConfirmSummaryPanel({
                 <button
                     type="button"
                     onClick={async () => {
+                        const baseLog = createLogBase();
+
                         await trackAction({
+                            ...baseLog,
+                            phase: "main",
                             page: "confirm",
                             type: "confirm_back",
+                            meta: {},
                             payload: {
                                 productId,
                                 shippingId,

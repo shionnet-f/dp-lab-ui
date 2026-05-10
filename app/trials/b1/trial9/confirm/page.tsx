@@ -10,6 +10,7 @@ import {
   trial9Data,
 } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
@@ -23,6 +24,16 @@ const completePath = getTrialPath("b1", "trial9", "complete");
 export default function ConfirmPageB1Trial9() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   const [error, setError] = useState(false);
   const didTrack = useRef(false);
@@ -60,9 +71,11 @@ export default function ConfirmPageB1Trial9() {
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "confirm",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial9" },
       payload: {
         productId,
         shippingId,
@@ -113,6 +126,55 @@ export default function ConfirmPageB1Trial9() {
     completeParams.append("options", optionId);
   });
 
+
+  async function handleSubmit() {
+    if (!selectedShipping) {
+      setError(true);
+
+      void trackAction({
+        ...createLogBase(),
+        phase: "main",
+        page: "confirm",
+        type: "confirm_submit_missing_shipping",
+        meta: { implTrialId: "trial9" },
+        payload: {
+          productId,
+          shippingId,
+          optionIds,
+          productPriceYen,
+          shippingPriceYen,
+          optionTotalYen,
+          totalYen,
+        },
+      });
+
+      window.setTimeout(() => {
+        setError(false);
+      }, 1800);
+
+      return;
+    }
+
+    await trackAction({
+      ...createLogBase(),
+      phase: "main",
+      page: "confirm",
+      type: "confirm_submit",
+      meta: { implTrialId: "trial9" },
+      payload: {
+        productId,
+        shippingId,
+        optionIds,
+        productPriceYen,
+        shippingPriceYen,
+        optionTotalYen,
+        totalYen,
+      },
+    });
+
+    router.push(`${completePath}?${completeParams.toString()}`);
+  }
+
   return (
     <main className="h-[1080px] overflow-hidden bg-gray-50">
       {error && (
@@ -156,21 +218,10 @@ export default function ConfirmPageB1Trial9() {
             shippingPriceYen={shippingPriceYen}
             optionTotalYen={optionTotalYen}
             totalYen={totalYen}
-            completePath={`${completePath}?${completeParams.toString()}`}
             backPath={`${checkoutPath}?${backParams.toString()}`}
-            onSubmit={() => {
-              if (!selectedShipping) {
-                setError(true);
-
-                window.setTimeout(() => {
-                  setError(false);
-                }, 1800);
-
-                return;
-              }
-
-              router.push(`${completePath}?${completeParams.toString()}`);
-            }}
+            onSubmit={handleSubmit}
+            set={set}
+            trial={trial}
           />
         </div>
       </div>

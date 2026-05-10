@@ -3,11 +3,24 @@ import { use, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial1_1Data } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { ShippingMethodSection } from "@/app/trials/_components/a1TrialComponents/ShippingMethodSection";
 import { OptionSection } from "@/app/trials/_components/a1TrialComponents/OptionSection";
 import { OrderSummaryPanel } from "@/app/trials/_components/a1TrialComponents/OrderSummaryPanel";
 import { getTrialPath } from "@/app/trials/_lib/path";
+
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a1Index = segments.indexOf("a1");
+  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+}
 
 const confirmPath = getTrialPath("a1", "trial1-1", "confirm");
 const productPath = getTrialPath("a1", "trial1-1", "product");
@@ -41,17 +54,30 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
   const didTrack = useRef(false);
   const router = useRouter();
 
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    const baseLog = createLogBase();
+
+    void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "checkout",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
-  }, []);
+  }, [set, trial]);
 
   function toggleOption(value: string) {
     setOptions((prev) =>
@@ -77,14 +103,18 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
           title="購入手続き"
         />
 
-        {/* 810pxのメイン領域 */}
         <form
           onSubmit={async (e) => {
             e.preventDefault();
 
+            const baseLog = createLogBase();
+
             await trackAction({
+              ...baseLog,
+              phase: "main",
               page: "checkout",
               type: "checkout_submit",
+              meta: { implTrialId: getImplTrialId() },
               payload: {
                 productId: selectedProduct.id,
                 shippingId: shipping,
@@ -114,27 +144,26 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
             <input key={o} type="hidden" name="options" value={o} />
           ))}
 
-          {/* 左側 */}
           <div className="h-[810px] w-[720px]">
-            {/* 配送方法領域：438px */}
             <ShippingMethodSection
               shippingMethods={trial1_1Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              set={set}
+              trial={trial}
             />
 
-            {/* 60pxの空間 */}
             <div className="h-[60px]" />
 
-            {/* オプション領域：312px */}
             <OptionSection
               options={trial1_1Data.options}
               selectedOptions={options}
               onToggleOption={toggleOption}
+              set={set}
+              trial={trial}
             />
           </div>
 
-          {/* 右側：810pxのご注文商品領域 */}
           <OrderSummaryPanel
             product={selectedProduct}
             set={set}
@@ -143,7 +172,6 @@ export default function CheckoutPageA1Trial1_1({ searchParams }: Props) {
           />
         </form>
 
-        {/* 105pxの空間 */}
         <div className="h-[105px]" />
       </div>
     </main>

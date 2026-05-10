@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { ProductDetailModal } from "@/app/trials/_components/a1TrialComponents/ProductDetailModal";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 type ProductForCard = {
   id: string;
@@ -71,9 +72,18 @@ export function ProductCard({
           <button
             className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
             onClick={async () => {
+              const logParams = new URLSearchParams();
+              logParams.set("set", set);
+              logParams.set("trial", trial);
+
+              const baseLog = getClientLogBase({ searchParams: logParams });
+
               await trackAction({
+                ...baseLog,
+                phase: "main",
                 page: "product",
                 type: "product_select",
+                meta: {},
                 payload: { productId: product.id },
               });
 

@@ -37,7 +37,7 @@ export const trial10Data = {
   },
   products: [
     {
-      id: "a2-t10-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "A4コピー用紙 500枚×6冊 高白色",
@@ -59,7 +59,7 @@ export const trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t10-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "A4コピー用紙 500枚×6冊 マット紙",
@@ -81,7 +81,7 @@ export const trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t10-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "A4コピー用紙 500枚×5冊 スタンダード",
@@ -103,7 +103,7 @@ export const trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t10-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "A4コピー用紙 500枚×5冊 おすすめパック",

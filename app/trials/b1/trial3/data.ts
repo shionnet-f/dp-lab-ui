@@ -44,7 +44,7 @@ export const trial3Data: Trial3Data = {
   },
   products: [
     {
-      id: "b1-t3-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "白米 10kg 特選ブレンド米",
@@ -67,7 +67,7 @@ export const trial3Data: Trial3Data = {
       ],
     },
     {
-      id: "b1-t3-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "無洗米 10kg 家庭用パック",
@@ -90,7 +90,7 @@ export const trial3Data: Trial3Data = {
       ],
     },
     {
-      id: "b1-t3-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "白米 10kg ベーシック",
@@ -113,7 +113,7 @@ export const trial3Data: Trial3Data = {
       ],
     },
     {
-      id: "b1-t3-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "白米 10kg 食べ比べブレンド",

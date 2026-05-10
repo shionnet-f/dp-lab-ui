@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 type ProductForOrderSummary = {
   id: string;
@@ -23,6 +24,14 @@ export function OrderSummaryPanel({
   backPath,
 }: OrderSummaryPanelProps) {
   const router = useRouter();
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   return (
     <div className="flex h-[810px] w-[416px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white px-5 shadow-sm">
@@ -62,9 +71,17 @@ export function OrderSummaryPanel({
       <button
         type="button"
         onClick={async () => {
+          const baseLog = createLogBase();
+
           await trackAction({
+            ...baseLog,
+            phase: "main",
             page: "checkout",
             type: "checkout_back",
+            meta: {},
+            payload: {
+              productId: product.id,
+            },
           });
 
           router.push(`${backPath}?set=${set}&trial=${trial}`);

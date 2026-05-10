@@ -41,7 +41,7 @@ export const trial1_1Data: Trial1_1Data = {
   },
   products: [
     {
-      id: "a2-t1-1-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "泡ハンドソープ 詰め替え 1500ml プレミアム",
@@ -53,7 +53,7 @@ export const trial1_1Data: Trial1_1Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-1-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "液体ハンドソープ 詰め替え 1400ml",
@@ -65,7 +65,7 @@ export const trial1_1Data: Trial1_1Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-1-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "泡ハンドソープ 詰め替え 1200ml ベーシック",
@@ -77,7 +77,7 @@ export const trial1_1Data: Trial1_1Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-1-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "泡ハンドソープ 詰め替え 1300ml しっとり",

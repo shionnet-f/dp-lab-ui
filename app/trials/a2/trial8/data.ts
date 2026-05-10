@@ -48,7 +48,7 @@ export const trial8Data: Trial8Data = {
   },
   products: [
     {
-      id: "a2-t8-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "無糖コーヒー ボトル 500ml×24本 プレミアムブレンド",
@@ -70,7 +70,7 @@ export const trial8Data: Trial8Data = {
       ],
     },
     {
-      id: "a2-t8-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "微糖コーヒー ボトル 500ml×24本 すっきりテイスト",
@@ -92,7 +92,7 @@ export const trial8Data: Trial8Data = {
       ],
     },
     {
-      id: "a2-t8-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "無糖コーヒー ボトル 500ml×24本 スタンダード",
@@ -114,7 +114,7 @@ export const trial8Data: Trial8Data = {
       ],
     },
     {
-      id: "a2-t8-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "無糖コーヒー ボトル 500ml×24本 香り深煎り",

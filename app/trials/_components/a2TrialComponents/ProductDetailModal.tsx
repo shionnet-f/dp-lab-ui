@@ -1,17 +1,58 @@
 "use client";
 
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+}
+
+
+type ProductDpDisplay = {
+    label?: string;
+    subLabel?: string;
+    highlight?: string;
+    rating?: string;
+    reviewCount?: number;
+    rankingLabel?: string;
+    awardLabel?: string;
+    subscriptionPriceYen?: number;
+    displayPriceYen?: number;
+    originalPriceYen?: number;
+    relativeDeltaYen?: number;
+    showFreeShipping?: boolean;
+    showCountdown?: boolean;
+    kind?: string;
+    initialSeconds?: number;
+    isDiscountTarget?: boolean;
+    isDpTarget?: boolean;
+    actualVolumeText?: string;
+    emphasizedVolumeText?: string;
+    boldPackText?: string;
+    specLead?: string;
+    specTail?: string;
+};
 
 type ProductForDetailModal = {
     id: string;
     name: string;
     priceYen: number;
     description: string;
-    specsAndNotes: string[];
-    prePurchaseCheck: string[];
-    deliveryInfo: string[];
+    specsAndNotes: readonly string[] | string;
+    prePurchaseCheck: readonly string[];
+    deliveryInfo: readonly string[];
+    dpDisplay?: ProductDpDisplay | null;
+    hiddenDetailsTitle?: string;
 };
 
 type ProductDetailModalProps = {
@@ -26,6 +67,22 @@ function yen(n: number) {
     return new Intl.NumberFormat("ja-JP").format(n);
 }
 
+function getDisplayPriceYen(product: ProductForDetailModal) {
+    return product.dpDisplay?.subscriptionPriceYen ?? product.priceYen;
+}
+
+function renderInfoLines(value: readonly string[] | string) {
+    if (Array.isArray(value)) {
+        return value.map((item) => (
+            <p key={item} className="truncate">
+                {item}
+            </p>
+        ));
+    }
+
+    return <p className="leading-[30px]">{value}</p>;
+}
+
 export function ProductDetailModal({
     product,
     set,
@@ -35,6 +92,15 @@ export function ProductDetailModal({
 }: ProductDetailModalProps) {
     const dialogId = `product-dialog-${product.id}`;
     const router = useRouter();
+    const [isHiddenDetailOpen, setIsHiddenDetailOpen] = useState(false);
+
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
 
     function closeDialog() {
         const el = document.getElementById(dialogId) as HTMLDialogElement | null;
@@ -46,9 +112,14 @@ export function ProductDetailModal({
             <button
                 type="button"
                 onClick={() => {
+                    const baseLog = createLogBase();
+
                     void trackAction({
+                        ...baseLog,
+                        phase: "main",
                         page: "product",
                         type: "view_detail",
+                        meta: { implTrialId: getImplTrialId() },
                         payload: { productId: product.id },
                     });
 
@@ -74,9 +145,14 @@ export function ProductDetailModal({
                         <button
                             type="button"
                             onClick={() => {
+                                const baseLog = createLogBase();
+
                                 void trackAction({
+                                    ...baseLog,
+                                    phase: "main",
                                     page: "product",
                                     type: "close_detail",
+                                    meta: { implTrialId: getImplTrialId() },
                                     payload: { productId: product.id },
                                 });
 
@@ -116,7 +192,7 @@ export function ProductDetailModal({
 
                                 <div className="flex h-[30px] items-center overflow-hidden">
                                     <p className="truncate text-[22px] font-semibold text-gray-900">
-                                        ¥{yen(product.priceYen)}
+                                        ¥{yen(getDisplayPriceYen(product))}
                                     </p>
                                 </div>
 
@@ -157,11 +233,52 @@ export function ProductDetailModal({
                             </div>
 
                             <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
-                                {product.specsAndNotes.map((item) => (
-                                    <p key={item} className="truncate">
-                                        {item}
-                                    </p>
-                                ))}
+                                {product.hiddenDetailsTitle ? (
+                                    isHiddenDetailOpen ? (
+                                        <div>
+                                            {renderInfoLines(product.specsAndNotes)}
+                                            <button
+                                                type="button"
+                                                className="mt-2 h-[28px] border border-gray-300 bg-white px-3 text-[13px] font-semibold text-gray-700"
+                                                onClick={() => {
+                                                    const baseLog = createLogBase();
+                                                    void trackAction({
+                                                        ...baseLog,
+                                                        phase: "main",
+                                                        page: "product",
+                                                        type: "close_hidden_detail",
+                                                        meta: { implTrialId: getImplTrialId() },
+                                                        payload: { productId: product.id },
+                                                    });
+                                                    setIsHiddenDetailOpen(false);
+                                                }}
+                                            >
+                                                詳細を閉じる
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            className="h-[40px] w-full border border-gray-300 bg-gray-50 text-[14px] font-semibold text-gray-700"
+                                            onClick={() => {
+                                                const baseLog = createLogBase();
+                                                void trackAction({
+                                                    ...baseLog,
+                                                    phase: "main",
+                                                    page: "product",
+                                                    type: "open_hidden_detail",
+                                                    meta: { implTrialId: getImplTrialId() },
+                                                    payload: { productId: product.id },
+                                                });
+                                                setIsHiddenDetailOpen(true);
+                                            }}
+                                        >
+                                            {product.hiddenDetailsTitle}
+                                        </button>
+                                    )
+                                ) : (
+                                    renderInfoLines(product.specsAndNotes)
+                                )}
                             </div>
                         </div>
                     </section>
@@ -213,11 +330,17 @@ export function ProductDetailModal({
                             type="button"
                             className="flex h-[50px] w-[360px] items-center justify-center bg-black text-[16px] font-semibold text-white"
                             onClick={async () => {
+                                const baseLog = createLogBase();
+
                                 await trackAction({
+                                    ...baseLog,
+                                    phase: "main",
                                     page: "product",
                                     type: "product_select",
+                                    meta: { implTrialId: getImplTrialId() },
                                     payload: {
                                         productId: product.id,
+                                        source: "detail_modal",
                                     },
                                 });
 

@@ -1,18 +1,42 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { trial2Data } from "../data";
+import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
-type Props = {
-  searchParams?: Promise<{
-    set?: string;
-    trial?: string;
-  }>;
-};
-
-export default async function StartPageB1Trial2({ searchParams }: Props) {
+export default function StartPageB1Trial2() {
   const { purchaseConditions } = trial2Data;
-  const sp = await searchParams;
-  const set = sp?.set ?? "1";
-  const trial = sp?.trial ?? "1";
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const didTrack = useRef(false);
+
+  const set = searchParams.get("set") ?? "1";
+  const trial = searchParams.get("trial") ?? "1";
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
+  useEffect(() => {
+    if (didTrack.current) return;
+    didTrack.current = true;
+
+    void trackAction({
+      ...createLogBase(),
+      phase: "main",
+      page: "start",
+      type: "page_view",
+      meta: { implTrialId: "trial2" },
+      payload: {},
+    });
+  }, [searchParams]);
 
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50 px-6">
@@ -29,12 +53,24 @@ export default async function StartPageB1Trial2({ searchParams }: Props) {
           {purchaseConditions.specificCondition}
         </div>
 
-        <Link
-          href={`/trials/b1/trial2/product?set=${set}&trial=${trial}`}
+        <button
+          type="button"
+          onClick={async () => {
+            await trackAction({
+              ...createLogBase(),
+              phase: "main",
+              page: "start",
+              type: "trial_start",
+              meta: { implTrialId: "trial2" },
+              payload: {},
+            });
+
+            router.push(`/trials/b1/trial2/product?set=${set}&trial=${trial}`);
+          }}
           className="inline-block rounded-md bg-black px-6 py-3 text-sm font-medium text-white"
         >
           試行を開始する
-        </Link>
+        </button>
       </div>
     </main>
   );

@@ -41,7 +41,7 @@ export const trial1_3Data: Trial1_3Data = {
   },
   products: [
     {
-      id: "a2-t1-3-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "50×50mm 90枚×8冊 付箋 プレミアム",
@@ -53,7 +53,7 @@ export const trial1_3Data: Trial1_3Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-3-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "75×75mm 90枚×5冊 付箋",
@@ -65,7 +65,7 @@ export const trial1_3Data: Trial1_3Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-3-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "50×50mm 90枚×5冊 付箋 ベーシック",
@@ -77,7 +77,7 @@ export const trial1_3Data: Trial1_3Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-3-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "50×50mm 100枚×5冊 付箋 カラー",

@@ -4,8 +4,21 @@ import { useEffect, useId, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trial10Data, type Trial10Product } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
+
+function getImplTrialId() {
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const trialsIndex = segments.indexOf("trials");
+
+  if (trialsIndex >= 0) {
+    return segments[trialsIndex + 2] ?? null;
+  }
+
+  const a1Index = segments.indexOf("a1");
+  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+}
 
 const checkoutPath = getTrialPath("a1", "trial10", "checkout");
 
@@ -84,15 +97,28 @@ function ProductDetailModal({
   const router = useRouter();
   const dp = product.dpDisplay;
 
+  function createBaseLog() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
+
   return (
     <>
       <button
         type="button"
         className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
         onClick={() => {
-          trackAction({
+          const baseLog = createBaseLog();
+
+          void trackAction({
+            ...baseLog,
+            phase: "main",
             page: "product",
             type: "view_detail",
+            meta: { implTrialId: getImplTrialId() },
             payload: { productId: product.id },
           });
 
@@ -119,9 +145,14 @@ function ProductDetailModal({
               type="button"
               className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
               onClick={() => {
-                trackAction({
+                const baseLog = createBaseLog();
+
+                void trackAction({
+                  ...baseLog,
+                  phase: "main",
                   page: "product",
                   type: "close_detail",
+                  meta: { implTrialId: getImplTrialId() },
                   payload: { productId: product.id },
                 });
 
@@ -229,10 +260,18 @@ function ProductDetailModal({
               <button
                 className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
                 onClick={async () => {
+                  const baseLog = createBaseLog();
+
                   await trackAction({
+                    ...baseLog,
+                    phase: "main",
                     page: "product",
                     type: "product_select",
-                    payload: { productId: product.id },
+                    meta: { implTrialId: getImplTrialId() },
+                    payload: {
+                      productId: product.id,
+                      source: "detail_modal",
+                    },
                   });
 
                   router.push(
@@ -262,6 +301,14 @@ function ProductCard({ product, set, trial }: ProductCardProps) {
   const router = useRouter();
   const dp = product.dpDisplay;
   const showDiscount = Boolean(dp?.isDiscountTarget);
+
+  function createBaseLog() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   return (
     <article className="h-[378px] w-[550px] border border-gray-200 bg-white shadow-sm rounded-md">
@@ -302,10 +349,18 @@ function ProductCard({ product, set, trial }: ProductCardProps) {
           <button
             className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
             onClick={async () => {
+              const baseLog = createBaseLog();
+
               await trackAction({
+                ...baseLog,
+                phase: "main",
                 page: "product",
                 type: "product_select",
-                payload: { productId: product.id },
+                meta: { implTrialId: getImplTrialId() },
+                payload: {
+                  productId: product.id,
+                  source: "product_card",
+                },
               });
 
               router.push(`${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`);
@@ -332,10 +387,14 @@ export default function ProductPageA1Trial10() {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    const baseLog = getClientLogBase({ searchParams });
+
+    void trackAction({
+      ...baseLog,
+      phase: "main",
       page: "product",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: getImplTrialId() },
       payload: {},
     });
   }, []);

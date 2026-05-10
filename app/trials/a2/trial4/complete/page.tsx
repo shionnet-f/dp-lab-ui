@@ -23,6 +23,7 @@ export default async function CompletePageA2Trial4({
   return (
     <TrialCompletePage
       set={set}
+      trial={trial}
       nextPath={next.nextPath}
       nextParams={next.nextParams}
     />

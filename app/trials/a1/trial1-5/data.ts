@@ -44,7 +44,7 @@ export const trial1_5Data: Trial1_5Data = {
   },
   products: [
     {
-      id: "a1-t1-5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "防災セット 1人用 プレミアム 38点",
@@ -63,7 +63,7 @@ export const trial1_5Data: Trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "非常食中心 防災セット 1人用",
@@ -82,7 +82,7 @@ export const trial1_5Data: Trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "防災セット 1人用 ベーシック 24点",
@@ -101,7 +101,7 @@ export const trial1_5Data: Trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "防災セット 1人用 充実 30点",

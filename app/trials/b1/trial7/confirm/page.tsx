@@ -9,6 +9,7 @@ import {
   trial7Data,
 } from "../data";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { getTrialPath } from "@/app/trials/_lib/path";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
 import { OrderItemPanel } from "@/app/trials/_components/a1TrialComponents/OrderItemPanel";
@@ -25,6 +26,16 @@ function yen(n: number) {
 export default function ConfirmPageB1Trial7() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   const [error, setError] = useState(false);
   const didTrack = useRef(false);
@@ -63,9 +74,11 @@ export default function ConfirmPageB1Trial7() {
     didTrack.current = true;
 
     trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "confirm",
       type: "page_view",
-      meta: {},
+      meta: { implTrialId: "trial7" },
       payload: {
         productId,
         shippingId,
@@ -124,6 +137,25 @@ export default function ConfirmPageB1Trial7() {
     if (!selectedShipping) {
       setError(true);
 
+      void trackAction({
+        ...createLogBase(),
+        phase: "main",
+        page: "confirm",
+        type: "confirm_submit_missing_shipping",
+        meta: { implTrialId: "trial7" },
+        payload: {
+          productId,
+          shippingId,
+          optionIds,
+          subscriptionPriceYen,
+          productPriceYen,
+          shippingPriceYen,
+          optionTotalYen,
+          totalYen,
+          isSubscriptionDisplay,
+        },
+      });
+
       window.setTimeout(() => {
         setError(false);
       }, 1800);
@@ -132,9 +164,11 @@ export default function ConfirmPageB1Trial7() {
     }
 
     await trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "confirm",
       type: "confirm_submit",
-      meta: {},
+      meta: { implTrialId: "trial7" },
       payload: {
         productId,
         shippingId,
@@ -153,9 +187,11 @@ export default function ConfirmPageB1Trial7() {
 
   async function handleBack() {
     await trackAction({
+      ...createLogBase(),
+      phase: "main",
       page: "confirm",
       type: "confirm_back",
-      meta: {},
+      meta: { implTrialId: "trial7" },
       payload: {
         productId,
         shippingId,

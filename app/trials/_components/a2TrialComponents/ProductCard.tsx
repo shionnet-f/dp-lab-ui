@@ -4,15 +4,53 @@ import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { ProductDetailModal } from "@/app/trials/_components/a2TrialComponents/ProductDetailModal";
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
+function getImplTrialId() {
+    const segments = window.location.pathname.split("/").filter(Boolean);
+    const trialsIndex = segments.indexOf("trials");
+
+    if (trialsIndex >= 0) {
+        return segments[trialsIndex + 2] ?? null;
+    }
+
+    const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+    return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+}
+
+type ProductDpDisplay = {
+    label?: string;
+    subLabel?: string;
+    highlight?: string;
+    rating?: string;
+    reviewCount?: number;
+    rankingLabel?: string;
+    awardLabel?: string;
+    subscriptionPriceYen?: number;
+    displayPriceYen?: number;
+    originalPriceYen?: number;
+    relativeDeltaYen?: number;
+    showFreeShipping?: boolean;
+    showCountdown?: boolean;
+    kind?: string;
+    initialSeconds?: number;
+    isDiscountTarget?: boolean;
+    isDpTarget?: boolean;
+    actualVolumeText?: string;
+    emphasizedVolumeText?: string;
+    boldPackText?: string;
+    specLead?: string;
+    specTail?: string;
+};
 
 type ProductForCard = {
     id: string;
     name: string;
     priceYen: number;
     description: string;
-    specsAndNotes: string[];
-    prePurchaseCheck: string[];
-    deliveryInfo: string[];
+    specsAndNotes: readonly string[] | string;
+    prePurchaseCheck: readonly string[];
+    deliveryInfo: readonly string[];
+    dpDisplay?: ProductDpDisplay | null;
 };
 
 type ProductCardProps = {
@@ -27,6 +65,10 @@ function yen(n: number) {
     return new Intl.NumberFormat("ja-JP").format(n);
 }
 
+function getDisplayPriceYen(product: ProductForCard) {
+    return product.dpDisplay?.subscriptionPriceYen ?? product.priceYen;
+}
+
 export function ProductCard({
     product,
     set,
@@ -35,6 +77,14 @@ export function ProductCard({
     dpArea,
 }: ProductCardProps) {
     const router = useRouter();
+
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
 
     return (
         <article className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
@@ -57,7 +107,7 @@ export function ProductCard({
 
                     <div className="flex h-[30px] items-center overflow-hidden">
                         <p className="truncate text-[20px] font-semibold text-gray-900">
-                            ¥{yen(product.priceYen)}
+                            ¥{yen(getDisplayPriceYen(product))}
                         </p>
                     </div>
 
@@ -86,9 +136,14 @@ export function ProductCard({
                             type="button"
                             className="flex h-[40px] w-[110px] items-center justify-center bg-black text-[15px] font-medium text-white"
                             onClick={async () => {
+                                const baseLog = createLogBase();
+
                                 await trackAction({
+                                    ...baseLog,
+                                    phase: "main",
                                     page: "product",
                                     type: "product_select",
+                                    meta: { implTrialId: getImplTrialId() },
                                     payload: {
                                         productId: product.id,
                                         source: "card",
@@ -96,8 +151,8 @@ export function ProductCard({
                                 });
 
                                 router.push(
-                `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
-              );
+                                    `${checkoutPath}?set=${set}&trial=${trial}&productId=${product.id}`,
+                                );
                             }}
                         >
                             購入へ

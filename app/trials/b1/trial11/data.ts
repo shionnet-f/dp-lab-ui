@@ -33,7 +33,7 @@ export const trial11Data = {
   },
   products: [
     {
-      id: "b1-t11-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "壁かけカレンダー 年間一覧付き プレミアム",
@@ -56,7 +56,7 @@ export const trial11Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t11-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "壁かけカレンダー 写真重視タイプ",
@@ -79,7 +79,7 @@ export const trial11Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t11-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "壁かけカレンダー ベーシック一覧タイプ",
@@ -102,7 +102,7 @@ export const trial11Data = {
       dpDisplay: null,
     },
     {
-      id: "b1-t11-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "壁かけカレンダー すっきり予定管理タイプ",

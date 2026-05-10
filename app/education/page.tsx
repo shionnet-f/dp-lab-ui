@@ -10,6 +10,40 @@ import type { SlideData } from "./_data/types";
 
 type Version = "A" | "B";
 
+type ExperimentPlanForEducationLog = {
+  sessionId?: string;
+  participantId?: string;
+  setOrder?: string;
+  educationVersion?: Version;
+};
+
+function loadExperimentPlanForEducationLog(): ExperimentPlanForEducationLog {
+  const rawPlan = localStorage.getItem("experimentPlan");
+
+  if (!rawPlan) return {};
+
+  try {
+    return JSON.parse(rawPlan) as ExperimentPlanForEducationLog;
+  } catch {
+    return {};
+  }
+}
+
+function getEducationLogBase(version: Version) {
+  const plan = loadExperimentPlanForEducationLog();
+
+  return {
+    sessionId: plan.sessionId,
+    participantId: plan.participantId,
+    phase: "education",
+    page: "education",
+    meta: {
+      educationVersion: plan.educationVersion ?? version,
+      setOrder: plan.setOrder ?? null,
+    },
+  };
+}
+
 export default function EducationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,8 +76,20 @@ export default function EducationPage() {
     if (didLogStart.current) return;
     didLogStart.current = true;
 
+    const baseLog = getEducationLogBase(version);
+
     void trackAction({
-      page: "education",
+      ...baseLog,
+      type: "page_view",
+      payload: {
+        version,
+        totalSlides: slides.length,
+        next,
+      },
+    });
+
+    void trackAction({
+      ...baseLog,
       type: "education_start",
       payload: {
         version,
@@ -54,8 +100,10 @@ export default function EducationPage() {
   }, [next, slides.length, version]);
 
   useEffect(() => {
+    const baseLog = getEducationLogBase(version);
+
     void trackAction({
-      page: "education",
+      ...baseLog,
       type: "slide_view",
       payload: {
         version,
@@ -75,9 +123,10 @@ export default function EducationPage() {
     const fromIndex = currentIndex;
     const toIndex = currentIndex - 1;
     const toSlide = slides[toIndex];
+    const baseLog = getEducationLogBase(version);
 
     void trackAction({
-      page: "education",
+      ...baseLog,
       type: "slide_prev",
       payload: {
         version,
@@ -96,9 +145,11 @@ export default function EducationPage() {
   const handleNext = () => {
     if (!canGoNext) return;
 
+    const baseLog = getEducationLogBase(version);
+
     if (isLast) {
       void trackAction({
-        page: "education",
+        ...baseLog,
         type: "education_finish_confirm_open",
         payload: {
           version,
@@ -119,7 +170,7 @@ export default function EducationPage() {
     const toSlide = slides[toIndex];
 
     void trackAction({
-      page: "education",
+      ...baseLog,
       type: "slide_next",
       payload: {
         version,
@@ -136,8 +187,10 @@ export default function EducationPage() {
   };
 
   const handleCancelFinish = () => {
+    const baseLog = getEducationLogBase(version);
+
     void trackAction({
-      page: "education",
+      ...baseLog,
       type: "education_finish_confirm_cancel",
       payload: {
         version,
@@ -154,9 +207,11 @@ export default function EducationPage() {
     if (isFinishing) return;
     setIsFinishing(true);
 
+    const baseLog = getEducationLogBase(version);
+
     try {
       await trackAction({
-        page: "education",
+        ...baseLog,
         type: "education_finish_confirm_ok",
         payload: {
           version,
@@ -168,7 +223,7 @@ export default function EducationPage() {
       });
 
       await trackAction({
-        page: "education",
+        ...baseLog,
         type: "education_end",
         payload: {
           version,
@@ -190,9 +245,11 @@ export default function EducationPage() {
       [currentSlide.id]: optionId,
     }));
 
+    const baseLog = getEducationLogBase(version);
+
     void trackAction({
-      page: "education",
-      type: "quiz_select",
+      ...baseLog,
+      type: "answer_select",
       payload: {
         version,
         slideIndex: currentIndex,

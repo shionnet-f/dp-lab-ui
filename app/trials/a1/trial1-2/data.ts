@@ -44,7 +44,7 @@ export const trial1_2Data: Trial1_2Data = {
   },
   products: [
     {
-      id: "a1-t1-2-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "フリーザーバッグ Mサイズ 120枚 プレミアム",
@@ -63,7 +63,7 @@ export const trial1_2Data: Trial1_2Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-2-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "保存バッグ Mサイズ 110枚 キッチン用",
@@ -82,7 +82,7 @@ export const trial1_2Data: Trial1_2Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-2-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "フリーザーバッグ Mサイズ 100枚 ベーシック",
@@ -101,7 +101,7 @@ export const trial1_2Data: Trial1_2Data = {
       dpDisplay: null,
     },
     {
-      id: "a1-t1-2-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "フリーザーバッグ Mサイズ 120枚 ダブルジッパー",

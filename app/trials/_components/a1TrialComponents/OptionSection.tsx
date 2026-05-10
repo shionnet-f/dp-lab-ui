@@ -1,6 +1,7 @@
 "use client";
 
 import { trackAction } from "@/app/actions/track";
+import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 type OptionItem = {
     id: string;
@@ -13,6 +14,8 @@ type OptionSectionProps = {
     options: OptionItem[];
     selectedOptions: string[];
     onToggleOption: (id: string) => void;
+    set: string;
+    trial: string;
 };
 
 function yen(n: number) {
@@ -23,7 +26,17 @@ export function OptionSection({
     options,
     selectedOptions,
     onToggleOption,
+    set,
+    trial,
 }: OptionSectionProps) {
+    function createLogBase() {
+        const logParams = new URLSearchParams();
+        logParams.set("set", set);
+        logParams.set("trial", trial);
+
+        return getClientLogBase({ searchParams: logParams });
+    }
+
     return (
         <article className="h-[312px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="h-[15px]" />
@@ -48,9 +61,14 @@ export function OptionSection({
                                 onChange={() => {
                                     onToggleOption(option.id);
 
-                                    trackAction({
+                                    const baseLog = createLogBase();
+
+                                    void trackAction({
+                                        ...baseLog,
+                                        phase: "main",
                                         page: "checkout",
                                         type: "option_toggle",
+                                        meta: {},
                                         payload: {
                                             optionId: option.id,
                                             selected: !selected,

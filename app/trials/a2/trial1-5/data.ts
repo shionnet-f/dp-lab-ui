@@ -30,7 +30,7 @@ export const trial1_5Data = {
   },
   products: [
     {
-      id: "a2-t1-5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "花粉症薬 56錠 眠くなりにくい プレミアム",
@@ -42,7 +42,7 @@ export const trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "花粉症薬 60錠 スタンダード",
@@ -54,7 +54,7 @@ export const trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "花粉症薬 56錠 眠くなりにくい ベーシック",
@@ -66,7 +66,7 @@ export const trial1_5Data = {
       dpDisplay: null,
     },
     {
-      id: "a2-t1-5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "花粉症薬 60錠 眠くなりにくい ロング",
