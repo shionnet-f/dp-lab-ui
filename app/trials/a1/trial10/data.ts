@@ -1,4 +1,3 @@
-
 export type Trial10Product = {
   id: string;
   role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
@@ -9,6 +8,7 @@ export type Trial10Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     originalPriceYen?: number;
     displayPriceYen?: number;
@@ -69,6 +69,7 @@ export const trial10Data: Trial10Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/battery.svg",
       dpDisplay: null,
     },
     {
@@ -92,6 +93,7 @@ export const trial10Data: Trial10Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/battery.svg",
       dpDisplay: {
         originalPriceYen: 1480,
         displayPriceYen: 1180,
@@ -119,6 +121,7 @@ export const trial10Data: Trial10Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/battery.svg",
       dpDisplay: null,
     },
     {
@@ -142,6 +145,7 @@ export const trial10Data: Trial10Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/battery.svg",
       dpDisplay: {
         originalPriceYen: 1820,
         displayPriceYen: 1420,
@@ -150,13 +154,38 @@ export const trial10Data: Trial10Data = {
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 200, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 500, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 800, shortDescription: "本日中のお届けが可能です" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -169,7 +198,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial10Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial10Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

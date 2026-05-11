@@ -8,6 +8,7 @@ export type Trial4Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -60,6 +61,7 @@ export const trial4Data: Trial4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/monitor.svg",
       dpDisplay: null,
     },
     {
@@ -70,7 +72,11 @@ export const trial4Data: Trial4Data = {
       priceYen: 15800,
       description:
         "コンパクトで置きやすいモニターです。省スペース環境での利用を想定したモデルです。",
-      specsAndNotes: ["台数：1台", "画面サイズ：21.5インチ", "解像度：1920×1080"],
+      specsAndNotes: [
+        "台数：1台",
+        "画面サイズ：21.5インチ",
+        "解像度：1920×1080",
+      ],
       prePurchaseCheck: [
         "画面サイズが条件を満たすか確認してから選択してください",
         "設置スペースや接続端子を確認してください",
@@ -79,6 +85,7 @@ export const trial4Data: Trial4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/monitor.svg",
       dpDisplay: null,
     },
     {
@@ -89,7 +96,11 @@ export const trial4Data: Trial4Data = {
       priceYen: 17600,
       description:
         "作業にも動画視聴にも使いやすい23.8インチモニターです。基本性能を押さえた標準モデルです。",
-      specsAndNotes: ["台数：1台", "画面サイズ：23.8インチ", "解像度：1920×1080"],
+      specsAndNotes: [
+        "台数：1台",
+        "画面サイズ：23.8インチ",
+        "解像度：1920×1080",
+      ],
       prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
         "設置スペースや接続端子を確認してください",
@@ -98,6 +109,7 @@ export const trial4Data: Trial4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/monitor.svg",
       dpDisplay: null,
     },
     {
@@ -117,17 +129,43 @@ export const trial4Data: Trial4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/monitor.svg",
       dpDisplay: { label: "残り3点" },
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 500, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 800, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 700, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 500,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 800,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 700,
+      shortDescription: "受け取り日時を指定できます",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -140,7 +178,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial4Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial4Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

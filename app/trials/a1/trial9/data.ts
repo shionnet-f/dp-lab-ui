@@ -9,6 +9,7 @@ export type Trial9Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     specLead?: string;
     boldPackText?: string;
@@ -70,6 +71,7 @@ export const trial9Data: Trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
     {
@@ -93,6 +95,7 @@ export const trial9Data: Trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
     {
@@ -116,6 +119,7 @@ export const trial9Data: Trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
     {
@@ -138,6 +142,7 @@ export const trial9Data: Trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/water.png",
       dpDisplay: {
         specLead: "ケース単位での販売商品で、普段使いしやすいサイズ感が案内されています。",
         boldPackText: "500ml × 12本",

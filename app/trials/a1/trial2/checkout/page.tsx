@@ -1,4 +1,5 @@
 "use client";
+
 import { use, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, trial2Data } from "../data";
@@ -19,10 +20,10 @@ function getImplTrialId() {
   }
 
   const a1Index = segments.indexOf("a1");
-  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+  return a1Index >= 0 ? (segments[a1Index + 1] ?? null) : null;
 }
 
-const confirmPath = getTrialPath("a1", "trial2", "confirm")
+const confirmPath = getTrialPath("a1", "trial2", "confirm");
 const productPath = getTrialPath("a1", "trial2", "product");
 
 type Props = {
@@ -79,7 +80,6 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
     });
   }, []);
 
-
   function toggleOption(value: string) {
     setOptions((prev) =>
       prev.includes(value) ? prev.filter((o) => o !== value) : [...prev, value],
@@ -89,7 +89,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
   if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-[18px] font-bold text-red-700">
           URLに set または trial がありません。
         </div>
       </main>
@@ -104,7 +104,6 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
           title="購入手続き"
         />
 
-        {/* 810pxのメイン領域 */}
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -146,9 +145,7 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
             <input key={o} type="hidden" name="options" value={o} />
           ))}
 
-          {/* 左側 */}
           <div className="h-[810px] w-[720px]">
-            {/* 配送方法領域：438px */}
             <ShippingMethodSection
               shippingMethods={trial2Data.shippingMethods}
               selectedShipping={shipping}
@@ -157,10 +154,8 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
               trial={trial}
             />
 
-            {/* 60pxの空間 */}
             <div className="h-[60px]" />
 
-            {/* オプション領域：312px */}
             <OptionSection
               options={trial2Data.options}
               selectedOptions={options}
@@ -170,7 +165,6 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
             />
           </div>
 
-          {/* 右側：810pxのご注文商品領域 */}
           <OrderSummaryPanel
             product={selectedProduct}
             set={set}
@@ -179,7 +173,6 @@ export default function CheckoutPageA1Trial2({ searchParams }: Props) {
           />
         </form>
 
-        {/* 105pxの空間 */}
         <div className="h-[105px]" />
       </div>
     </main>
