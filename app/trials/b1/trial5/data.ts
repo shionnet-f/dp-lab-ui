@@ -8,6 +8,7 @@ export type Trial5Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   detailParagraphs: string[];
   dpDisplay?: { label: string } | null;
 };
@@ -74,6 +75,7 @@ export const trial5Data: Trial5Data = {
         "・配送：通常配送でお届けされ、地域や配送状況により到着日数が異なる場合があります。",
         "・その他：ケース商品のため、購入前に保管スペースを確保しておくと安心です。",
       ],
+      imageSrc: "/images/products/can.svg",
       dpDisplay: null,
     },
     {
@@ -102,6 +104,7 @@ export const trial5Data: Trial5Data = {
         "・配送：通常配送でお届けされ、地域によって到着日数が異なる場合があります。",
         "・その他：炭酸ではないため、爽快感は控えめです。",
       ],
+      imageSrc: "/images/products/can.svg",
       dpDisplay: null,
     },
     {
@@ -130,6 +133,7 @@ export const trial5Data: Trial5Data = {
         "・配送：通常配送でお届けされ、地域により到着日数が異なる場合があります。",
         "・その他：ケース商品のため、保管スペースを確保しておくと扱いやすいです。",
       ],
+      imageSrc: "/images/products/can.svg",
       dpDisplay: null,
     },
     {
@@ -158,6 +162,7 @@ export const trial5Data: Trial5Data = {
         "・配送：通常配送でお届けされ、地域によって到着日数が異なる場合があります。",
         "・その他：価格は正解商品より少し高めですが、本数は多めです。",
       ],
+      imageSrc: "/images/products/can.svg",
       dpDisplay: null,
     },
   ] satisfies Trial5Product[],

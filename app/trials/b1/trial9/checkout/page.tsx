@@ -148,7 +148,7 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
               <div className="h-[15px]" />
 
               <div className="flex h-[30px] items-center px-5">
-                <h2 className="text-base font-semibold text-gray-900">
+                <h2 className="text-[20px] font-bold text-gray-900">
                   配送方法
                 </h2>
               </div>
@@ -220,7 +220,7 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
               <div className="h-[15px]" />
 
               <div className="flex h-[30px] items-center px-5">
-                <h2 className="text-base font-semibold text-gray-900">
+                <h2 className="text-[20px] font-bold text-gray-900">
                   追加オプション
                 </h2>
               </div>
@@ -286,24 +286,28 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
             <div className="h-[15px]" />
 
             <div className="flex h-[60px] items-center">
-              <h2 className="text-base font-semibold text-gray-900">
+              <h2 className="text-[20px] font-bold text-gray-900">
                 ご注文商品
               </h2>
             </div>
 
-            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-              画像エリア
+            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-50">
+              <img
+                src={selectedProduct.imageSrc}
+                alt=""
+                className="max-h-[80px] max-w-[110px] object-contain"
+              />
             </div>
 
             <div className="h-[60px]" />
 
-            <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+            <div className="h-[44px] overflow-hidden text-[18px] font-bold leading-6 text-gray-900">
               {selectedProduct.name}
             </div>
 
             <div className="h-[60px]" />
 
-            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-[15px] font-semibold leading-6 text-gray-600">
               {selectedProduct.description}
             </div>
 
@@ -311,7 +315,7 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
 
             <button
               type="submit"
-              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-sm font-medium text-white"
+              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-[18px] font-bold text-white"
             >
               次へ進む
             </button>

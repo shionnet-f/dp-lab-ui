@@ -59,7 +59,7 @@ function DetailDialogButton({
     <>
       <button
         type="button"
-        className="h-[30px] rounded-md border border-gray-300 px-3 text-[12px] font-medium text-gray-700"
+        className="className=h-[36px] rounded-md border border-gray-300 bg-white px-4 text-[15px] font-bold text-gray-700"
         onClick={() => {
           void trackAction({
             ...createLogBase(),
@@ -79,7 +79,7 @@ function DetailDialogButton({
         }}
       >
         料金詳細を見る
-      </button>
+      </button >
 
       <dialog
         id={dialogId}
@@ -87,11 +87,11 @@ function DetailDialogButton({
       >
         <div className="h-full w-full overflow-hidden bg-white">
           <div className="flex h-[70px] items-center justify-between border-b border-gray-200 px-[40px]">
-            <h2 className="text-[18px] font-semibold text-gray-900">{title}</h2>
+            <h2 className="text-[22px] font-bold text-gray-900">{title}</h2>
 
             <button
               type="button"
-              className="h-[36px] w-[88px] rounded-md border border-gray-300 text-[14px] text-gray-700"
+              className="h-[38px] w-[88px] rounded-md border border-gray-300 bg-white text-[15px] font-bold text-gray-700"
               onClick={() => {
                 void trackAction({
                   ...createLogBase(),
@@ -119,9 +119,9 @@ function DetailDialogButton({
 
             {rows.map((row, index) => (
               <div key={row.label}>
-                <div className="flex h-[60px] items-center justify-between rounded-md border border-gray-200 px-[20px] text-[14px] text-gray-700">
+                <div className="flex h-[60px] items-center justify-between rounded-md border border-gray-200 px-[20px] text-[18px] font-bold text-gray-900">
                   <span>{row.label}</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="text-[22px] font-bold text-gray-900">
                     {row.value}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ function ShippingMethodSectionHiddenDetail({
       <div className="h-[15px]" />
 
       <div className="flex h-[30px] items-center justify-between px-5">
-        <h2 className="text-base font-semibold text-gray-900">配送方法</h2>
+        <h2 className="text-[20px] font-bold text-gray-900">配送方法</h2>
 
         <DetailDialogButton
           title="配送方法の料金詳細"
@@ -193,7 +193,7 @@ function ShippingMethodSectionHiddenDetail({
 
       {shippingMethods.map((method, index) => (
         <div key={method.id}>
-          <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+          <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-gray-700">
             <input
               type="radio"
               name="shippingRadio"
@@ -215,8 +215,12 @@ function ShippingMethodSectionHiddenDetail({
             />
 
             <div className="leading-tight">
-              <div className="font-medium text-gray-900">{method.name}</div>
-              <div className="text-gray-600">{method.shortDescription}</div>
+              <div className="text-[18px] font-bold text-gray-900">
+                {method.name}
+              </div>
+              <div className="mt-1 text-[15px] font-semibold text-gray-600">
+                {method.shortDescription}
+              </div>
             </div>
           </label>
 
@@ -269,7 +273,7 @@ function OptionSectionHiddenDetail({
       <div className="h-[15px]" />
 
       <div className="flex h-[30px] items-center justify-between px-5">
-        <h2 className="text-base font-semibold text-gray-900">
+        <h2 className="text-[20px] font-bold text-gray-900">
           追加オプション
         </h2>
 
@@ -289,7 +293,7 @@ function OptionSectionHiddenDetail({
 
         return (
           <div key={option.id}>
-            <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
+            <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-gray-700">
               <input
                 type="checkbox"
                 checked={selected}
@@ -311,8 +315,12 @@ function OptionSectionHiddenDetail({
               />
 
               <div className="leading-tight">
-                <div className="font-medium text-gray-900">{option.name}</div>
-                <div className="text-gray-600">{option.shortDescription}</div>
+                <div className="text-[18px] font-bold text-gray-900">
+                  {option.name}
+                </div>
+                <div className="mt-1 text-[15px] font-semibold text-gray-600">
+                  {option.shortDescription}
+                </div>
               </div>
             </label>
 
@@ -459,24 +467,28 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
             <div className="h-[15px]" />
 
             <div className="flex h-[60px] items-center">
-              <h2 className="text-base font-semibold text-gray-900">
+              <h2 className="text-[20px] font-bold text-gray-900">
                 ご注文商品
               </h2>
             </div>
 
-            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-              画像エリア
+            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-50">
+              <img
+                src={selectedProduct.imageSrc}
+                alt=""
+                className="max-h-[80px] max-w-[110px] object-contain"
+              />
             </div>
 
             <div className="h-[60px]" />
 
-            <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+            <div className="h-[44px] overflow-hidden text-[18px] font-bold leading-6 text-gray-900">
               {selectedProduct.name}
             </div>
 
             <div className="h-[60px]" />
 
-            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-[15px] font-semibold leading-6 text-gray-600">
               {selectedProduct.description}
             </div>
 
@@ -488,7 +500,7 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
 
             <button
               type="submit"
-              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-sm font-medium text-white"
+              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-[18px] font-bold text-white"
             >
               次へ進む
             </button>
@@ -509,7 +521,7 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
 
                 router.push(`${productPath}?set=${set}&trial=${trial}`);
               }}
-              className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-center text-[18px] font-bold text-gray-700 hover:bg-gray-50"
             >
               商品一覧へ戻る
             </button>

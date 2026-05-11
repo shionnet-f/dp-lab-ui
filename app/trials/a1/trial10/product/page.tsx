@@ -170,9 +170,13 @@ function ProductDetailModal({
             <div className="flex w-[400px] flex-col">
               <div className="h-[60px]" />
 
-              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-100">
-                画像エリア
-              </section>
+              <div className="flex h-[120px] w-full items-center justify-center bg-gray-50">
+                <img
+                  src={product.imageSrc}
+                  alt=""
+                  className="max-h-[80px] max-w-[110px] object-contain"
+                />
+              </div>
 
               <div className="h-[60px]" />
 

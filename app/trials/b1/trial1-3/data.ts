@@ -8,6 +8,7 @@ export type Trial1_3Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
 };
 
@@ -38,69 +39,71 @@ export type Trial1_3Data = {
 
 export const trial1_3Data: Trial1_3Data = {
   purchaseConditions: {
-    budgetYen: 4000,
-    quantityCondition: "10000mAh以上であること",
-    specificCondition: "USB-Cで充電できること",
+    budgetYen: 1200,
+    quantityCondition: "芯径0.5mmであること",
+    specificCondition: "消しゴム付きであること",
   },
   products: [
     {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "モバイルバッテリー 12000mAh 急速充電対応",
-      priceYen: 4380,
+      name: "シャーペン LX-214",
+      priceYen: 1380,
       description:
-        "外出先で使いやすい大容量モバイルバッテリーです。急速充電対応モデルです。",
+        "長時間の筆記にも使いやすい、しっかりとした握り心地のシャーペンです。",
       specsAndNotes: [
-        "容量：12000mAh",
-        "充電端子：USB-C",
-        "出力：急速充電対応",
+        "芯径：0.5mm",
+        "消しゴム：あり",
+        "グリップ：ラバーグリップ",
       ],
       prePurchaseCheck: [
-        "必要な容量と充電端子を確認してから選択してください",
+        "芯径や付属機能を確認してから選択してください",
         "購入手続き画面で配送方法や金額を最終確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
       dpDisplay: null,
     },
     {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "モバイルバッテリー 10000mAh Micro USB対応",
-      priceYen: 2680,
+      name: "シャーペン NX-380",
+      priceYen: 680,
       description:
-        "日常使いしやすいモバイルバッテリーです。容量条件は満たしますがUSB-C充電ではありません。",
+        "軽量で持ち運びやすいシャーペンです。日常的な筆記に適しています。",
       specsAndNotes: [
-        "容量：10000mAh",
-        "充電端子：Micro USB",
-        "出力：標準充電",
+        "芯径：0.5mm",
+        "消しゴム：なし",
+        "グリップ：樹脂グリップ",
       ],
       prePurchaseCheck: [
-        "USB-Cで充電できるかを確認してから選択してください",
+        "消しゴムが付いているかを確認してから選択してください",
         "購入手続き画面で配送方法や金額を最終確認できます",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
       dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "モバイルバッテリー 10000mAh USB-C ベーシック",
-      priceYen: 2980,
+      name: "シャーペン PX-126",
+      priceYen: 780,
       description:
-        "必要十分な容量を備えたUSB-C充電対応のモバイルバッテリーです。条件を満たす中で最も安い商品です。",
+        "必要な機能を備えた標準的なシャーペンです。条件を満たす中で最も安い商品です。",
       specsAndNotes: [
-        "容量：10000mAh",
-        "充電端子：USB-C",
-        "出力：標準充電",
+        "芯径：0.5mm",
+        "消しゴム：あり",
+        "グリップ：樹脂グリップ",
       ],
       prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
@@ -110,20 +113,21 @@ export const trial1_3Data: Trial1_3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
       dpDisplay: null,
     },
     {
       id: "p4",
       role: "dp_candidate",
       failReason: null,
-      name: "モバイルバッテリー 12000mAh USB-C スリムモデル",
-      priceYen: 3380,
+      name: "シャーペン RX-452",
+      priceYen: 980,
       description:
-        "持ち運びしやすいスリムタイプのモバイルバッテリーです。条件を満たす中ではやや高めの商品です。",
+        "安定した書き心地を重視したシャーペンです。条件を満たす中ではやや高めの商品です。",
       specsAndNotes: [
-        "容量：12000mAh",
-        "充電端子：USB-C",
-        "出力：急速充電対応",
+        "芯径：0.5mm",
+        "消しゴム：あり",
+        "グリップ：ラバーグリップ",
       ],
       prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
@@ -133,6 +137,7 @@ export const trial1_3Data: Trial1_3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
       dpDisplay: null,
     },
   ],

@@ -8,6 +8,7 @@ export type Trial3Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -65,6 +66,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
     },
     {
       id: "p2",
@@ -88,6 +90,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
     },
     {
       id: "p3",
@@ -111,6 +114,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
     },
     {
       id: "p4",
@@ -134,6 +138,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
     },
   ],
   shippingMethods: [

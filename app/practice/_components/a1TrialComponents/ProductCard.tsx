@@ -12,6 +12,7 @@ type ProductForCard = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc?: string;
 };
 
 type ProductCardProps = {
@@ -34,17 +35,17 @@ export function ProductCard({
   const router = useRouter();
 
   return (
-    <article className="h-[378px] w-[550px] border border-gray-200 bg-white shadow-sm rounded-md">
+    <article className="h-[378px] w-[550px] rounded-xl border border-gray-200 bg-white shadow-sm">
       <div className="flex h-full flex-col px-[60px]">
         <div className="h-[15px]" />
 
-        <h2 className="h-[42px] overflow-hidden text-[20px] font-semibold leading-[42px] text-gray-900">
+        <h2 className="h-[42px] overflow-hidden text-[22px] font-bold leading-[42px] text-gray-900">
           {product.name}
         </h2>
 
         <div className="h-[60px]" />
 
-        <p className="h-[42px] overflow-hidden text-[22px] font-semibold leading-[42px] text-gray-900">
+        <p className="h-[42px] overflow-hidden text-[28px] font-bold leading-[42px] text-gray-900">
           ¥{yen(product.priceYen)}
         </p>
 
@@ -65,7 +66,7 @@ export function ProductCard({
           />
 
           <button
-            className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+            className="flex items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
             onClick={() => {
               router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
             }}

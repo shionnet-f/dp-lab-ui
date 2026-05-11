@@ -8,6 +8,7 @@ export type Trial1_1Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
 };
 
@@ -60,6 +61,7 @@ export const trial1_1Data: Trial1_1Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -79,6 +81,7 @@ export const trial1_1Data: Trial1_1Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: null,
     },
     {
@@ -98,6 +101,7 @@ export const trial1_1Data: Trial1_1Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -121,6 +125,7 @@ export const trial1_1Data: Trial1_1Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
   ],

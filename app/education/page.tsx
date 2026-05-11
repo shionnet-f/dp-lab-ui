@@ -284,7 +284,7 @@ export default function EducationPage() {
               type="button"
               onClick={handlePrev}
               disabled={isFirst}
-              className="h-[48px] w-[120px] rounded-2xl border border-gray-300 bg-white text-[16px] font-medium disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-[48px] w-[180px] rounded-2xl border border-gray-300 bg-white text-[18px] font-medium disabled:cursor-not-allowed disabled:opacity-40"
             >
               戻る
             </button>
@@ -295,7 +295,7 @@ export default function EducationPage() {
               type="button"
               onClick={handleNext}
               disabled={!canGoNext}
-              className="h-[48px] w-[180px] rounded-2xl bg-gray-900 text-[16px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-[48px] w-[180px] rounded-2xl bg-gray-900 text-[18px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isLast ? "教育を終了する" : "次へ"}
             </button>
@@ -306,10 +306,10 @@ export default function EducationPage() {
       {showFinishConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
           <div className="w-[520px] rounded-3xl bg-white px-[40px] py-[32px] shadow-xl">
-            <h2 className="text-[24px] font-bold text-gray-900">
+            <h2 className="text-[28px] font-bold text-gray-900">
               教育を終了しますか？
             </h2>
-            <p className="mt-[16px] text-[16px] leading-[1.8] text-gray-700">
+            <p className="mt-[16px] text-[18px] leading-[1.8] text-gray-700">
               OKを押すと教育フェーズを終了し、次の画面へ進みます。
               誤って終了しないように確認してください。
             </p>
@@ -319,7 +319,7 @@ export default function EducationPage() {
                 type="button"
                 onClick={handleCancelFinish}
                 disabled={isFinishing}
-                className="h-[48px] w-[120px] rounded-2xl border border-gray-300 bg-white text-[16px] font-medium text-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="h-[48px] w-[120px] rounded-2xl border border-gray-300 bg-white text-[18px] font-medium text-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 キャンセル
               </button>
@@ -327,7 +327,7 @@ export default function EducationPage() {
                 type="button"
                 onClick={handleConfirmFinish}
                 disabled={isFinishing}
-                className="h-[48px] w-[160px] rounded-2xl bg-gray-900 text-[16px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+                className="h-[48px] w-[160px] rounded-2xl bg-gray-900 text-[18px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {isFinishing ? "終了中..." : "終了する"}
               </button>

@@ -8,6 +8,7 @@ export type Trial10Product = {
   specsAndNotes: string;
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
 };
 
@@ -53,6 +54,7 @@ export const trial10Data = {
         "通常配送・お急ぎ便・日時指定便から選択できます。",
         "送料は配送方法に応じて変わります。",
       ],
+      imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
     {
@@ -73,6 +75,7 @@ export const trial10Data = {
         "通常配送・お急ぎ便・日時指定便から選択できます。",
         "送料は配送方法に応じて変わります。",
       ],
+      imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
     {
@@ -93,6 +96,7 @@ export const trial10Data = {
         "通常配送・お急ぎ便・日時指定便から選択できます。",
         "送料は配送方法に応じて変わります。",
       ],
+      imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
     {
@@ -113,6 +117,7 @@ export const trial10Data = {
         "通常配送・お急ぎ便・日時指定便から選択できます。",
         "送料は配送方法に応じて変わります。",
       ],
+      imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
   ] satisfies Trial10Product[],

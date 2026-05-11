@@ -8,6 +8,7 @@ export type Trial9Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -57,6 +58,7 @@ export const trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "商品ごとに送料が異なります",
       ],
+      imageSrc: "/images/products/mask.png",
       dpDisplay: null,
     },
     {
@@ -82,6 +84,7 @@ export const trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "商品ごとに送料が異なります",
       ],
+      imageSrc: "/images/products/mask.png",
       dpDisplay: null,
     },
     {
@@ -107,6 +110,7 @@ export const trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "商品ごとに送料が異なります",
       ],
+      imageSrc: "/images/products/mask.png",
       dpDisplay: null,
     },
     {
@@ -132,6 +136,7 @@ export const trial9Data = {
         "配送方法は購入手続き画面で選択できます",
         "商品ごとに送料が異なります",
       ],
+      imageSrc: "/images/products/mask.png",
       dpDisplay: null,
     },
   ] satisfies Trial9Product[],

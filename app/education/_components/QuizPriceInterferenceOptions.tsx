@@ -6,6 +6,7 @@ type QuizPriceInterferenceOptionsProps = {
 type PriceCard = {
   id: string;
   productName: string;
+  imageSrc: string;
   originalPriceText?: string;
   discountedPriceText?: string;
   regularPriceText?: string;
@@ -16,18 +17,21 @@ const cards: PriceCard[] = [
   {
     id: "A",
     productName: "天然水 350ml × 12本",
+    imageSrc: "/images/products/water.png",
     regularPriceText: "¥7,480",
     isDp: false,
   },
   {
     id: "B",
     productName: "天然水 350ml × 12本",
+    imageSrc: "/images/products/water.png",
     regularPriceText: "¥7,480",
     isDp: false,
   },
   {
     id: "C",
     productName: "天然水 350ml × 12本",
+    imageSrc: "/images/products/water.png",
     originalPriceText: "¥7,480",
     discountedPriceText: "¥5,980",
     isDp: true,
@@ -73,7 +77,7 @@ export default function QuizPriceInterferenceOptions({
   onSelect,
 }: QuizPriceInterferenceOptionsProps) {
   return (
-    <div className="grid grid-cols-3 gap-[16px]">
+    <div className="grid grid-cols-3 gap-[60px]">
       {cards.map((card) => {
         const isSelected = selectedId === card.id;
 
@@ -103,8 +107,12 @@ export default function QuizPriceInterferenceOptions({
 
             <article className="rounded-xl border border-gray-200 bg-white p-3 pt-8">
               <div className="grid gap-3">
-                <div className="flex h-28 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-                  画像エリア
+                <div className="flex h-28 w-full items-center justify-center rounded-lg bg-gray-100 p-3">
+                  <img
+                    src={card.imageSrc}
+                    alt=""
+                    className="max-h-20 max-w-24 object-contain"
+                  />
                 </div>
 
                 <div className="min-h-[48px]">

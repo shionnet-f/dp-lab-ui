@@ -61,7 +61,7 @@ function ShippingMethodSectionHiddenPrice({
       <div className="h-[15px]" />
 
       <div className="flex h-[30px] items-center px-5">
-        <h2 className="text-base font-semibold text-gray-900">配送方法</h2>
+        <h2 className="text-[20px] font-bold text-gray-900">配送方法</h2>
       </div>
 
       <div className="h-[60px]" />
@@ -89,18 +89,19 @@ function ShippingMethodSectionHiddenPrice({
               }}
             />
 
-            <div className="leading-tight">
-              <div className="font-medium text-gray-900">{method.name}</div>
-              <div className="text-gray-600">{method.shortDescription}</div>
+            <div className="h-full items-center justify-between px-4 text-[18px] font-bold text-gray-800">
+              <p className="truncate pr-4">{method.name}</p>
+              <p className="shrink-0">{method.shortDescription}</p>
             </div>
           </label>
 
           {index < shippingMethods.length - 1 && <div className="h-[60px]" />}
-        </div>
-      ))}
+        </div >
+      ))
+      }
 
       <div className="h-[15px]" />
-    </article>
+    </article >
   );
 }
 
@@ -139,7 +140,7 @@ function OptionSectionHiddenPrice({
       <div className="h-[15px]" />
 
       <div className="flex h-[30px] items-center px-5">
-        <h2 className="text-base font-semibold text-gray-900">
+        <h2 className="text-[20px] font-bold text-gray-900">
           追加オプション
         </h2>
       </div>
@@ -172,9 +173,9 @@ function OptionSectionHiddenPrice({
                 }}
               />
 
-              <div className="leading-tight">
-                <div className="font-medium text-gray-900">{option.name}</div>
-                <div className="text-gray-600">{option.shortDescription}</div>
+              <div className="h-full items-center justify-between px-4 text-[18px] font-bold text-gray-800">
+                <p className="truncate pr-4">{option.name}</p>
+                <p className="shrink-0">{option.shortDescription}</p>
               </div>
             </label>
 
@@ -321,24 +322,26 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
             <div className="h-[15px]" />
 
             <div className="flex h-[60px] items-center">
-              <h2 className="text-base font-semibold text-gray-900">
-                ご注文商品
-              </h2>
+              <h2 className="text-[20px] font-bold text-gray-900">ご注文商品</h2>
             </div>
 
-            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-              画像エリア
+            <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-50">
+              <img
+                src={selectedProduct.imageSrc}
+                alt=""
+                className="max-h-[80px] max-w-[110px] object-contain"
+              />
             </div>
 
             <div className="h-[60px]" />
 
-            <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+            <div className="h-[44px] overflow-hidden text-[20px] font-bold leading-[24px] text-gray-900">
               {selectedProduct.name}
             </div>
 
             <div className="h-[60px]" />
 
-            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+            <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-[16px] font-medium leading-[24px] text-gray-700">
               {selectedProduct.description}
             </div>
 
@@ -352,7 +355,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
 
             <button
               type="submit"
-              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-sm font-medium text-white"
+              className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-[18px] font-bold text-white"
             >
               次へ進む
             </button>
@@ -372,7 +375,7 @@ export default function CheckoutPageB1Trial3({ searchParams }: Props) {
 
                 router.push(`${productPath}?set=${set}&trial=${trial}`);
               }}
-              className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-[18px] font-bold text-gray-700 hover:bg-gray-50"
             >
               商品一覧へ戻る
             </button>

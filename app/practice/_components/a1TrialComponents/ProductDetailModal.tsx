@@ -13,6 +13,7 @@ type ProductForDetailModal = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: { label: string } | null;
+  imageSrc?: string;
 };
 
 type ProductDetailModalProps = {
@@ -42,7 +43,7 @@ export function ProductDetailModal({
     <>
       <button
         type="button"
-        className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+        className="flex items-center justify-center rounded-md border border-gray-300 text-[18px] font-bold text-black"
         onClick={() => {
           const el = document.getElementById(
             dialogId,
@@ -55,17 +56,15 @@ export function ProductDetailModal({
 
       <dialog
         id={dialogId}
-        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden p-0 backdrop:bg-black/70"
+        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden rounded-md p-0 backdrop:bg-black/70"
       >
         <div className="h-full w-full overflow-hidden bg-white">
           <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[60px]">
-            <h2 className="text-[24px] font-semibold text-gray-900">
-              商品詳細
-            </h2>
+            <h2 className="text-[28px] font-bold text-gray-900">商品詳細</h2>
 
             <button
               type="button"
-              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
+              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[17px] font-bold text-gray-700"
               onClick={() => {
                 const el = document.getElementById(
                   dialogId,
@@ -81,31 +80,36 @@ export function ProductDetailModal({
             <div className="flex w-[400px] flex-col">
               <div className="h-[60px]" />
 
-              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-100">
-                画像エリア
-              </section>
+              <div className="flex h-[120px] w-full items-center justify-center bg-gray-50">
+                {product.imageSrc ? (
+                  <img
+                    src={product.imageSrc}
+                    alt=""
+                    className="max-h-[80px] max-w-[110px] object-contain"
+                  />
+                ) : (
+                  <span className="text-[15px] font-medium text-gray-400">画像エリア</span>
+                )}
+              </div>
 
               <div className="h-[60px]" />
 
               <section className="h-[160px] overflow-hidden border border-gray-300 p-[16px]">
-                <h3 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                <h3 className="mb-[12px] text-[18px] font-bold text-gray-900">
                   商品説明
                 </h3>
-                <div className="text-[14px] leading-[22px] text-gray-600">
+                <div className="text-[15px] font-medium leading-[23px] text-gray-600">
                   <p>{product.description}</p>
-                  <p>
-                    毎日の使用を想定した定番商品です。購入前に内容をよく確認してください。
-                  </p>
                 </div>
               </section>
 
               <div className="h-[60px]" />
 
               <section className="h-[160px] overflow-hidden border border-gray-300 p-[16px]">
-                <h3 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                <h3 className="mb-[12px] text-[18px] font-bold text-gray-900">
                   仕様・補足
                 </h3>
-                <div className="text-[14px] leading-[22px] text-gray-600">
+                <div className="text-[15px] font-medium leading-[23px] text-gray-600">
                   {product.specsAndNotes.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
@@ -134,23 +138,23 @@ export function ProductDetailModal({
 
               <div className="h-[60px]" />
 
-              <h3 className="h-[35px] overflow-hidden text-[20px] font-bold leading-[35px] text-gray-900">
+              <h3 className="h-[35px] overflow-hidden text-[22px] font-bold leading-[35px] text-gray-900">
                 {product.name}
               </h3>
 
               <div className="h-[60px]" />
 
-              <p className="h-[35px] text-[22px] font-semibold leading-[35px] text-gray-900">
+              <p className="h-[35px] text-[26px] font-bold leading-[35px] text-gray-900">
                 ¥{yen(product.priceYen)}
               </p>
 
               <div className="h-[60px]" />
 
               <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
-                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                <h4 className="mb-[12px] text-[18px] font-bold text-gray-900">
                   購入前の確認
                 </h4>
-                <div className="text-[14px] leading-[22px] text-gray-700">
+                <div className="text-[15px] font-medium leading-[23px] text-gray-700">
                   {product.prePurchaseCheck.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
@@ -160,10 +164,10 @@ export function ProductDetailModal({
               <div className="h-[60px]" />
 
               <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
-                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                <h4 className="mb-[12px] text-[18px] font-bold text-gray-900">
                   配送に関わる情報
                 </h4>
-                <div className="text-[14px] leading-[22px] text-gray-700">
+                <div className="text-[15px] font-medium leading-[23px] text-gray-700">
                   {product.deliveryInfo.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
@@ -173,7 +177,7 @@ export function ProductDetailModal({
               <div className="h-[60px]" />
 
               <button
-                className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                className="flex h-[50px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
                 onClick={() => {
                   router.push(`${nextPath}?set=${set}&productId=${product.id}`);
                 }}
