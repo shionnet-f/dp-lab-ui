@@ -12,6 +12,7 @@ type ProductForCard = {
     specsAndNotes: string[];
     prePurchaseCheck: string[];
     deliveryInfo: string[];
+    imageSrc: string;
 };
 
 type ProductCardProps = {
@@ -34,41 +35,34 @@ export function ProductCard({
     const router = useRouter();
 
     return (
-        <article className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
+        <article className="h-full w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="grid h-full grid-cols-[520px_280px_360px]">
-                {/* 左側：商品名・価格 */}
                 <div className="h-full min-w-0 pl-[60px] pr-[20px]">
                     <div className="h-[10px]" />
 
-                    <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-                        <h2 className="truncate text-[20px] font-semibold text-gray-900">
+                    <div className="flex h-[36px] min-w-0 items-center overflow-hidden">
+                        <h2 className="truncate text-[22px] font-bold text-gray-900">
                             {product.name}
                         </h2>
                     </div>
 
-                    <div className="h-[10px]" />
+                    <div className="h-[54px]" />
 
-                    <div className="h-[60px]" />
-
-                    <div className="h-[10px]" />
-
-                    <div className="flex h-[30px] items-center overflow-hidden">
-                        <p className="truncate text-[20px] font-semibold text-gray-900">
+                    <div className="flex h-[40px] items-center overflow-hidden">
+                        <p className="truncate text-[28px] font-bold text-gray-900">
                             ¥{yen(product.priceYen)}
                         </p>
                     </div>
 
-                    <div className="h-[10px]" />
+                    <div className="h-[20px]" />
                 </div>
 
-                {/* 中央：DP領域 */}
                 <div className="flex h-full min-w-0 items-center justify-center px-[20px]">
                     <div className="h-[50px] w-full min-w-0 overflow-hidden">
                         {dpArea ?? <div className="h-full w-full" aria-hidden="true" />}
                     </div>
                 </div>
 
-                {/* 右側：ボタン2つ */}
                 <div className="flex h-full items-center justify-center">
                     <div className="flex items-center gap-[60px]">
                         <ProductDetailModal
@@ -80,7 +74,7 @@ export function ProductCard({
 
                         <button
                             type="button"
-                            className="flex h-[40px] w-[110px] items-center justify-center bg-black text-[15px] font-medium text-white"
+                            className="flex h-[40px] w-[110px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
                             onClick={() => {
                                 router.push(`${checkoutPath}?set=${set}&productId=${product.id}`);
                             }}

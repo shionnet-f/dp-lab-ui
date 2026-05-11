@@ -39,13 +39,13 @@ export default function ProductPageB2Trial5() {
         <TrialPageHeader purchaseConditions={trial5Data.purchaseConditions} title="商品一覧" />
         <section className="mx-auto flex h-[820px] w-[1160px] flex-col gap-[60px] overflow-hidden">
           {trial5Data.products.map((product) => (
-            <article key={product.id} className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
+            <article key={product.id} className="h-full w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
               <div className="grid h-full grid-cols-[220px_580px_360px]">
                 <div className="flex h-full items-center justify-center pl-[60px]">
-                  <div className="flex h-[110px] w-[140px] items-center justify-center rounded-md bg-gray-100 text-[14px] text-gray-400">画像</div>
+                  <div className="flex h-[120px] w-[160px] items-center justify-center overflow-hidden rounded-md bg-gray-50"><img src={product.imageSrc} alt="" className="max-h-[80px] max-w-[110px] object-contain" /></div>
                 </div>
                 <div className="flex h-full min-w-0 items-center px-[20px]">
-                  <h2 className="truncate text-[22px] font-semibold text-gray-900">{product.name}</h2>
+                  <h2 className="truncate text-[22px] font-bold leading-[42px] text-gray-900">{product.name}</h2>
                 </div>
                 <div className="flex h-full items-center justify-center">
                   <ProductDetailModal product={product} set={set} trial={trial} nextPath={checkoutPath} />

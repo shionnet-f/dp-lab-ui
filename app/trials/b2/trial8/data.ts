@@ -8,6 +8,7 @@ export type Trial8Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -57,6 +58,7 @@ export const trial8Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/sparkling-water.svg",
       dpDisplay: null,
     },
     {
@@ -82,6 +84,7 @@ export const trial8Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/sparkling-water.svg",
       dpDisplay: null,
     },
     {
@@ -107,6 +110,7 @@ export const trial8Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/sparkling-water.svg",
       dpDisplay: null,
     },
     {
@@ -133,6 +137,7 @@ export const trial8Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/sparkling-water.svg",
       dpDisplay: null,
     },
   ] satisfies Trial8Product[],

@@ -22,7 +22,7 @@ export function ConfirmShippingSection({
         <section className="h-[145px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="h-[15px]" />
 
-            <h2 className="flex h-[30px] items-center px-5 text-base font-semibold text-gray-900">
+            <h2 className="flex h-[30px] items-center px-5 text-[20px] font-bold text-gray-900">
                 配送方法
             </h2>
 
@@ -30,17 +30,17 @@ export function ConfirmShippingSection({
 
             <div className="h-[70px] px-5">
                 {shippingInfo ? (
-                    <div className="flex h-full min-w-0 items-center justify-between rounded-md border border-gray-200 px-4 text-sm text-gray-700">
-                        <span className="min-w-0 truncate pr-4">
+                    <div className="flex h-full min-w-0 items-center justify-between rounded-md border border-gray-200 px-4 text-gray-700">
+                        <span className="min-w-0 truncate pr-4 text-[18px] font-bold text-gray-900">
                             {shippingInfo.name}
                         </span>
 
-                        <span className="shrink-0">
+                        <span className="shrink-0 text-[22px] font-bold text-gray-900">
                             ¥{yen(shippingInfo.priceYen)}
                         </span>
                     </div>
                 ) : (
-                    <div className="flex h-full items-center rounded-md border border-gray-200 px-4 text-sm text-gray-500">
+                    <div className="flex h-full items-center rounded-md border border-gray-200 px-4 text-[18px] font-bold text-gray-500">
                         未選択
                     </div>
                 )}

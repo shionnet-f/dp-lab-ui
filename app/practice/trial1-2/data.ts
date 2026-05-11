@@ -45,7 +45,7 @@ export const practice1_2Data: practice1_2Data = {
   },
   products: [
     {
-      id: "a1-t1-6-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "コピー用紙 A4 1000枚",
@@ -58,7 +58,7 @@ export const practice1_2Data: practice1_2Data = {
       imageSrc: "/images/products/copy-paper.png",
     },
     {
-      id: "a1-t1-6-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "コピー用紙 B5 500枚",
@@ -71,7 +71,7 @@ export const practice1_2Data: practice1_2Data = {
       imageSrc: "/images/products/copy-paper.png",
     },
     {
-      id: "a1-t1-6-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "コピー用紙 A4 500枚",
@@ -84,7 +84,7 @@ export const practice1_2Data: practice1_2Data = {
       imageSrc: "/images/products/copy-paper.png",
     },
     {
-      id: "a1-t1-6-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "コピー用紙 A4 750枚",
