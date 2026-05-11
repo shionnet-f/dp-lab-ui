@@ -9,6 +9,7 @@ export type Trial2Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: { label: string } | null;
+  imageSrc: string;
 };
 
 export type ShippingMethod = {
@@ -39,91 +40,130 @@ export type Trial2Data = {
 export const trial2Data: Trial2Data = {
   purchaseConditions: {
     budgetYen: 1200,
-    quantityCondition: "長さが2m以上であること",
+    quantityCondition: "2m以上であること",
     specificCondition: "カテゴリ6以上であること",
   },
   products: [
     {
       id: "p1",
-      role: "budget_over",
-      failReason: "budget",
-      name: "高速通信対応LANケーブル",
-      priceYen: 1280,
-      description: "家庭内の有線接続に使いやすいLANケーブルです。端末やルーターとの接続に利用できます。",
-      specsAndNotes: ["長さ：3m", "規格：Cat6", "端子：RJ45"],
+      role: "dp_candidate",
+      failReason: null,
+      name: "LANケーブル LX-214",
+      priceYen: 920,
+      description:
+        "幅広い接続機器に対応した扱いやすいLANケーブルです。自宅や研究室での通常利用に適しています。",
+      specsAndNotes: ["長さ：2m", "カテゴリ：Cat6", "形状：スタンダードタイプ"],
       prePurchaseCheck: [
-        "必要な長さと規格を確認してから選択してください",
-        "接続する機器側の端子形状をご確認ください",
+        "接続機器や設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: null,
+      dpDisplay: {
+        label: "現在23人がこの商品を見ています",
+      },
+      imageSrc: "/images/products/lan-cable.png",
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "家庭用LANケーブル",
-      priceYen: 880,
-      description: "一般的な有線接続向けのLANケーブルです。日常的な使用を想定した定番商品です。",
-      specsAndNotes: ["長さ：2m", "規格：Cat5e", "端子：RJ45"],
+      role: "budget_over",
+      failReason: "budget",
+      name: "LANケーブル NX-380",
+      priceYen: 1380,
+      description:
+        "断線しにくい太めの被覆を採用したLANケーブルです。家庭用からオフィス利用まで幅広く使えます。",
+      specsAndNotes: [
+        "長さ：3m",
+        "カテゴリ：Cat6A",
+        "形状：スタンダードタイプ",
+      ],
       prePurchaseCheck: [
-        "必要な通信規格を確認してから選択してください",
-        "接続する機器側の端子形状をご確認ください",
+        "接続機器や設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       dpDisplay: null,
+      imageSrc: "/images/products/lan-cable.png",
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "LANケーブル スタンダードモデル",
-      priceYen: 980,
-      description: "家庭内の有線接続に使いやすいスタンダードなLANケーブルです。基本的な用途に対応します。",
-      specsAndNotes: ["長さ：2m", "規格：Cat6", "端子：RJ45"],
+      name: "LANケーブル PX-126",
+      priceYen: 790,
+      description:
+        "家庭で使いやすい標準的なLANケーブルです。PCやルーターの接続に適しています。",
+      specsAndNotes: ["長さ：2m", "カテゴリ：Cat6", "形状：スタンダードタイプ"],
       prePurchaseCheck: [
-        "必要な長さと規格を確認してから選択してください",
-        "接続する機器側の端子形状をご確認ください",
+        "接続機器や設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       dpDisplay: null,
+      imageSrc: "/images/products/lan-cable.png",
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "condition_ng",
       failReason: null,
-      name: "LANケーブル 高速モデル",
+      name: "LANケーブル RX-452",
       priceYen: 1080,
-      description: "高速通信に対応したLANケーブルです。接続環境に応じて安定した通信をサポートします。",
-      specsAndNotes: ["長さ：2m", "規格：Cat6A", "端子：RJ45"],
+      description:
+        "薄型で取り回しやすいフラットタイプのLANケーブルです。家具のすき間や壁沿いの配線に向いています。",
+      specsAndNotes: ["長さ：2m", "カテゴリ：Cat6", "形状：フラットタイプ"],
       prePurchaseCheck: [
-        "必要な長さと規格を確認してから選択してください",
-        "接続する機器側の端子形状をご確認ください",
+        "接続機器や設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: { label: "27人がこの商品を見ています" },
+      dpDisplay: null,
+      imageSrc: "/images/products/lan-cable.png",
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 200, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 500, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 800, shortDescription: "本日中のお届けが可能です" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 0,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 300,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 600,
+      shortDescription: "本日中のお届けが可能です",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -136,7 +176,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial2Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial2Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

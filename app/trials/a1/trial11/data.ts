@@ -1,4 +1,3 @@
-
 export type Trial11Product = {
   id: string;
   role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
@@ -9,6 +8,7 @@ export type Trial11Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { showFreeShipping: boolean } | null;
 };
 
@@ -65,6 +65,7 @@ export const trial11Data: Trial11Data = {
         "通常配送は無料です",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/shampoo.svg",
       dpDisplay: { showFreeShipping: false },
     },
     {
@@ -88,6 +89,7 @@ export const trial11Data: Trial11Data = {
         "通常配送は無料です",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/shampoo.svg",
       dpDisplay: { showFreeShipping: true },
     },
     {
@@ -111,6 +113,7 @@ export const trial11Data: Trial11Data = {
         "通常配送は無料です",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/shampoo.svg",
       dpDisplay: { showFreeShipping: false },
     },
     {
@@ -134,17 +137,43 @@ export const trial11Data: Trial11Data = {
         "通常配送は無料です",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/shampoo.svg",
       dpDisplay: { showFreeShipping: true },
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 820, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 760, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 0,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 820,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 760,
+      shortDescription: "受け取り日時を指定できます",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -157,7 +186,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial11Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial11Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

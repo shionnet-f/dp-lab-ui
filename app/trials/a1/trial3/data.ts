@@ -8,6 +8,7 @@ export type Trial3Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { rating: number; reviewCount: number } | null;
 };
 
@@ -49,7 +50,8 @@ export const trial3Data: Trial3Data = {
       failReason: "budget",
       name: "2ドア冷蔵庫 大容量モデル",
       priceYen: 32800,
-      description: "まとめ買いした食品の保管にも使いやすい2ドア冷蔵庫です。冷蔵室と冷凍室を分けて使えます。",
+      description:
+        "まとめ買いした食品の保管にも使いやすい2ドア冷蔵庫です。冷蔵室と冷凍室を分けて使えます。",
       specsAndNotes: ["台数：1台", "容量：140L", "冷凍室：あり"],
       prePurchaseCheck: [
         "予算内かを確認してから選択してください",
@@ -59,6 +61,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/refrigerator.svg",
       dpDisplay: null,
     },
     {
@@ -67,7 +70,8 @@ export const trial3Data: Trial3Data = {
       failReason: "specific_condition",
       name: "小型冷蔵庫 直冷式モデル",
       priceYen: 24800,
-      description: "飲料や少量の食品保管に使いやすい小型冷蔵庫です。省スペース設置向けのモデルです。",
+      description:
+        "飲料や少量の食品保管に使いやすい小型冷蔵庫です。省スペース設置向けのモデルです。",
       specsAndNotes: ["台数：1台", "容量：90L", "冷凍室：なし"],
       prePurchaseCheck: [
         "冷凍室の有無を確認してから選択してください",
@@ -77,6 +81,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/refrigerator.svg",
       dpDisplay: { rating: 4.7, reviewCount: 186 },
     },
     {
@@ -85,7 +90,8 @@ export const trial3Data: Trial3Data = {
       failReason: null,
       name: "2ドア冷蔵庫 ベーシックモデル",
       priceYen: 26800,
-      description: "日常使いに適した2ドア冷蔵庫です。必要十分な容量と冷凍室を備えた標準モデルです。",
+      description:
+        "日常使いに適した2ドア冷蔵庫です。必要十分な容量と冷凍室を備えた標準モデルです。",
       specsAndNotes: ["台数：1台", "容量：121L", "冷凍室：あり"],
       prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
@@ -95,6 +101,7 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/refrigerator.svg",
       dpDisplay: null,
     },
     {
@@ -103,7 +110,8 @@ export const trial3Data: Trial3Data = {
       failReason: null,
       name: "2ドア冷蔵庫 人気モデル",
       priceYen: 27980,
-      description: "毎日の使いやすさを意識した2ドア冷蔵庫です。冷蔵室と冷凍室を分けて収納できます。",
+      description:
+        "毎日の使いやすさを意識した2ドア冷蔵庫です。冷蔵室と冷凍室を分けて収納できます。",
       specsAndNotes: ["台数：1台", "容量：124L", "冷凍室：あり"],
       prePurchaseCheck: [
         "条件に合う商品か確認してから選択してください",
@@ -113,17 +121,43 @@ export const trial3Data: Trial3Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/refrigerator.svg",
       dpDisplay: { rating: 4.8, reviewCount: 328 },
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 500, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 800, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 700, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 500,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 800,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 700,
+      shortDescription: "受け取り日時を指定できます",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -136,7 +170,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial3Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial3Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

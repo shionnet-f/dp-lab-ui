@@ -8,6 +8,7 @@ export type Trial1_4Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
 };
 
@@ -60,6 +61,7 @@ export const trial1_4Data: Trial1_4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/hand-warmer.png",
       dpDisplay: null,
     },
     {
@@ -79,6 +81,7 @@ export const trial1_4Data: Trial1_4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/hand-warmer.png",
       dpDisplay: null,
     },
     {
@@ -98,6 +101,7 @@ export const trial1_4Data: Trial1_4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/hand-warmer.png",
       dpDisplay: null,
     },
     {
@@ -117,6 +121,7 @@ export const trial1_4Data: Trial1_4Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/hand-warmer.png",
       dpDisplay: null,
     },
   ],

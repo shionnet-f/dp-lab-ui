@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="ケーブルアイコン.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="2.8756734"
+     inkscape:cx="247.07256"
+     inkscape:cy="307.23239"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="85"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       id="grid1"
+       units="mm"
+       originx="0"
+       originy="0"
+       spacingx="0.99999998"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#4b4b4b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="m 70.000002,64.999996 v 20 c 0,5.000001 5,10.000001 9.999998,10.000001 5.000002,0 10.000002,-5 10.000001,-10.000001 v -20 c 10e-7,-4.999998 5.000001,-9.999998 9.999999,-9.999998 5.1618,-0.07354 10.0378,5.134315 10,9.999998 v 20"
+       id="path1"
+       sodipodi:nodetypes="cccccccc" />
+    <rect
+       style="fill:#4b4b4b;stroke:#4b4b4b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       id="rect1"
+       width="4"
+       height="5.9999995"
+       x="108"
+       y="84.999992" />
+    <rect
+       style="fill:#4b4b4b;fill-opacity:1;stroke:#4b4b4b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1-1"
+       width="4"
+       height="5.9999995"
+       x="68"
+       y="58" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#4b4b4b;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect2"
+       width="4"
+       height="1.9999999"
+       x="68"
+       y="54.999996" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#4b4b4b;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect2-1"
+       width="4"
+       height="1.9999999"
+       x="108"
+       y="92" />
+  </g>
+</svg>

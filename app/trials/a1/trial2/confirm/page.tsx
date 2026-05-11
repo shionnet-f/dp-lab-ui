@@ -26,11 +26,11 @@ function getImplTrialId() {
   }
 
   const a1Index = segments.indexOf("a1");
-  return a1Index >= 0 ? segments[a1Index + 1] ?? null : null;
+  return a1Index >= 0 ? (segments[a1Index + 1] ?? null) : null;
 }
 
 const completePath = getTrialPath("a1", "trial2", "complete");
-const checkoutPath = getTrialPath("a1", "trial2", "checkout")
+const checkoutPath = getTrialPath("a1", "trial2", "checkout");
 
 export default function ConfirmPageA1Trial2() {
   const searchParams = useSearchParams();
@@ -42,7 +42,6 @@ export default function ConfirmPageA1Trial2() {
   const optionKeys = searchParams.getAll("options");
   const set = searchParams.get("set");
   const trial = searchParams.get("trial");
-
 
   const didTrack = useRef(false);
 
@@ -62,11 +61,10 @@ export default function ConfirmPageA1Trial2() {
     });
   }, []);
 
-
   if (!set || !trial) {
     return (
       <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-white p-6 text-[18px] font-bold text-red-700">
           URLに set または trial がありません。
         </div>
       </main>
@@ -157,7 +155,7 @@ export default function ConfirmPageA1Trial2() {
         />
 
         {error && (
-          <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
+          <div className="fixed left-1/2 top-6 z-50 w-[480px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-[18px] font-bold text-red-700 shadow-lg">
             配送方法を選択してください
           </div>
         )}
