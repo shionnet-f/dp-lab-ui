@@ -1,7 +1,12 @@
 export type Trial4Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -40,22 +45,25 @@ export type Trial4Data = {
 export const trial4Data: Trial4Data = {
   purchaseConditions: {
     budgetYen: 20000,
-    quantityCondition: "1台であること",
-    specificCondition: "23インチ以上であること",
+    quantityCondition: "画面サイズが23インチ以上であること",
+    specificCondition: "解像度が1920×1080以上であること",
   },
   products: [
     {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "フルHDモニター 24インチ スピーカー内蔵",
+      name: "フルHDモニター NX-380",
       priceYen: 21400,
-      description:
-        "在宅作業や日常使いに向いた24インチモニターです。映像出力や作業表示に幅広く対応します。",
-      specsAndNotes: ["台数：1台", "画面サイズ：24インチ", "解像度：1920×1080"],
+      description: "在宅作業や日常使いに向いた24インチモニターです。",
+      specsAndNotes: [
+        "台数：1台",
+        "画面サイズ：21.5インチ",
+        "解像度：1920×1080",
+      ],
       prePurchaseCheck: [
-        "予算内かを確認してから選択してください",
-        "設置スペースや接続端子を確認してください",
+        "設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -66,44 +74,44 @@ export const trial4Data: Trial4Data = {
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "quantity_condition",
-      name: "省スペースモニター 21.5インチ",
-      priceYen: 15800,
-      description:
-        "コンパクトで置きやすいモニターです。省スペース環境での利用を想定したモデルです。",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "人気モニター LX-214",
+      priceYen: 18600,
+      description: "見やすさと設置性を両立した24インチモニターです。",
       specsAndNotes: [
         "台数：1台",
-        "画面サイズ：21.5インチ",
+        "画面サイズ：24インチ",
         "解像度：1920×1080",
       ],
       prePurchaseCheck: [
-        "画面サイズが条件を満たすか確認してから選択してください",
-        "設置スペースや接続端子を確認してください",
+        "設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/monitor.svg",
-      dpDisplay: null,
+      dpDisplay: {
+        label: "残り3点",
+      },
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "スタンダードモニター 23.8インチ",
+      name: "スタンダードモニター PX-126",
       priceYen: 17600,
-      description:
-        "作業にも動画視聴にも使いやすい23.8インチモニターです。基本性能を押さえた標準モデルです。",
+      description: "作業にも動画視聴にも使いやすい23.8インチモニターです。",
       specsAndNotes: [
         "台数：1台",
         "画面サイズ：23.8インチ",
         "解像度：1920×1080",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "設置スペースや接続端子を確認してください",
+        "設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -114,56 +122,59 @@ export const trial4Data: Trial4Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "人気モニター 24インチ ベゼルレス",
-      priceYen: 18600,
-      description:
-        "見やすさと設置性を両立した24インチモニターです。日常利用に適した扱いやすいモデルです。",
-      specsAndNotes: ["台数：1台", "画面サイズ：24インチ", "解像度：1920×1080"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "ベゼルレスモニター RX-452",
+      priceYen: 19200,
+      description: "画面まわりがすっきりした24インチモニターです。",
+      specsAndNotes: [
+        "台数：1台",
+        "画面サイズ：24インチ",
+        "解像度：1920×1080",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "設置スペースや接続端子を確認してください",
+        "設置場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/monitor.svg",
-      dpDisplay: { label: "残り3点" },
+      dpDisplay: null,
     },
   ],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 500,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 800,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "当日便",
-      priceYen: 700,
-      shortDescription: "受け取り日時を指定できます",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
     },
   ],
   options: [
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 3000,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 2800,
       shortDescription: "プレゼント用に包装します",
     },
   ],

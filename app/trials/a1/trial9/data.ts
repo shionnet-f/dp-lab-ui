@@ -1,8 +1,12 @@
-
 export type Trial9Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -45,7 +49,7 @@ export type Trial9Data = {
 
 export const trial9Data: Trial9Data = {
   purchaseConditions: {
-    budgetYen: 1200,
+    budgetYen: 1400,
     quantityCondition: "24本入りであること",
     specificCondition: "1本あたり500ml以上であること",
   },
@@ -54,18 +58,17 @@ export const trial9Data: Trial9Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "天然水 500ml×24本 プレミアムケース",
-      priceYen: 1380,
-      description:
-        "毎日の飲用に使いやすい定番のケース商品です。自宅用のストックにも向いています。",
+      name: "天然水 レギュラー",
+      priceYen: 1280,
+      description: "毎日の飲用に使いやすい天然水です。",
       specsAndNotes: [
-        "内容量：500ml×24本",
         "販売単位：1ケース",
         "保存方法：高温・直射日光を避けて保存してください",
+        "内容量：500ml×24本",
       ],
       prePurchaseCheck: [
-        "必要な本数と内容量を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -76,20 +79,19 @@ export const trial9Data: Trial9Data = {
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "天然水 350ml×24本 スタンダードケース",
-      priceYen: 980,
-      description:
-        "毎日の飲用に使いやすいケース商品です。必要本数は満たしますが、1本あたりの内容量が小さい商品です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "天然水 通常タイプ",
+      priceYen: 1080,
+      description: "自宅用のストックに使いやすい天然水です。",
       specsAndNotes: [
-        "内容量：350ml×24本",
         "販売単位：1ケース",
         "保存方法：高温・直射日光を避けて保存してください",
+        "内容量：500ml×24本",
       ],
       prePurchaseCheck: [
-        "1本あたりの内容量を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -102,18 +104,17 @@ export const trial9Data: Trial9Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "天然水 500ml×24本 ベーシックケース",
-      priceYen: 1080,
-      description:
-        "日常使いしやすい天然水のケース商品です。条件を満たす中で最も安い商品です。",
+      name: "天然水 ベーシック",
+      priceYen: 980,
+      description: "日常使いしやすい天然水です。",
       specsAndNotes: [
-        "内容量：500ml×24本",
         "販売単位：1ケース",
         "保存方法：高温・直射日光を避けて保存してください",
+        "内容量：500ml×24本",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -124,19 +125,19 @@ export const trial9Data: Trial9Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "dp_target",
       failReason: "quantity_condition",
-      name: "天然水 人気ケース",
-      priceYen: 1120,
-      description:
-        "すっきり飲みやすい天然水のケース商品です。詳細情報の見せ方に注意が必要な商品です。",
+      name: "天然水 標準タイプ",
+      priceYen: 1020,
+      description: "すっきり飲みやすい天然水です。",
       specsAndNotes: [
-        "ケース単位での販売商品です",
+        "販売単位：1ケース",
         "保存方法：高温・直射日光を避けて保存してください",
+        "内容量：350ml×24本",
       ],
       prePurchaseCheck: [
-        "内容量と本数を詳細画面で確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -144,21 +145,46 @@ export const trial9Data: Trial9Data = {
       ],
       imageSrc: "/images/products/water.png",
       dpDisplay: {
-        specLead: "ケース単位での販売商品で、普段使いしやすいサイズ感が案内されています。",
-        boldPackText: "500ml × 12本",
-        specTail: "という構成が目に入りやすい案内ですが、実際の内容量は350mlボトルが12本のセットです。容量を確認したうえで選択してください。",
+        specLead: "ケース販売の商品です。内容量の表記を確認してください。",
+        boldPackText: "500ml相当の使いやすさ",
+        specTail: "実際の内容量は350ml×12本です。",
         isDpTarget: true,
       },
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 200, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 500, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 800, shortDescription: "本日中のお届けが可能です" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 250,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -171,7 +197,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial9Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial9Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

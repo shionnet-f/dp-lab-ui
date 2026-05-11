@@ -1,7 +1,12 @@
 export type Trial1_1Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,14 +53,17 @@ export const trial1_1Data: Trial1_1Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "柔軟剤 詰め替え 1400ml プレミアム",
+      name: "柔軟剤 レギュラー",
       priceYen: 1280,
-      description:
-        "大容量で使いやすい詰め替え用柔軟剤です。まとめ買い向けのプレミアム商品です。",
-      specsAndNotes: ["内容量：1400ml", "形態：詰め替え用", "香り：フローラル"],
+      description: "毎日の洗濯に使いやすい柔軟剤です。",
+      specsAndNotes: [
+        "内容量：1400ml",
+        "形態：詰め替え用",
+        "香り：シトラス",
+      ],
       prePurchaseCheck: [
-        "必要な容量と形態を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -68,14 +76,17 @@ export const trial1_1Data: Trial1_1Data = {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "柔軟剤 本体ボトル 1200ml",
-      priceYen: 980,
-      description:
-        "毎日の洗濯に使いやすい柔軟剤です。容量は満たしますが詰め替え用ではありません。",
-      specsAndNotes: ["内容量：1200ml", "形態：本体ボトル", "香り：フローラル"],
+      name: "柔軟剤 通常タイプ",
+      priceYen: 880,
+      description: "日常使いしやすい柔軟剤です。",
+      specsAndNotes: [
+        "内容量：1200ml",
+        "形態：詰め替え用",
+        "香り：フローラル",
+      ],
       prePurchaseCheck: [
-        "詰め替え用かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -88,14 +99,17 @@ export const trial1_1Data: Trial1_1Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "柔軟剤 詰め替え 1200ml ベーシック",
+      name: "柔軟剤 ベーシック",
       priceYen: 920,
-      description:
-        "使いやすい詰め替え用柔軟剤です。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["内容量：1200ml", "形態：詰め替え用", "香り：シトラス"],
+      description: "家庭で使いやすい柔軟剤です。",
+      specsAndNotes: [
+        "内容量：1200ml",
+        "形態：詰め替え用",
+        "香り：フローラル",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -106,20 +120,19 @@ export const trial1_1Data: Trial1_1Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "柔軟剤 詰め替え 1300ml しっとりタイプ",
-      priceYen: 1080,
-      description:
-        "詰め替え用の大容量柔軟剤です。条件を満たす中ではやや高めの商品です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "柔軟剤 シンプル",
+      priceYen: 980,
+      description: "扱いやすい容量の柔軟剤です。",
       specsAndNotes: [
         "内容量：1300ml",
         "形態：詰め替え用",
-        "香り：ホワイトフローラル",
+        "香り：フローラル",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -127,7 +140,7 @@ export const trial1_1Data: Trial1_1Data = {
       ],
       imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
-    },
+    }
   ],
   shippingMethods: [
     {
@@ -161,7 +174,7 @@ export const trial1_1Data: Trial1_1Data = {
       name: "ギフト包装",
       priceYen: 200,
       shortDescription: "プレゼント用に包装します",
-    },
+    }
   ],
 };
 

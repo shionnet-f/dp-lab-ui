@@ -1,7 +1,12 @@
 export type Trial1_4Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,14 +53,17 @@ export const trial1_4Data: Trial1_4Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "カイロ 貼らないタイプ 80枚 プレミアム",
+      name: "カイロ レギュラー",
       priceYen: 1680,
-      description:
-        "寒い日に使いやすい大容量のカイロです。貼らないタイプのまとめ買い向け商品です。",
-      specsAndNotes: ["枚数：80枚", "タイプ：貼らない", "持続時間：12時間"],
+      description: "寒い日に使いやすいカイロセットです。",
+      specsAndNotes: [
+        "枚数：80枚",
+        "タイプ：貼らない",
+        "持続時間：12時間",
+      ],
       prePurchaseCheck: [
-        "必要な枚数とタイプを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -68,14 +76,17 @@ export const trial1_4Data: Trial1_4Data = {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "カイロ 貼るタイプ 60枚 レギュラー",
-      priceYen: 980,
-      description:
-        "使いやすいカイロのセットです。枚数条件は満たしますが貼るタイプです。",
-      specsAndNotes: ["枚数：60枚", "タイプ：貼る", "持続時間：10時間"],
+      name: "カイロ 通常タイプ",
+      priceYen: 1020,
+      description: "日常使いしやすいカイロセットです。",
+      specsAndNotes: [
+        "枚数：60枚",
+        "タイプ：貼る",
+        "持続時間：10時間",
+      ],
       prePurchaseCheck: [
-        "貼らないタイプかどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -88,14 +99,17 @@ export const trial1_4Data: Trial1_4Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "カイロ 貼らないタイプ 60枚 ベーシック",
-      priceYen: 1080,
-      description:
-        "日常使いしやすい貼らないタイプのカイロです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["枚数：60枚", "タイプ：貼らない", "持続時間：10時間"],
+      name: "カイロ ベーシック",
+      priceYen: 1110,
+      description: "寒い時期に備えやすいカイロセットです。",
+      specsAndNotes: [
+        "枚数：60枚",
+        "タイプ：貼らない",
+        "持続時間：10時間",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -106,16 +120,19 @@ export const trial1_4Data: Trial1_4Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "カイロ 貼らないタイプ 72枚 温感長持ち",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "カイロ シンプル",
       priceYen: 1240,
-      description:
-        "長時間使いやすい貼らないタイプのカイロです。条件を満たす中ではやや高めの商品です。",
-      specsAndNotes: ["枚数：72枚", "タイプ：貼らない", "持続時間：14時間"],
+      description: "まとめて使いやすいカイロセットです。",
+      specsAndNotes: [
+        "枚数：72枚",
+        "タイプ：貼らない",
+        "持続時間：14時間",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -123,7 +140,7 @@ export const trial1_4Data: Trial1_4Data = {
       ],
       imageSrc: "/images/products/hand-warmer.png",
       dpDisplay: null,
-    },
+    }
   ],
   shippingMethods: [
     {
@@ -149,15 +166,15 @@ export const trial1_4Data: Trial1_4Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 400,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 300,
       shortDescription: "プレゼント用に包装します",
-    },
+    }
   ],
 };
 

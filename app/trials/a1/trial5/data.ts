@@ -1,7 +1,12 @@
 export type Trial5Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,13 +53,17 @@ export const trial5Data: Trial5Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "ティッシュペーパー 大容量セット",
+      name: "ボックスティッシュ レギュラー",
       priceYen: 2180,
-      description: "まとめ買い向けのティッシュセットです。日常使いしやすい標準タイプです。",
-      specsAndNotes: ["内容量：200組 × 12箱", "セット数：12箱", "タイプ：ボックスティッシュ"],
+      description: "まとめ買い向けのティッシュセットです。",
+      specsAndNotes: [
+        "内容量：200組 × 12箱",
+        "セット数：12箱",
+        "タイプ：ボックスティッシュ",
+      ],
       prePurchaseCheck: [
-        "予算内かを確認してから選択してください",
-        "必要な箱数と組数を確認してください",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -65,34 +74,42 @@ export const trial5Data: Trial5Data = {
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "ティッシュペーパー まとめ買いセット",
-      priceYen: 1580,
-      description: "日常使い向けのティッシュセットです。保管しやすい箱数で届きます。",
-      specsAndNotes: ["内容量：150組 × 10箱", "セット数：10箱", "タイプ：ボックスティッシュ"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "ボックスティッシュ 通常タイプ",
+      priceYen: 1780,
+      description: "日常使いしやすいティッシュセットです。",
+      specsAndNotes: [
+        "内容量：200組 × 10箱",
+        "セット数：10箱",
+        "タイプ：ボックスティッシュ",
+      ],
       prePurchaseCheck: [
-        "必要な箱数と組数を確認してから選択してください",
-        "購入手続き画面で最終確認ができます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/tissue.png",
-      dpDisplay: { label: "タイムセール 残り18分" },
+      dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "ティッシュペーパー 標準セット",
+      name: "ボックスティッシュ ベーシック",
       priceYen: 1680,
-      description: "毎日の使用に適したティッシュセットです。必要十分な箱数をまとめて購入できます。",
-      specsAndNotes: ["内容量：200組 × 10箱", "セット数：10箱", "タイプ：ボックスティッシュ"],
+      description: "毎日の使用に適したティッシュセットです。",
+      specsAndNotes: [
+        "内容量：200組 × 10箱",
+        "セット数：10箱",
+        "タイプ：ボックスティッシュ",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で最終確認ができます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -103,32 +120,63 @@ export const trial5Data: Trial5Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "ティッシュペーパー 人気セット",
-      priceYen: 1780,
-      description: "使い勝手のよい人気のティッシュセットです。日常使い向けに十分な箱数が入っています。",
-      specsAndNotes: ["内容量：200組 × 10箱", "セット数：10箱", "タイプ：ボックスティッシュ"],
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "ボックスティッシュ 標準タイプ",
+      priceYen: 1730,
+      description: "使い勝手のよいティッシュセットです。",
+      specsAndNotes: [
+        "内容量：200組 × 10箱",
+        "セット数：10箱",
+        "タイプ：ボックスティッシュ",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で最終確認ができます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/tissue.png",
-      dpDisplay: { label: "タイムセール 残り9分" },
+      dpDisplay: {
+        label: "タイムセール 残り9分",
+      },
     },
   ],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 200, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 500, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "当日便", priceYen: 800, shortDescription: "本日中のお届けが可能です" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    },
   ],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 300, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 200, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ],
 };
 
@@ -141,7 +189,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial5Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial5Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 
