@@ -8,6 +8,7 @@ export type Trial1Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 export type ShippingMethod = {
@@ -50,6 +51,7 @@ export const trial1_1Data: Trial1_1Data = {
       specsAndNotes: ["内容量：1500ml", "タイプ：泡タイプ", "形状：詰め替え用"],
       prePurchaseCheck: ["予算内に収まるか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -62,6 +64,7 @@ export const trial1_1Data: Trial1_1Data = {
       specsAndNotes: ["内容量：1400ml", "タイプ：液体タイプ", "形状：詰め替え用"],
       prePurchaseCheck: ["泡タイプの詰め替え用であることか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -74,6 +77,7 @@ export const trial1_1Data: Trial1_1Data = {
       specsAndNotes: ["内容量：1200ml", "タイプ：泡タイプ", "形状：詰め替え用"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -86,6 +90,7 @@ export const trial1_1Data: Trial1_1Data = {
       specsAndNotes: ["内容量：1300ml", "タイプ：泡タイプ", "形状：詰め替え用"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
   ],

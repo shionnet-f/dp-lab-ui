@@ -33,13 +33,17 @@ function RankingAwardBadge({
   dpDisplay: RankingAwardDisplay;
 }) {
   return (
-    <div className="flex h-full w-full min-w-0 flex-col justify-center overflow-hidden border border-orange-400 bg-orange-100 px-3 text-[14px] font-semibold leading-[22px] text-orange-700">
+    <div className="flex h-full w-full min-w-0 flex-col justify-center overflow-hidden px-3 text-[14px] font-semibold leading-[22px] text-orange-700">
       {dpDisplay.rankingLabel ? (
-        <p className="truncate">{dpDisplay.rankingLabel}</p>
+        <span className="rounded bg-sky-100 px-2 py-1 text-[13px] font-semibold leading-none text-sky-700">
+          {dpDisplay.rankingLabel}
+        </span>
       ) : null}
 
       {dpDisplay.awardLabel ? (
-        <p className="truncate">{dpDisplay.awardLabel}</p>
+        <span className="rounded bg-violet-100 px-2 py-1 text-[13px] font-semibold leading-none text-violet-700">
+          {dpDisplay.awardLabel}
+        </span>
       ) : null}
     </div>
   );

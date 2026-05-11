@@ -8,6 +8,7 @@ export type Trial7Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     label?: string;
     subscriptionPriceYen?: number;
@@ -61,6 +62,7 @@ export const trial7Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/flower.svg",
       dpDisplay: null,
     },
     {
@@ -84,6 +86,7 @@ export const trial7Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/flower.svg",
       dpDisplay: null,
     },
     {
@@ -107,6 +110,7 @@ export const trial7Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/flower.svg",
       dpDisplay: null,
     },
     {
@@ -130,6 +134,7 @@ export const trial7Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/flower.svg",
       dpDisplay: {
         rankingLabel: "人気ランキング 1位",
         awardLabel: "フラワーギフト大賞 受賞",

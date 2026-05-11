@@ -8,6 +8,7 @@ export type Trial1Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 export type ShippingMethod = {
@@ -50,6 +51,7 @@ export const trial1_3Data: Trial1_3Data = {
       specsAndNotes: ["サイズ：50mm×50mm", "枚数：90枚×8冊", "罫線：なし"],
       prePurchaseCheck: ["予算内に収まるか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/sticky-notes.png",
       dpDisplay: null,
     },
     {
@@ -62,6 +64,7 @@ export const trial1_3Data: Trial1_3Data = {
       specsAndNotes: ["サイズ：75mm×75mm", "枚数：90枚×5冊", "罫線：なし"],
       prePurchaseCheck: ["50mm×50mmサイズであることか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/sticky-notes.png",
       dpDisplay: null,
     },
     {
@@ -74,6 +77,7 @@ export const trial1_3Data: Trial1_3Data = {
       specsAndNotes: ["サイズ：50mm×50mm", "枚数：90枚×5冊", "罫線：なし"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/sticky-notes.png",
       dpDisplay: null,
     },
     {
@@ -86,6 +90,7 @@ export const trial1_3Data: Trial1_3Data = {
       specsAndNotes: ["サイズ：50mm×50mm", "枚数：100枚×5冊", "罫線：なし"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/sticky-notes.png",
       dpDisplay: null,
     },
   ],

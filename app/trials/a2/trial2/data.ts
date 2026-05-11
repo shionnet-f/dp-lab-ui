@@ -8,6 +8,7 @@ export type Trial2Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 export type ShippingMethod = {
@@ -45,6 +46,7 @@ export const trial2Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/hdmi-cable.png",
       dpDisplay: null,
     },
     {
@@ -63,6 +65,7 @@ export const trial2Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/hdmi-cable.png",
       dpDisplay: null,
     },
     {
@@ -81,6 +84,7 @@ export const trial2Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/hdmi-cable.png",
       dpDisplay: null,
     },
     {
@@ -99,6 +103,7 @@ export const trial2Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/hdmi-cable.png",
       dpDisplay: { label: "現在 23人が見ています" },
     },
   ] satisfies Trial2Product[],

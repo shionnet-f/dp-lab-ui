@@ -8,6 +8,7 @@ export type Trial1Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 export type ShippingMethod = {
@@ -50,6 +51,7 @@ export const trial1_2Data: Trial1_2Data = {
       specsAndNotes: ["容量：30L", "枚数：100枚×3個", "タイプ：半透明"],
       prePurchaseCheck: ["予算内に収まるか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/trash-bag.svg",
       dpDisplay: null,
     },
     {
@@ -62,6 +64,7 @@ export const trial1_2Data: Trial1_2Data = {
       specsAndNotes: ["容量：30L", "枚数：100枚×2個", "タイプ：透明"],
       prePurchaseCheck: ["半透明タイプであることか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/trash-bag.svg",
       dpDisplay: null,
     },
     {
@@ -74,6 +77,7 @@ export const trial1_2Data: Trial1_2Data = {
       specsAndNotes: ["容量：30L", "枚数：50枚×4個", "タイプ：半透明"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/trash-bag.svg",
       dpDisplay: null,
     },
     {
@@ -86,6 +90,7 @@ export const trial1_2Data: Trial1_2Data = {
       specsAndNotes: ["容量：30L", "枚数：70枚×3個", "タイプ：半透明"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/trash-bag.svg",
       dpDisplay: null,
     },
   ],

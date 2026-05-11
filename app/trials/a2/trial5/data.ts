@@ -8,6 +8,7 @@ export type Trial5Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -53,6 +54,7 @@ export const trial5Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -76,6 +78,7 @@ export const trial5Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/shampoo.svg",
       dpDisplay: null,
     },
     {
@@ -99,6 +102,7 @@ export const trial5Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -122,6 +126,7 @@ export const trial5Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: { label: "本日限定タイムセール" },
     },
   ] satisfies Trial5Product[],

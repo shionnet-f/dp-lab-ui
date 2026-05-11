@@ -8,6 +8,7 @@ export type Trial10Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     originalPriceYen?: number;
     displayPriceYen?: number;
@@ -56,6 +57,7 @@ export const trial10Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/copy-paper.png",
       dpDisplay: null,
     },
     {
@@ -78,6 +80,7 @@ export const trial10Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/copy-paper.png",
       dpDisplay: null,
     },
     {
@@ -100,6 +103,7 @@ export const trial10Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/copy-paper.png",
       dpDisplay: null,
     },
     {
@@ -122,6 +126,7 @@ export const trial10Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/copy-paper.png",
       dpDisplay: {
         originalPriceYen: 3980,
         displayPriceYen: 3250,

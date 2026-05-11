@@ -8,6 +8,7 @@ export type Trial6Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { kind: "countdown"; initialSeconds: number } | null;
 };
 
@@ -53,6 +54,7 @@ export const trial6Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: null,
     },
     {
@@ -76,6 +78,7 @@ export const trial6Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: null,
     },
     {
@@ -99,6 +102,7 @@ export const trial6Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: null,
     },
     {
@@ -122,6 +126,7 @@ export const trial6Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: { kind: "countdown", initialSeconds: 120 },
     },
   ] satisfies Trial6Product[],

@@ -8,6 +8,7 @@ export type Trial3Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string; subLabel?: string } | null;
 };
 export type ShippingMethod = {
@@ -45,6 +46,7 @@ export const trial3Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/earphones.png",
       dpDisplay: { label: "★4.7", subLabel: "(421)" },
     },
     {
@@ -63,6 +65,7 @@ export const trial3Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/earphones.png",
       dpDisplay: { label: "★4.1", subLabel: "(88)" },
     },
     {
@@ -81,6 +84,7 @@ export const trial3Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/earphones.png",
       dpDisplay: { label: "★3.9", subLabel: "(64)" },
     },
     {
@@ -99,6 +103,7 @@ export const trial3Data = {
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/earphones.png",
       dpDisplay: { label: "★4.8", subLabel: "(512)" },
     },
   ] satisfies Trial3Product[],

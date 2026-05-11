@@ -50,6 +50,7 @@ type ProductForCard = {
     specsAndNotes: readonly string[] | string;
     prePurchaseCheck: readonly string[];
     deliveryInfo: readonly string[];
+    imageSrc: string;
     dpDisplay?: ProductDpDisplay | null;
 };
 
@@ -87,14 +88,14 @@ export function ProductCard({
     }
 
     return (
-        <article className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
+        <article className="h-full w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="grid h-full grid-cols-[520px_280px_360px]">
                 {/* 左側：商品名・価格 */}
                 <div className="h-full min-w-0 pl-[60px] pr-[20px]">
                     <div className="h-[10px]" />
 
                     <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-                        <h2 className="truncate text-[20px] font-semibold text-gray-900">
+                        <h2 className="truncate text-[22px] font-bold leading-[42px] text-gray-900">
                             {product.name}
                         </h2>
                     </div>
@@ -106,7 +107,7 @@ export function ProductCard({
                     <div className="h-[10px]" />
 
                     <div className="flex h-[30px] items-center overflow-hidden">
-                        <p className="truncate text-[20px] font-semibold text-gray-900">
+                        <p className="truncate text-[28px] font-bold text-gray-900">
                             ¥{yen(getDisplayPriceYen(product))}
                         </p>
                     </div>
@@ -134,7 +135,7 @@ export function ProductCard({
 
                         <button
                             type="button"
-                            className="flex h-[40px] w-[110px] items-center justify-center bg-black text-[15px] font-medium text-white"
+                            className="flex h-[40px] w-[110px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
                             onClick={async () => {
                                 const baseLog = createLogBase();
 

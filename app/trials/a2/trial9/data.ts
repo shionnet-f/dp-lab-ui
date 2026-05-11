@@ -8,6 +8,7 @@ export type Trial9Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     emphasizedVolumeText?: string;
     actualVolumeText?: string;
@@ -56,6 +57,7 @@ export const trial9Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: null,
     },
     {
@@ -78,6 +80,7 @@ export const trial9Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: null,
     },
     {
@@ -100,6 +103,7 @@ export const trial9Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: null,
     },
     {
@@ -122,6 +126,7 @@ export const trial9Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: {
         emphasizedVolumeText: "500ml×12本",
         actualVolumeText: "実際の内容量：350ml×12本",

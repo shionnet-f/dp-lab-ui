@@ -8,6 +8,7 @@ export type Trial8Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -68,6 +69,7 @@ export const trial8Data: Trial8Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/water.png",
     },
     {
       id: "p2",
@@ -90,6 +92,7 @@ export const trial8Data: Trial8Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/water.png",
     },
     {
       id: "p3",
@@ -112,6 +115,7 @@ export const trial8Data: Trial8Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/water.png",
     },
     {
       id: "p4",
@@ -134,6 +138,7 @@ export const trial8Data: Trial8Data = {
         "通常配送は3〜5日でお届けします",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/water.png",
     },
   ],
   shippingMethods: [

@@ -8,6 +8,7 @@ export type Trial1Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 export type ShippingMethod = {
@@ -39,6 +40,7 @@ export const trial1_5Data = {
       specsAndNotes: ["内容量：56錠", "特徴：眠くなりにくいタイプ", "効能：花粉・鼻炎"],
       prePurchaseCheck: ["予算内に収まるか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/medicine.svg",
       dpDisplay: null,
     },
     {
@@ -51,6 +53,7 @@ export const trial1_5Data = {
       specsAndNotes: ["内容量：60錠", "特徴：眠気が出る場合があります", "効能：花粉・鼻炎"],
       prePurchaseCheck: ["眠くなりにくいタイプであることか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/medicine.svg",
       dpDisplay: null,
     },
     {
@@ -63,6 +66,7 @@ export const trial1_5Data = {
       specsAndNotes: ["内容量：56錠", "特徴：眠くなりにくいタイプ", "効能：花粉・鼻炎"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/medicine.svg",
       dpDisplay: null,
     },
     {
@@ -75,6 +79,7 @@ export const trial1_5Data = {
       specsAndNotes: ["内容量：60錠", "特徴：眠くなりにくいタイプ", "効能：花粉・鼻炎"],
       prePurchaseCheck: ["条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"],
+      imageSrc: "/images/products/medicine.svg",
       dpDisplay: null,
     },
   ] satisfies Trial1Product[],

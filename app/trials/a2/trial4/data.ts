@@ -8,6 +8,7 @@ export type Trial4Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -53,6 +54,7 @@ export const trial4Data = {
         "設置の有無によりお届け日が変わる場合があります",
         "地域により大型家電の配送条件が異なる場合があります",
       ],
+      imageSrc: "/images/products/washing-machine.svg",
       dpDisplay: null,
     },
     {
@@ -76,6 +78,7 @@ export const trial4Data = {
         "設置の有無によりお届け日が変わる場合があります",
         "地域により大型家電の配送条件が異なる場合があります",
       ],
+      imageSrc: "/images/products/washing-machine.svg",
       dpDisplay: null,
     },
     {
@@ -99,6 +102,7 @@ export const trial4Data = {
         "設置の有無によりお届け日が変わる場合があります",
         "地域により大型家電の配送条件が異なる場合があります",
       ],
+      imageSrc: "/images/products/washing-machine.svg",
       dpDisplay: null,
     },
     {
@@ -122,6 +126,7 @@ export const trial4Data = {
         "設置の有無によりお届け日が変わる場合があります",
         "地域により大型家電の配送条件が異なる場合があります",
       ],
+      imageSrc: "/images/products/washing-machine.svg",
       dpDisplay: { label: "残り2点" },
     },
   ] satisfies Trial4Product[],

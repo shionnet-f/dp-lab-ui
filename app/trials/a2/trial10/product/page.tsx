@@ -67,7 +67,7 @@ function PriceBlock({
           className={
             large
               ? "min-w-0 truncate text-[28px] font-bold leading-none text-red-600"
-              : "min-w-0 truncate text-[22px] font-bold leading-none text-red-600"
+              : "min-w-0 truncate text-[28px] font-bold leading-none text-red-600"
           }
         >
           ¥{yen(displayPriceYen)}
@@ -80,8 +80,8 @@ function PriceBlock({
     <p
       className={
         large
-          ? "truncate text-[22px] font-semibold leading-[30px] text-gray-900"
-          : "truncate text-[20px] font-semibold text-gray-900"
+          ? "truncate text-[28px] font-bold leading-[30px] text-gray-900"
+          : "truncate text-[22px] font-bold leading-[42px] text-gray-900"
       }
     >
       ¥{yen(basePriceYen)}
@@ -131,19 +131,19 @@ function ProductDetailModal({
           const el = document.getElementById(dialogId) as HTMLDialogElement | null;
           el?.showModal();
         }}
-        className="flex h-[40px] w-[110px] items-center justify-center border border-gray-300 bg-white text-[15px] font-medium text-gray-700"
+        className="flex h-[40px] w-[110px] items-center justify-center rounded-md border border-gray-300 bg-white text-[17px] font-bold text-gray-700"
       >
         詳細を見る
       </button>
 
       <dialog
         id={dialogId}
-        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden rounded-lg p-0 backdrop:bg-black/70"
+        className="fixed left-[470px] top-[110px] h-[860px] w-[980px] overflow-hidden rounded-md p-0 backdrop:bg-black/70"
       >
         <div className="h-full w-full overflow-hidden bg-white">
           {/* 70px：見出しと閉じる */}
           <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[40px]">
-            <h2 className="text-[24px] font-semibold text-gray-900">
+            <h2 className="text-[28px] font-bold text-gray-900">
               商品詳細
             </h2>
 
@@ -163,7 +163,7 @@ function ProductDetailModal({
 
                 closeDialog();
               }}
-              className="flex h-[40px] w-[100px] items-center justify-center border border-gray-300 bg-white text-[15px] font-medium text-gray-700"
+              className="flex h-[40px] w-[100px] items-center justify-center rounded-md border border-gray-300 bg-white text-[17px] font-bold text-gray-700"
             >
               閉じる
             </button>
@@ -174,8 +174,12 @@ function ProductDetailModal({
             <div className="grid h-full grid-cols-[200px_1fr_180px]">
               {/* 左：画像領域 */}
               <div className="flex h-full items-center justify-center">
-                <div className="flex h-[120px] w-[160px] items-center justify-center overflow-hidden rounded-md bg-gray-100 text-[14px] text-gray-400">
-                  画像
+                <div className="flex h-[120px] w-[160px] items-center justify-center overflow-hidden rounded-md bg-gray-50">
+                  <img
+                    src={product.imageSrc}
+                    alt=""
+                    className="max-h-[80px] max-w-[110px] object-contain"
+                  />
                 </div>
               </div>
 
@@ -184,7 +188,7 @@ function ProductDetailModal({
                 <div className="h-[10px]" />
 
                 <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-                  <h3 className="truncate text-[22px] font-semibold text-gray-900">
+                  <h3 className="truncate text-[22px] font-bold leading-[42px] text-gray-900">
                     {product.name}
                   </h3>
                 </div>
@@ -224,12 +228,12 @@ function ProductDetailModal({
           <section className="grid h-[190px] grid-cols-[1fr_1fr] gap-[60px] px-[40px]">
             <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
               <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
+                <h3 className="text-[18px] font-bold text-gray-900">
                   商品説明
                 </h3>
               </div>
 
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
+              <div className="h-[120px] overflow-hidden text-[15px] font-medium leading-[23px] text-gray-700">
                 <p className="truncate">{product.description}</p>
                 <p className="truncate">
                   毎日の使用を想定した定番商品です。
@@ -239,12 +243,12 @@ function ProductDetailModal({
 
             <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
               <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
+                <h3 className="text-[18px] font-bold text-gray-900">
                   仕様・補足
                 </h3>
               </div>
 
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
+              <div className="h-[120px] overflow-hidden text-[15px] font-medium leading-[23px] text-gray-700">
                 {product.specsAndNotes.map((line) => (
                   <p key={line} className="truncate">
                     {line}
@@ -261,12 +265,12 @@ function ProductDetailModal({
           <section className="grid h-[190px] grid-cols-[1fr_1fr] gap-[60px] px-[40px]">
             <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
               <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
+                <h3 className="text-[18px] font-bold text-gray-900">
                   購入前の確認
                 </h3>
               </div>
 
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
+              <div className="h-[120px] overflow-hidden text-[15px] font-medium leading-[23px] text-gray-700">
                 {product.prePurchaseCheck.map((line) => (
                   <p key={line} className="truncate">
                     {line}
@@ -277,12 +281,12 @@ function ProductDetailModal({
 
             <div className="h-full overflow-hidden border border-gray-300 bg-white p-[20px]">
               <div className="h-[30px]">
-                <h3 className="text-[18px] font-semibold text-gray-900">
+                <h3 className="text-[18px] font-bold text-gray-900">
                   配送情報
                 </h3>
               </div>
 
-              <div className="h-[120px] overflow-hidden text-[15px] leading-[30px] text-gray-700">
+              <div className="h-[120px] overflow-hidden text-[15px] font-medium leading-[23px] text-gray-700">
                 {product.deliveryInfo.map((line) => (
                   <p key={line} className="truncate">
                     {line}
@@ -299,7 +303,7 @@ function ProductDetailModal({
           <div className="flex h-[60px] items-center justify-center px-[40px]">
             <button
               type="button"
-              className="flex h-[50px] w-[360px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+              className="flex h-[50px] w-[360px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
               onClick={async () => {
                 const baseLog = createProductLogBase(set, trial);
 
@@ -343,14 +347,14 @@ function ProductCard({ product, set, trial, checkoutPath }: ProductCardProps) {
   const showDiscount = Boolean(dp);
 
   return (
-    <article className="h-full w-full overflow-hidden rounded-lg border border-gray-300 bg-white">
+    <article className="h-full w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
       <div className="grid h-full grid-cols-[520px_280px_360px]">
         {/* 左側：商品名・価格 */}
         <div className="h-full min-w-0 pl-[60px] pr-[20px]">
           <div className="h-[10px]" />
 
           <div className="flex h-[30px] min-w-0 items-center overflow-hidden">
-            <h2 className="truncate text-[20px] font-semibold text-gray-900">
+            <h2 className="truncate text-[22px] font-bold leading-[42px] text-gray-900">
               {product.name}
             </h2>
           </div>
@@ -392,7 +396,7 @@ function ProductCard({ product, set, trial, checkoutPath }: ProductCardProps) {
 
             <button
               type="button"
-              className="flex h-[40px] w-[110px] items-center justify-center bg-black text-[15px] font-medium text-white"
+              className="flex h-[40px] w-[110px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
               onClick={async () => {
                 const baseLog = createProductLogBase(set, trial);
 

@@ -9,6 +9,7 @@ export type Trial11Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     showFreeShipping?: boolean;
   } | null;
@@ -55,6 +56,7 @@ export const trial11Data = {
         "通常配送は送料無料です",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -77,6 +79,7 @@ export const trial11Data = {
         "通常配送は送料無料です",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/shampoo.svg",
       dpDisplay: null,
     },
     {
@@ -99,6 +102,7 @@ export const trial11Data = {
         "通常配送は送料無料です",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {
@@ -121,6 +125,7 @@ export const trial11Data = {
         "通常配送は送料無料です",
         "地域や天候により到着が前後する場合があります",
       ],
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: { showFreeShipping: true }
     },
   ] satisfies Trial11Product[],
