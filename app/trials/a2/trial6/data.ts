@@ -1,13 +1,14 @@
 export type Trial6Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { kind: "countdown"; initialSeconds: number } | null;
 };
 
@@ -33,115 +34,118 @@ export const trial6Data = {
   },
   products: [
     {
+      id: "p3",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "漂白剤 標準タイプ",
+      priceYen: 740,
+      description: "日常使いしやすい漂白剤です。",
+      specsAndNotes: [
+        "内容量：410ml×3本",
+        "用途：衣類用",
+        "種類：漂白剤",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/laundry-detergent.svg",
+      dpDisplay: {
+        kind: "countdown",
+        initialSeconds: 161,
+      },
+    },
+    {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "衣類用漂白剤 450ml×3本 しっかり消臭",
+      name: "漂白剤 レギュラー",
       priceYen: 1080,
-      description:
-        "衣類用で本数条件も満たしていますが、予算を超える商品です。",
+      description: "毎日の洗濯に使いやすい漂白剤です。",
       specsAndNotes: [
         "内容量：450ml×3本",
         "用途：衣類用",
-        "液性：酸素系",
+        "種類：漂白剤",
       ],
       prePurchaseCheck: [
-        "予算内に収まるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: null,
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "キッチン用漂白剤 500ml×3本 まとめ買い",
-      priceYen: 840,
-      description:
-        "本数条件は満たしますが、キッチン用のため衣類用条件を満たしません。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "漂白剤 通常タイプ",
+      priceYen: 790,
+      description: "まとめて使いやすい漂白剤です。",
       specsAndNotes: [
-        "内容量：500ml×3本",
-        "用途：キッチン用",
-        "液性：塩素系",
-      ],
-      prePurchaseCheck: [
-        "衣類用かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
-      ],
-      dpDisplay: null,
-    },
-    {
-      id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "衣類用漂白剤 400ml×3本 ベーシック",
-      priceYen: 780,
-      description:
-        "衣類用で本数条件も満たしており、条件を満たす中で最も安い商品です。",
-      specsAndNotes: [
-        "内容量：400ml×3本",
+        "内容量：420ml×3本",
         "用途：衣類用",
-        "液性：酸素系",
+        "種類：漂白剤",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/laundry-detergent.svg",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "correct",
       failReason: null,
-      name: "衣類用漂白剤 420ml×3本 抗菌プラス",
-      priceYen: 940,
-      description:
-        "衣類用で本数条件も満たす商品です。条件は満たしますが、正解商品より高い商品です。",
+      name: "漂白剤 ベーシック",
+      priceYen: 680,
+      description: "家庭で使いやすい漂白剤です。",
       specsAndNotes: [
-        "内容量：420ml×3本",
+        "内容量：400ml×3本",
         "用途：衣類用",
-        "液性：酸素系",
+        "種類：漂白剤",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: { kind: "countdown", initialSeconds: 120 },
+      imageSrc: "/images/products/laundry-detergent.svg",
+      dpDisplay: null,
     },
   ] satisfies Trial6Product[],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 500,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 800,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "日時指定便",
-      priceYen: 700,
+      priceYen: 800,
       shortDescription: "受け取り日時を指定できます",
     },
   ] satisfies ShippingMethod[],
@@ -149,24 +153,30 @@ export const trial6Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 150,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 130,
       shortDescription: "プレゼント用に包装します",
     },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial6Data.products.find((product) => product.id === productId) ?? trial6Data.products[0];
+  return (
+    trial6Data.products.find((product) => product.id === productId) ??
+    trial6Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial6Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial6Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {

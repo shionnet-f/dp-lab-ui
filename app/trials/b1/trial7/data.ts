@@ -1,15 +1,17 @@
 export type Trial7Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
-  actualPriceYen?: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
+  actualPriceYen?: number;
   dpDisplay?: null;
+
 };
 
 export type ShippingMethod = {
@@ -26,7 +28,20 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial7Data = {
+export type Trial7Data = {
+  trialId?: string;
+  dpType?: string;
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial7Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial7Data: Trial7Data = {
   trialId: "b1-trial7",
   dpType: "最終確認ページで初めてサブスク価格と分かるようにする",
   purchaseConditions: {
@@ -37,141 +52,132 @@ export const trial7Data = {
   products: [
     {
       id: "p1",
-      role: "budget_over",
-      failReason: "budget",
-      name: "高耐久 USB Type-C to Type-C ケーブル 2m",
-      priceYen: 1780,
-      description:
-        "Type-C to Type-C の2mケーブルです。長さと端子条件は満たしますが、予算を超える商品です。",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "USBケーブル レギュラー",
+      priceYen: 1060,
+      actualPriceYen: 1260,
+      description: "充電やデータ転送に使いやすいケーブルです。",
       specsAndNotes: [
-        "長さ：2m",
+        "長さ：1.5m",
         "端子：USB Type-C to Type-C",
-        "急速充電対応",
-        "ナイロン編み込み被覆",
-        "データ転送対応",
+        "急速充電対応"
       ],
       prePurchaseCheck: [
-        "長さと端子形状が条件に合うか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください"
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
+        "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
     {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "USB Type-A to Type-C ケーブル 1.5m",
+      name: "USBケーブル 通常タイプ",
       priceYen: 980,
-      description:
-        "長さは1.5mありますが、端子が Type-C to Type-C ではない商品です。",
+      description: "一般的な充電に使いやすいケーブルです。",
       specsAndNotes: [
         "長さ：1.5m",
         "端子：USB Type-A to Type-C",
-        "急速充電対応",
-        "一般的な充電用ケーブルです",
-        "データ転送対応",
+        "急速充電対応"
       ],
       prePurchaseCheck: [
-        "端子形状が条件に合っているか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください"
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
+        "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "USB Type-C to Type-C ケーブル 1m",
-      priceYen: 1280,
-      description:
-        "Type-C to Type-C の1mケーブルで、条件を満たす中で最も安い商品です。",
+      name: "USBケーブル ベーシック",
+      priceYen: 980,
+      description: "日常使いに適したケーブルです。",
       specsAndNotes: [
         "長さ：1m",
         "端子：USB Type-C to Type-C",
-        "急速充電対応",
-        "データ転送対応",
-        "日常使い向けの標準的なケーブルです",
+        "急速充電対応"
       ],
       prePurchaseCheck: [
-        "長さと端子形状が条件に合うか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください"
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
+        "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "USB Type-C to Type-C ケーブル 1.5m おすすめ版",
-      priceYen: 1160,
-      actualPriceYen: 1560,
-      description:
-        "Type-C to Type-C の1.5mケーブルで、一見すると予算内で購入できそうに見える商品です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "USBケーブル シンプル",
+      priceYen: 1280,
+      description: "取り回ししやすいケーブルです。",
       specsAndNotes: [
         "長さ：1.5m",
         "端子：USB Type-C to Type-C",
-        "急速充電対応",
-        "データ転送対応",
-        "やわらかい被覆で取り回ししやすい仕様です",
-        "在庫状況により発送時期が前後する場合があります",
+        "急速充電対応"
       ],
       prePurchaseCheck: [
-        "長さと端子形状が条件に合うか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください"
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
+        "地域によりお届け日が異なる場合があります"
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
-    },
-  ] satisfies Trial7Product[],
+    }
+  ],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 220,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 480,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
-      name: "日時指定便",
-      priceYen: 320,
-      shortDescription: "受け取り日時を指定できます",
-    },
-  ] satisfies ShippingMethod[],
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    }
+  ],
   options: [
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 450,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 180,
-      shortDescription: "簡易ギフト包装を追加します",
-    },
-    {
-      id: "bag",
-      name: "手提げ袋を追加",
-      priceYen: 80,
-      shortDescription: "持ち運び用の手提げ袋を追加します",
-    },
-  ] satisfies AddonOption[],
+      priceYen: 400,
+      shortDescription: "プレゼント用に包装します",
+    }
+  ],
 };
 
 export function getProductById(productId?: string) {

@@ -1,7 +1,12 @@
 export type Trial11Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -46,99 +51,103 @@ export const trial11Data: Trial11Data = {
   products: [
     {
       id: "p1",
-      role: "budget_over",
-      failReason: "budget",
-      name: "ノンシリコン シャンプー 500ml×2本 プレミアムセット",
-      priceYen: 2680,
-      description:
-        "毎日のヘアケアに使いやすいノンシリコンシャンプーのまとめ買いセットです。",
-      specsAndNotes: [
-        "内容量：500ml×2本",
-        "種類：ノンシリコンシャンプー",
-        "香り：フローラル",
-      ],
-      prePurchaseCheck: [
-        "必要な本数と種類を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は無料です",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      imageSrc: "/images/products/shampoo.svg",
-      dpDisplay: { showFreeShipping: false },
-    },
-    {
-      id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "シャンプー 500ml×2本 しっとりセット",
-      priceYen: 1980,
-      description:
-        "日常使いしやすいシャンプーのセット商品です。本数条件は満たしますがノンシリコンではありません。",
-      specsAndNotes: [
-        "内容量：500ml×2本",
-        "種類：シリコン配合シャンプー",
-        "香り：フローラル",
-      ],
-      prePurchaseCheck: [
-        "ノンシリコンかどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は無料です",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      imageSrc: "/images/products/shampoo.svg",
-      dpDisplay: { showFreeShipping: true },
-    },
-    {
-      id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "ノンシリコン シャンプー 500ml×2本 ベーシックセット",
-      priceYen: 2080,
-      description:
-        "日常使いしやすいノンシリコンシャンプーの標準セットです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: [
-        "内容量：500ml×2本",
-        "種類：ノンシリコンシャンプー",
-        "香り：シトラス",
-      ],
-      prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は無料です",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      imageSrc: "/images/products/shampoo.svg",
-      dpDisplay: { showFreeShipping: false },
-    },
-    {
-      id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "ノンシリコン シャンプー 500ml×2本 人気セット",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "シャンプー スタンダードセット",
       priceYen: 2280,
-      description:
-        "まとめ買い向けのノンシリコンシャンプーセットです。条件を満たす中ではやや高めの商品です。",
+      description: "毎日のヘアケアに使いやすいシャンプーセットです。",
       specsAndNotes: [
         "内容量：500ml×2本",
         "種類：ノンシリコンシャンプー",
         "香り：ホワイトフローラル",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "通常配送は無料です",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/shampoo.svg",
-      dpDisplay: { showFreeShipping: true },
+      dpDisplay: {
+        showFreeShipping: true,
+      },
+    },
+    {
+      id: "p2",
+      role: "budget_over",
+      failReason: "budget",
+      name: "シャンプー レギュラーセット",
+      priceYen: 2680,
+      description: "まとめ買い向けのシャンプーセットです。",
+      specsAndNotes: [
+        "内容量：500ml×2本",
+        "種類：ノンシリコンシャンプー",
+        "香り：フローラル",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "通常配送は無料です",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/shampoo.svg",
+      dpDisplay: {
+        showFreeShipping: false,
+      },
+    },
+    {
+      id: "p3",
+      role: "correct",
+      failReason: null,
+      name: "シャンプー ベーシックセット",
+      priceYen: 2080,
+      description: "日常使いしやすいシャンプーセットです。",
+      specsAndNotes: [
+        "内容量：500ml×2本",
+        "種類：ノンシリコンシャンプー",
+        "香り：シトラス",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "通常配送は無料です",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/shampoo.svg",
+      dpDisplay: {
+        showFreeShipping: false,
+      },
+    },
+    {
+      id: "p4",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "シャンプー シンプルセット",
+      priceYen: 2380,
+      description: "扱いやすい容量のシャンプーセットです。",
+      specsAndNotes: [
+        "内容量：500ml×2本",
+        "種類：ノンシリコンシャンプー",
+        "香り：グリーンフローラル",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "通常配送は無料です",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/shampoo.svg",
+      dpDisplay: {
+        showFreeShipping: false,
+      },
     },
   ],
   shippingMethods: [
@@ -151,27 +160,27 @@ export const trial11Data: Trial11Data = {
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 820,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "当日便",
-      priceYen: 760,
-      shortDescription: "受け取り日時を指定できます",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
     },
   ],
   options: [
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 600,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 500,
       shortDescription: "プレゼント用に包装します",
     },
   ],

@@ -17,7 +17,7 @@ function renderBlock(block: TextBlock, i: number) {
   if (typeof block === "string") {
     if (block.trim() === "") return null;
     return (
-      <p key={i} className="text-[26px] leading-[1.9] tracking-[0.01em] text-gray-800">
+      <p key={i} className="text-[30px] leading-[1.85] tracking-[0.01em] text-gray-800">
         {block}
       </p>
     );
@@ -25,7 +25,7 @@ function renderBlock(block: TextBlock, i: number) {
 
   if (block.type === "text") {
     return (
-      <p key={i} className="text-[26px] leading-[1.9] tracking-[0.01em] text-gray-800">
+      <p key={i} className="text-[30px] leading-[1.85] tracking-[0.01em] text-gray-800">
         {block.content}
       </p>
     );
@@ -33,7 +33,7 @@ function renderBlock(block: TextBlock, i: number) {
 
   if (block.type === "list") {
     return (
-      <ul key={i} className="list-disc space-y-[16px] pl-[36px] text-[26px] leading-[1.75] text-gray-800">
+      <ul key={i} className="list-disc space-y-[16px] pl-[36px] text-[30px] leading-[1.7] text-gray-800">
         {block.items.map((item, j) => (
           <li key={j}>{item}</li>
         ))}
@@ -45,5 +45,5 @@ function renderBlock(block: TextBlock, i: number) {
 }
 
 export default function TextSlide({ body }: TextSlideProps) {
-  return <div className="space-y-[24px]">{body.map((b, i) => renderBlock(b, i))}</div>;
+  return <div className="space-y-[28px]">{body.map((b, i) => renderBlock(b, i))}</div>;
 }

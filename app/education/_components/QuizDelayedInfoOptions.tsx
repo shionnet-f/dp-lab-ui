@@ -7,6 +7,7 @@ type Card = {
   id: string;
   productName: string;
   productPrice: string;
+  imageSrc: string;
   summaryOpen: boolean;
   summaryRows: Array<{ label: string; value: string }>;
 };
@@ -16,6 +17,7 @@ const cards: Card[] = [
     id: "A",
     productName: "天然水 500ml × 24本",
     productPrice: "¥1,980",
+    imageSrc: "/images/products/water.png",
     summaryOpen: true,
     summaryRows: [
       { label: "商品価格", value: "¥1,980" },
@@ -27,6 +29,7 @@ const cards: Card[] = [
     id: "B",
     productName: "天然水 500ml × 24本",
     productPrice: "¥1,980",
+    imageSrc: "/images/products/water.png",
     summaryOpen: true,
     summaryRows: [
       { label: "商品価格", value: "¥1,980" },
@@ -38,6 +41,7 @@ const cards: Card[] = [
     id: "C",
     productName: "天然水 500ml × 24本",
     productPrice: "¥1,980",
+    imageSrc: "/images/products/water.png",
     summaryOpen: false,
     summaryRows: [
       { label: "商品価格", value: "¥1,980" },
@@ -87,7 +91,7 @@ export default function QuizDelayedInfoOptions({
   onSelect,
 }: QuizDelayedInfoOptionsProps) {
   return (
-    <div className="grid grid-cols-3 gap-[16px]">
+    <div className="grid grid-cols-3 gap-[60px]">
       {cards.map((card) => {
         const isSelected = selectedId === card.id;
 
@@ -121,11 +125,20 @@ export default function QuizDelayedInfoOptions({
                   checkout
                 </div>
 
-                <div className="min-h-[40px]">
-                  <h2 className="line-clamp-2 text-sm font-semibold leading-5 text-gray-900">
-                    {card.productName}
-                  </h2>
-                  <p className="mt-1 text-sm font-medium text-gray-800">{card.productPrice}</p>
+                <div className="flex min-h-[64px] items-center gap-3">
+                  <div className="flex h-14 w-16 shrink-0 items-center justify-center rounded-md bg-gray-100 p-2">
+                    <img
+                      src={card.imageSrc}
+                      alt=""
+                      className="max-h-10 max-w-12 object-contain"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <h2 className="line-clamp-2 text-sm font-semibold leading-5 text-gray-900">
+                      {card.productName}
+                    </h2>
+                    <p className="mt-1 text-sm font-medium text-gray-800">{card.productPrice}</p>
+                  </div>
                 </div>
 
                 <SummaryBox card={card} />

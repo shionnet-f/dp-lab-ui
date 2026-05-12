@@ -157,7 +157,7 @@ export function ProductDetailModal({
                   dpArea ? (
                     dpArea
                   ) : (
-                    <div className="flex h-full items-center justify-center border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold leading-[35px] text-orange-700">
+                    <div className="flex h-full items-center justify-center px-3 text-[16px] font-semibold leading-[35px]">
                       <p className="truncate">{viewerText}</p>
                     </div>
                   )

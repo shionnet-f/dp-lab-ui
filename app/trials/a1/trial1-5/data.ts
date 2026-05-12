@@ -1,7 +1,12 @@
 export type Trial1_5Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,14 +53,17 @@ export const trial1_5Data: Trial1_5Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "防災セット 1人用 プレミアム 38点",
+      name: "防災セット レギュラー",
       priceYen: 10800,
-      description:
-        "災害時に役立つ防災用品をまとめた1人用セットです。高機能な用品を多く含みます。",
-      specsAndNotes: ["対象：1人用", "内容：防災用品中心", "点数：38点"],
+      description: "災害時に役立つ用品をまとめた防災セットです。",
+      specsAndNotes: [
+        "対象：1人用",
+        "内容：防災用品中心",
+        "点数：38点",
+      ],
       prePurchaseCheck: [
-        "対象人数とセット内容を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -68,14 +76,17 @@ export const trial1_5Data: Trial1_5Data = {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "非常食中心 防災セット 1人用",
-      priceYen: 6980,
-      description:
-        "非常食を中心に構成された1人用セットです。防災用品中心ではありません。",
-      specsAndNotes: ["対象：1人用", "内容：食品中心", "点数：20点"],
+      name: "防災セット 通常タイプ",
+      priceYen: 7620,
+      description: "災害時の備えに使える防災セットです。",
+      specsAndNotes: [
+        "対象：1人用",
+        "内容：食品中心",
+        "点数：20点",
+      ],
       prePurchaseCheck: [
-        "食品中心ではなく防災用品中心かを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -88,14 +99,17 @@ export const trial1_5Data: Trial1_5Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "防災セット 1人用 ベーシック 24点",
-      priceYen: 7980,
-      description:
-        "防災用品を中心にまとめた1人用の基本セットです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["対象：1人用", "内容：防災用品中心", "点数：24点"],
+      name: "防災セット ベーシック",
+      priceYen: 8150,
+      description: "基本的な備えをまとめた防災セットです。",
+      specsAndNotes: [
+        "対象：1人用",
+        "内容：防災用品中心",
+        "点数：24点",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -106,16 +120,19 @@ export const trial1_5Data: Trial1_5Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "防災セット 1人用 充実 30点",
-      priceYen: 8980,
-      description:
-        "防災用品を中心にまとめた1人用セットです。条件を満たす中ではやや高めの商品です。",
-      specsAndNotes: ["対象：1人用", "内容：防災用品中心", "点数：30点"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "防災セット シンプル",
+      priceYen: 9330,
+      description: "防災用品をまとめて備えられるセットです。",
+      specsAndNotes: [
+        "対象：1人用",
+        "内容：防災用品中心",
+        "点数：30点",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -123,7 +140,7 @@ export const trial1_5Data: Trial1_5Data = {
       ],
       imageSrc: "/images/products/emergency-kit.png",
       dpDisplay: null,
-    },
+    }
   ],
   shippingMethods: [
     {
@@ -149,15 +166,15 @@ export const trial1_5Data: Trial1_5Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 2200,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 2000,
       shortDescription: "プレゼント用に包装します",
-    },
+    }
   ],
 };
 

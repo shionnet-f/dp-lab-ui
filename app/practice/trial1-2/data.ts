@@ -9,6 +9,7 @@ export type practice1_2Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: null;
+  imageSrc: string;
 };
 
 export type ShippingMethod = {
@@ -44,7 +45,7 @@ export const practice1_2Data: practice1_2Data = {
   },
   products: [
     {
-      id: "a1-t1-6-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "コピー用紙 A4 1000枚",
@@ -54,9 +55,10 @@ export const practice1_2Data: practice1_2Data = {
       prePurchaseCheck: ["サイズと枚数を確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/copy-paper.png",
     },
     {
-      id: "a1-t1-6-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "コピー用紙 B5 500枚",
@@ -66,9 +68,10 @@ export const practice1_2Data: practice1_2Data = {
       prePurchaseCheck: ["A4サイズか確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/copy-paper.png",
     },
     {
-      id: "a1-t1-6-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "コピー用紙 A4 500枚",
@@ -78,9 +81,10 @@ export const practice1_2Data: practice1_2Data = {
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/copy-paper.png",
     },
     {
-      id: "a1-t1-6-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "コピー用紙 A4 750枚",
@@ -90,6 +94,7 @@ export const practice1_2Data: practice1_2Data = {
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/copy-paper.png",
     },
   ],
   shippingMethods: [

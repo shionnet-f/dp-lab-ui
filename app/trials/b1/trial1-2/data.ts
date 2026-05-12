@@ -1,14 +1,16 @@
 export type Trial1_2Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
+
 };
 
 export type ShippingMethod = {
@@ -39,86 +41,102 @@ export type Trial1_2Data = {
 export const trial1_2Data: Trial1_2Data = {
   purchaseConditions: {
     budgetYen: 1300,
-    quantityCondition: "Mサイズで100枚以上入っていること",
-    specificCondition: "冷凍保存に対応していること",
+    quantityCondition: "30枚以上であること",
+    specificCondition: "冷凍保存対応であること",
   },
   products: [
     {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "フリーザーバッグ Mサイズ 120枚 プレミアム",
+      name: "フリーザーバッグ レギュラー",
       priceYen: 1380,
-      description:
-        "冷凍保存にも使える便利な保存バッグです。大容量のプレミアムパックです。",
-      specsAndNotes: ["サイズ：M", "枚数：120枚", "対応：冷凍保存対応"],
+      description: "日常使いしやすい商品です。",
+      specsAndNotes: [
+          "枚数：40枚",
+          "対応：冷凍保存対応",
+          "サイズ：M"
+        ],
       prePurchaseCheck: [
-        "必要なサイズと枚数を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
+      imageSrc: "/images/products/freezer-bag.svg",
       dpDisplay: null,
     },
     {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "保存バッグ Mサイズ 110枚 キッチン用",
-      priceYen: 980,
-      description:
-        "日常使いしやすい保存バッグです。枚数条件は満たしますが冷凍保存には対応していません。",
-      specsAndNotes: ["サイズ：M", "枚数：110枚", "対応：冷蔵保存向け"],
+      name: "フリーザーバッグ 通常タイプ",
+      priceYen: 880,
+      description: "扱いやすい標準的な商品です。",
+      specsAndNotes: [
+          "枚数：30枚",
+          "対応：常温保存用",
+          "サイズ：M"
+        ],
       prePurchaseCheck: [
-        "冷凍保存に対応しているかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
+      imageSrc: "/images/products/freezer-bag.svg",
       dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "フリーザーバッグ Mサイズ 100枚 ベーシック",
-      priceYen: 880,
-      description:
-        "冷凍保存に対応した使いやすいフリーザーバッグです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["サイズ：M", "枚数：100枚", "対応：冷凍保存対応"],
+      name: "フリーザーバッグ ベーシック",
+      priceYen: 860,
+      description: "毎日の使用に適した商品です。",
+      specsAndNotes: [
+          "枚数：30枚",
+          "対応：冷凍保存対応",
+          "サイズ：M"
+        ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
+      imageSrc: "/images/products/freezer-bag.svg",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "フリーザーバッグ Mサイズ 120枚 ダブルジッパー",
-      priceYen: 1080,
-      description:
-        "冷凍保存に対応した保存バッグです。条件を満たす中ではやや高めの商品です。",
-      specsAndNotes: ["サイズ：M", "枚数：120枚", "対応：冷凍保存対応"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "フリーザーバッグ シンプル",
+      priceYen: 1020,
+      description: "幅広い場面で使いやすい商品です。",
+      specsAndNotes: [
+          "枚数：35枚",
+          "対応：冷凍保存対応",
+          "サイズ：M"
+        ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
+      imageSrc: "/images/products/freezer-bag.svg",
       dpDisplay: null,
-    },
+    }
   ],
   shippingMethods: [
     {
@@ -138,7 +156,7 @@ export const trial1_2Data: Trial1_2Data = {
       name: "当日便",
       priceYen: 800,
       shortDescription: "本日中のお届けが可能です",
-    },
+    }
   ],
   options: [
     {
@@ -150,9 +168,9 @@ export const trial1_2Data: Trial1_2Data = {
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 250,
       shortDescription: "プレゼント用に包装します",
-    },
+    }
   ],
 };
 

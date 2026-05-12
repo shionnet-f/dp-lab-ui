@@ -8,6 +8,7 @@ export type Trial2Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
   hiddenDetailsTitle?: string;
 };
@@ -70,6 +71,7 @@ export const trial2Data: Trial2Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/toilet-paper.svg",
     },
     {
       id: "p2",
@@ -93,6 +95,7 @@ export const trial2Data: Trial2Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/toilet-paper.svg",
     },
     {
       id: "p3",
@@ -116,6 +119,7 @@ export const trial2Data: Trial2Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/toilet-paper.svg",
     },
     {
       id: "p4",
@@ -139,6 +143,7 @@ export const trial2Data: Trial2Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/toilet-paper.svg",
     },
   ],
   shippingMethods: [

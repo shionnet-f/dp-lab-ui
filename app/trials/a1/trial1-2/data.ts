@@ -1,7 +1,12 @@
 export type Trial1_2Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive";
+  failReason:
+    | "budget"
+    | "quantity_condition"
+    | "specific_condition"
+    | "not_lowest"
+    | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,14 +53,17 @@ export const trial1_2Data: Trial1_2Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "フリーザーバッグ Mサイズ 120枚 プレミアム",
+      name: "保存バッグ レギュラー",
       priceYen: 1380,
-      description:
-        "冷凍保存にも使える便利な保存バッグです。大容量のプレミアムパックです。",
-      specsAndNotes: ["サイズ：M", "枚数：120枚", "対応：冷凍保存対応"],
+      description: "食品の保存に使いやすい保存バッグです。",
+      specsAndNotes: [
+        "サイズ：M",
+        "枚数：120枚",
+        "対応：冷凍保存対応",
+      ],
       prePurchaseCheck: [
-        "必要なサイズと枚数を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -68,14 +76,17 @@ export const trial1_2Data: Trial1_2Data = {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "保存バッグ Mサイズ 110枚 キッチン用",
-      priceYen: 980,
-      description:
-        "日常使いしやすい保存バッグです。枚数条件は満たしますが冷凍保存には対応していません。",
-      specsAndNotes: ["サイズ：M", "枚数：110枚", "対応：冷蔵保存向け"],
+      name: "保存バッグ 通常タイプ",
+      priceYen: 780,
+      description: "日常使いしやすい保存バッグです。",
+      specsAndNotes: [
+        "サイズ：M",
+        "枚数：110枚",
+        "対応：冷蔵保存向け",
+      ],
       prePurchaseCheck: [
-        "冷凍保存に対応しているかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -88,14 +99,17 @@ export const trial1_2Data: Trial1_2Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "フリーザーバッグ Mサイズ 100枚 ベーシック",
+      name: "保存バッグ ベーシック",
       priceYen: 880,
-      description:
-        "冷凍保存に対応した使いやすいフリーザーバッグです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["サイズ：M", "枚数：100枚", "対応：冷凍保存対応"],
+      description: "食品の小分けに使いやすい保存バッグです。",
+      specsAndNotes: [
+        "サイズ：M",
+        "枚数：100枚",
+        "対応：冷凍保存対応",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -106,16 +120,19 @@ export const trial1_2Data: Trial1_2Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "フリーザーバッグ Mサイズ 120枚 ダブルジッパー",
-      priceYen: 1080,
-      description:
-        "冷凍保存に対応した保存バッグです。条件を満たす中ではやや高めの商品です。",
-      specsAndNotes: ["サイズ：M", "枚数：120枚", "対応：冷凍保存対応"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "保存バッグ シンプル",
+      priceYen: 980,
+      description: "まとめて使いやすい保存バッグです。",
+      specsAndNotes: [
+        "サイズ：M",
+        "枚数：120枚",
+        "対応：冷凍保存対応",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -123,7 +140,7 @@ export const trial1_2Data: Trial1_2Data = {
       ],
       imageSrc: "/images/products/freezer-bag.svg",
       dpDisplay: null,
-    },
+    }
   ],
   shippingMethods: [
     {
@@ -155,9 +172,9 @@ export const trial1_2Data: Trial1_2Data = {
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 250,
       shortDescription: "プレゼント用に包装します",
-    },
+    }
   ],
 };
 

@@ -2,6 +2,7 @@
 
 import { trackAction } from "@/app/actions/track";
 import { getClientLogBase } from "@/lib/log/clientLogBase";
+
 function getImplTrialId() {
   const segments = window.location.pathname.split("/").filter(Boolean);
   const trialsIndex = segments.indexOf("trials");
@@ -10,103 +11,107 @@ function getImplTrialId() {
     return segments[trialsIndex + 2] ?? null;
   }
 
-  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
-  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+  const setIdIndex = segments.findIndex((segment) =>
+    ["a1", "a2", "b1", "b2"].includes(segment),
+  );
+  return setIdIndex >= 0 ? (segments[setIdIndex + 1] ?? null) : null;
 }
 
 type OptionItem = {
-    id: string;
-    name: string;
-    priceYen: number;
-    shortDescription: string;
+  id: string;
+  name: string;
+  priceYen: number;
+  shortDescription: string;
 };
 
 type OptionSectionProps = {
-    options: OptionItem[];
-    selectedOptions: string[];
-    onToggleOption: (id: string) => void;
-    set: string;
-    trial: string;
+  options: OptionItem[];
+  selectedOptions: string[];
+  onToggleOption: (id: string) => void;
+  set: string;
+  trial: string;
 };
 
 function yen(n: number) {
-    return new Intl.NumberFormat("ja-JP").format(n);
+  return new Intl.NumberFormat("ja-JP").format(n);
 }
 
 export function OptionSection({
-    options,
-    selectedOptions,
-    onToggleOption,
-    set,
-    trial,
+  options,
+  selectedOptions,
+  onToggleOption,
+  set,
+  trial,
 }: OptionSectionProps) {
-    function createLogBase() {
-        const logParams = new URLSearchParams();
-        logParams.set("set", set);
-        logParams.set("trial", trial);
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+    logParams.set("set", set);
+    logParams.set("trial", trial);
 
-        return getClientLogBase({ searchParams: logParams });
-    }
-    return (
-        <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-            <div className="h-[15px]" />
+    return getClientLogBase({ searchParams: logParams });
+  }
 
-            <div className="flex h-[30px] items-center px-5">
-                <h2 className="text-base font-semibold text-gray-900">
-                    追加オプション
-                </h2>
-            </div>
+  return (
+    <article className="h-[438px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="h-[15px]" />
 
-            <div className="h-[123px]" />
+      <div className="flex h-[30px] items-center px-5">
+        <h2 className="text-[20px] font-bold text-gray-900">追加オプション</h2>
+      </div>
 
-            {options.map((option, index) => {
-                const selected = selectedOptions.includes(option.id);
+      <div className="h-[123px]" />
 
-                return (
-                    <div key={option.id}>
-                        <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-sm text-gray-700">
-                            <input
-                                type="checkbox"
-                                checked={selected}
-                                onChange={() => {
-                                    onToggleOption(option.id);
+      {options.map((option, index) => {
+        const selected = selectedOptions.includes(option.id);
 
-                                    const baseLog = createLogBase();
+        return (
+          <div key={option.id}>
+            <label className="mx-5 flex h-[66px] items-center gap-3 rounded-md border border-gray-200 px-4 text-gray-700">
+              <input
+                type="checkbox"
+                checked={selected}
+                onChange={() => {
+                  onToggleOption(option.id);
 
-                                    void trackAction({
-                                        ...baseLog,
-                                        phase: "main",
-                                        page: "checkout",
-                                        type: "option_toggle",
-                                        meta: { implTrialId: getImplTrialId() },
-                                        payload: {
-                                            optionId: option.id,
-                                            selected: !selected,
-                                            priceYen: option.priceYen,
-                                        },
-                                    });
-                                }}
-                            />
+                  const baseLog = createLogBase();
 
-                            <div className="min-w-0 leading-tight">
-                                <div className="truncate font-medium text-gray-900">
-                                    {option.name}
-                                </div>
-                                <div className="truncate text-gray-600">
-                                    {option.shortDescription}
-                                </div>
-                                <div className="text-gray-700">
-                                    +¥{yen(option.priceYen)}
-                                </div>
-                            </div>
-                        </label>
+                  void trackAction({
+                    ...baseLog,
+                    phase: "main",
+                    page: "checkout",
+                    type: "option_toggle",
+                    meta: { implTrialId: getImplTrialId() },
+                    payload: {
+                      optionId: option.id,
+                      selected: !selected,
+                      priceYen: option.priceYen,
+                    },
+                  });
+                }}
+              />
 
-                        {index < options.length - 1 && <div className="h-[60px]" />}
-                    </div>
-                );
-            })}
+              <div className="flex min-w-0 flex-1 items-center justify-between gap-4">
+                <div className="min-w-0 leading-tight">
+                  <div className="truncate text-[18px] font-bold text-gray-900">
+                    {option.name}
+                  </div>
+                  <div className="mt-1 truncate text-[15px] font-semibold text-gray-600">
+                    {option.shortDescription}
+                  </div>
+                </div>
 
-            <div className="h-[123px]" />
-        </article>
-    );
+                <div className="shrink-0 text-right text-[22px] font-bold text-gray-900">
+                  +¥{yen(option.priceYen)}
+                </div>
+              </div>
+            </label>
+
+            {index < options.length - 1 && <div className="h-[60px]" />}
+          </div>
+        );
+      })}
+
+      <div className="h-[123px]" />
+    </article>
+  );
 }

@@ -47,7 +47,7 @@ function ProductDetailModalB1Trial6({
     <>
       <button
         type="button"
-        className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+        className="flex items-center justify-center border border-gray-300 rounded-md text-[18px] font-bold text-black"
         onClick={() => {
           trackAction({
             ...createLogBase(),
@@ -73,13 +73,13 @@ function ProductDetailModalB1Trial6({
       >
         <div className="h-full w-full overflow-hidden bg-white">
           <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[60px]">
-            <h2 className="text-[24px] font-semibold text-gray-900">
+            <h2 className="text-[28px] font-bold text-gray-900">
               商品詳細
             </h2>
 
             <button
               type="button"
-              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
+              className="h-[40px] w-[100px] rounded-md border border-gray-300 bg-white text-[17px] font-bold text-gray-700"
               onClick={() => {
                 trackAction({
                   ...createLogBase(),
@@ -105,8 +105,12 @@ function ProductDetailModalB1Trial6({
             <div className="flex w-[400px] flex-col">
               <div className="h-[60px]" />
 
-              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-100 text-[14px] text-gray-400">
-                画像エリア
+              <section className="flex h-[160px] items-center justify-center border border-gray-300 bg-gray-50 text-[14px] text-gray-400">
+                <img
+                  src={product.imageSrc}
+                  alt=""
+                  className="max-h-[80px] max-w-[110px] object-contain"
+                />
               </section>
 
               <div className="h-[60px]" />
@@ -116,7 +120,7 @@ function ProductDetailModalB1Trial6({
                   商品説明
                 </h3>
 
-                <div className="h-[94px] overflow-hidden text-[14px] leading-[22px] text-gray-600">
+                <div className="h-[94px] overflow-hidden text-[15px] font-medium leading-[23px] text-gray-600">
                   <p>{product.description}</p>
                   <p>
                     毎日の使用を想定した定番商品です。購入前に内容をよく確認してください。
@@ -132,7 +136,7 @@ function ProductDetailModalB1Trial6({
                   仕様・補足
                 </h3>
 
-                <div className="h-[94px] overflow-y-auto pr-[6px] text-[14px] leading-[22px] text-gray-600">
+                <div className="h-[94px] overflow-y-auto pr-[6px] text-[15px] font-medium leading-[23px] text-gray-600">
                   <div className="space-y-[8px]">
                     {product.specsAndNotes.map((line) => (
                       <div key={line}>{line}</div>
@@ -152,24 +156,24 @@ function ProductDetailModalB1Trial6({
 
               <div className="h-[60px]" />
 
-              <h3 className="h-[35px] overflow-hidden text-[20px] font-bold leading-[35px] text-gray-900">
+              <h3 className="h-[35px] overflow-hidden text-[22px] font-bold leading-[35px] text-gray-900">
                 {product.name}
               </h3>
 
               <div className="h-[60px]" />
 
-              <p className="h-[35px] text-[22px] font-semibold leading-[35px] text-gray-900">
+              <p className="h-[35px] text-[26px] font-bold leading-[35px] text-gray-900">
                 ¥{yen(displayPriceYen)}
               </p>
 
               <div className="h-[60px]" />
 
               <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
-                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                <h4 className="mb-[12px] text-[18px] font-bold text-gray-900">
                   購入前の確認
                 </h4>
 
-                <div className="text-[14px] leading-[22px] text-gray-700">
+                <div className="text-[15px] font-medium leading-[23px] text-gray-700">
                   {product.prePurchaseCheck.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
@@ -179,11 +183,11 @@ function ProductDetailModalB1Trial6({
               <div className="h-[60px]" />
 
               <section className="h-[120px] overflow-hidden border border-gray-300 p-[16px]">
-                <h4 className="mb-[12px] text-[16px] font-semibold text-gray-900">
+                <h4 className="mb-[12px] text-[18px] font-bold text-gray-900">
                   配送に関わる情報
                 </h4>
 
-                <div className="text-[14px] leading-[22px] text-gray-700">
+                <div className="text-[15px] font-medium leading-[23px] text-gray-700">
                   {product.deliveryInfo.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
@@ -194,7 +198,7 @@ function ProductDetailModalB1Trial6({
 
               <button
                 type="button"
-                className="flex h-[50px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                className="flex h-[50px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
                 onClick={async () => {
                   await trackAction({
                     ...createLogBase(),
@@ -245,13 +249,13 @@ function ProductCardB1Trial6({ product, set, trial }: ProductCardB1Trial6Props) 
       <div className="flex h-full flex-col px-[60px]">
         <div className="h-[15px]" />
 
-        <h2 className="h-[42px] overflow-hidden text-[20px] font-semibold leading-[42px] text-gray-900">
+        <h2 className="h-[42px] overflow-hidden text-[22px] font-bold leading-[42px] text-gray-900">
           {product.name}
         </h2>
 
         <div className="h-[60px]" />
 
-        <p className="h-[42px] overflow-hidden text-[22px] font-semibold leading-[42px] text-gray-900">
+        <p className="h-[42px] overflow-hidden text-[28px] font-bold leading-[42px] text-gray-900">
           ¥{yen(displayPriceYen)}
         </p>
 
@@ -267,7 +271,7 @@ function ProductCardB1Trial6({ product, set, trial }: ProductCardB1Trial6Props) 
           <ProductDetailModalB1Trial6 product={product} set={set} trial={trial} />
 
           <button
-            className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+            className="flex items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
             onClick={async () => {
               await trackAction({
                 ...createLogBase(),

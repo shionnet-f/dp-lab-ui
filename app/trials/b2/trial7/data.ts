@@ -9,6 +9,7 @@ export type Trial7Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
 };
 
@@ -58,6 +59,7 @@ export const trial7Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
     {
@@ -83,6 +85,7 @@ export const trial7Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
     {
@@ -108,6 +111,7 @@ export const trial7Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
     {
@@ -135,6 +139,7 @@ export const trial7Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/usb-c-cable.svg",
       dpDisplay: null,
     },
   ] satisfies Trial7Product[],

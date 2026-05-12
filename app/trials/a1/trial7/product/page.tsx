@@ -76,16 +76,16 @@ export default function ProductPageA1Trial7() {
               checkoutPath={checkoutPath}
               dpArea={
                 product.dpDisplay ? (
-                  <div className="flex h-full items-center justify-center overflow-hidden">
-                    <div className="flex max-w-full flex-wrap items-center justify-center gap-2">
+                  <div className="flex h-full items-center justify-start overflow-hidden">
+                    <div className="flex max-w-full flex-wrap items-center justify-start gap-2">
                       {product.dpDisplay.rankingLabel ? (
-                        <span className="rounded bg-sky-100 px-2 py-1 text-[13px] font-semibold leading-none text-sky-700">
+                        <span className="rounded bg-sky-100 px-3 py-1 text-[16px] font-bold leading-none text-sky-700">
                           {product.dpDisplay.rankingLabel}
                         </span>
                       ) : null}
 
                       {product.dpDisplay.awardLabel ? (
-                        <span className="rounded bg-violet-100 px-2 py-1 text-[13px] font-semibold leading-none text-violet-700">
+                        <span className="rounded bg-violet-100 px-3 py-1 text-[16px] font-bold leading-none text-violet-700">
                           {product.dpDisplay.awardLabel}
                         </span>
                       ) : null}

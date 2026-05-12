@@ -84,7 +84,7 @@ export default function ConfirmPagePracticeTrial1_1() {
         />
 
         {error && (
-          <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
+          <div className="fixed left-1/2 top-6 z-50 w-[480px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-[18px] font-bold text-red-700 shadow-lg">
             配送方法を選択してください
           </div>
         )}

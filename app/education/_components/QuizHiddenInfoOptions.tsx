@@ -11,6 +11,7 @@ type Card = {
   id: string;
   productName: string;
   price: string;
+  imageSrc: string;
   variant: "clean" | "embedded";
 };
 
@@ -19,18 +20,21 @@ const cards: Card[] = [
     id: "A",
     productName: "天然水 500ml × 24本",
     price: "¥1,980",
+    imageSrc: "/images/products/water.png",
     variant: "clean",
   },
   {
     id: "B",
     productName: "天然水 500ml × 24本",
     price: "¥1,980",
+    imageSrc: "/images/products/water.png",
     variant: "embedded",
   },
   {
     id: "C",
     productName: "天然水 500ml × 24本",
     price: "¥1,980",
+    imageSrc: "/images/products/water.png",
     variant: "clean",
   },
 ];
@@ -79,7 +83,7 @@ export default function QuizHiddenInfoOptions({
   onSelect,
 }: QuizHiddenInfoOptionsProps) {
   return (
-    <div className="grid grid-cols-3 gap-[16px]">
+    <div className="grid grid-cols-3 gap-[60px]">
       {cards.map((card) => {
         const isSelected = selectedId === card.id;
 
@@ -109,8 +113,12 @@ export default function QuizHiddenInfoOptions({
 
             <article className="rounded-xl border border-gray-200 bg-white p-3 pt-8">
               <div className="grid gap-3">
-                <div className="flex h-24 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-                  画像エリア
+                <div className="flex h-24 w-full items-center justify-center rounded-lg bg-gray-100 p-3">
+                  <img
+                    src={card.imageSrc}
+                    alt=""
+                    className="max-h-16 max-w-24 object-contain"
+                  />
                 </div>
 
                 <div className="min-h-[40px]">

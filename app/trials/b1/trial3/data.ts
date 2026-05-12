@@ -1,13 +1,24 @@
 export type Trial3Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role:
+  | "budget_over"
+  | "condition_ng"
+  | "correct"
+  | "valid_but_expensive"
+  | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -36,6 +47,32 @@ export type Trial3Data = {
   options: AddonOption[];
 };
 
+export const SHIPPING_PRICE_TABLE: Record<
+  string,
+  Record<string, number>
+> = {
+  p1: {
+    standard: 900,
+    express: 1200,
+    scheduled: 1500,
+  },
+  p2: {
+    standard: 200,
+    express: 500,
+    scheduled: 800,
+  },
+  p3: {
+    standard: 200,
+    express: 500,
+    scheduled: 800,
+  },
+  p4: {
+    standard: 300,
+    express: 600,
+    scheduled: 900,
+  },
+};
+
 export const trial3Data: Trial3Data = {
   purchaseConditions: {
     budgetYen: 8000,
@@ -45,139 +82,157 @@ export const trial3Data: Trial3Data = {
   products: [
     {
       id: "p1",
-      role: "budget_over",
-      failReason: "budget",
-      name: "白米 10kg 特選ブレンド米",
-      priceYen: 8280,
-      description:
-        "毎日の食卓で使いやすい白米10kgの商品です。条件は満たしますが、予算を超える価格です。",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "米 レギュラー",
+      priceYen: 6200,
+      description: "家庭用に使いやすい米です。",
       specsAndNotes: [
         "内容量：10kg",
         "種類：白米",
         "精米時期：商品ラベルに記載",
-        "保存は高温多湿を避けてください",
       ],
       prePurchaseCheck: [
-        "必要な重量と米の種類を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
+        "配送料金は最終確認画面で表示されます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
+      dpDisplay: {
+        label: "配送料金は最終確認で表示",
+      },
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "無洗米 10kg 家庭用パック",
-      priceYen: 6980,
-      description:
-        "10kg入りで価格は抑えめですが、白米ではなく無洗米の商品です。",
+      role: "budget_over",
+      failReason: "budget",
+      name: "米 スタンダード",
+      priceYen: 8280,
+      description: "まとめ買い向けの米です。",
       specsAndNotes: [
         "内容量：10kg",
-        "種類：無洗米",
+        "種類：白米",
         "精米時期：商品ラベルに記載",
-        "保存は高温多湿を避けてください",
       ],
       prePurchaseCheck: [
-        "白米かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
+        "配送料金は最終確認画面で表示されます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
+      dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "白米 10kg ベーシック",
+      name: "米 ベーシック",
       priceYen: 6480,
-      description:
-        "日常使いしやすい白米10kgの商品です。条件を満たす中で最も安い商品です。",
+      description: "日常使いしやすい米です。",
       specsAndNotes: [
         "内容量：10kg",
         "種類：白米",
         "精米時期：商品ラベルに記載",
-        "保存は高温多湿を避けてください",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
+        "配送料金は最終確認画面で表示されます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
+      dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "白米 10kg 食べ比べブレンド",
-      priceYen: 6920,
-      description:
-        "白米10kgの商品です。条件を満たしますが、正解商品より少し高い価格です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "米 シンプル",
+      priceYen: 7280,
+      description: "保管しやすい米です。",
       specsAndNotes: [
         "内容量：10kg",
         "種類：白米",
         "精米時期：商品ラベルに記載",
-        "風味の異なる原料米を使用しています",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
+        "配送料金は最終確認画面で表示されます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/rice.png",
+      dpDisplay: null,
     },
   ],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 500,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 800,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
-      name: "日時指定便",
-      priceYen: 700,
-      shortDescription: "希望日時にあわせてお届け",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
     },
   ],
   options: [
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 1500,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 1400,
       shortDescription: "プレゼント用に包装します",
     },
   ],
 };
 
 export function getProductById(productId?: string) {
-  return trial3Data.products.find((product) => product.id === productId) ?? trial3Data.products[0];
+  return (
+    trial3Data.products.find((product) => product.id === productId) ??
+    trial3Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial3Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial3Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
+}
+
+export function getShippingPrice(productId?: string, shippingId?: string) {
+  if (!productId || !shippingId) return 0;
+
+  return (
+    SHIPPING_PRICE_TABLE[productId]?.[shippingId] ??
+    getShippingById(shippingId)?.priceYen ??
+    0
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {

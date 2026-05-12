@@ -1,7 +1,12 @@
 export type Trial10Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -52,18 +57,17 @@ export const trial10Data: Trial10Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "アルカリ乾電池 単3 24本 プレミアムパック",
+      name: "乾電池 レギュラーパック",
       priceYen: 1680,
-      description:
-        "防災用や日常使いのストックに向いた単3アルカリ乾電池の大容量パックです。",
+      description: "日常使いのストックに向いた乾電池パックです。",
       specsAndNotes: [
         "本数：24本",
         "種類：単3アルカリ乾電池",
         "保存方法：高温多湿を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "必要な本数と電池の種類を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用機器に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -74,48 +78,19 @@ export const trial10Data: Trial10Data = {
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "マンガン乾電池 単3 20本 お買い得パック",
-      priceYen: 1180,
-      description:
-        "日常使い向けの単3乾電池パックです。本数は満たしますがアルカリではありません。",
-      specsAndNotes: [
-        "本数：20本",
-        "種類：単3マンガン乾電池",
-        "保存方法：高温多湿を避けて保管してください",
-      ],
-      prePurchaseCheck: [
-        "アルカリ電池かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      imageSrc: "/images/products/battery.svg",
-      dpDisplay: {
-        originalPriceYen: 1480,
-        displayPriceYen: 1180,
-        isDiscountTarget: true,
-      },
-    },
-    {
-      id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "アルカリ乾電池 単3 20本 ベーシックパック",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "乾電池 通常タイプ",
       priceYen: 1280,
-      description:
-        "日常使いしやすい単3アルカリ乾電池の標準パックです。条件を満たす中で最も安い商品です。",
+      description: "まとめ買いしやすい乾電池パックです。",
       specsAndNotes: [
-        "本数：20本",
+        "本数：24本",
         "種類：単3アルカリ乾電池",
         "保存方法：高温多湿を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用機器に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -125,21 +100,20 @@ export const trial10Data: Trial10Data = {
       dpDisplay: null,
     },
     {
-      id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "アルカリ乾電池 単3 24本 人気パック",
-      priceYen: 1420,
-      description:
-        "まとめ買い向けの単3アルカリ乾電池パックです。条件を満たす中ではやや高めの商品です。",
+      id: "p3",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "乾電池 標準タイプ",
+      priceYen: 1180,
+      description: "日常使いしやすい乾電池パックです。",
       specsAndNotes: [
-        "本数：24本",
+        "本数：20本",
         "種類：単3アルカリ乾電池",
         "保存方法：高温多湿を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用機器に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -147,10 +121,33 @@ export const trial10Data: Trial10Data = {
       ],
       imageSrc: "/images/products/battery.svg",
       dpDisplay: {
-        originalPriceYen: 1820,
-        displayPriceYen: 1420,
+        originalPriceYen: 1580,
+        displayPriceYen: 1180,
         isDiscountTarget: true,
       },
+    },
+    {
+      id: "p4",
+      role: "correct",
+      failReason: null,
+      name: "乾電池 ベーシック",
+      priceYen: 1080,
+      description: "家庭で使いやすい乾電池パックです。",
+      specsAndNotes: [
+        "本数：20本",
+        "種類：単3アルカリ乾電池",
+        "保存方法：高温多湿を避けて保管してください",
+      ],
+      prePurchaseCheck: [
+        "使用機器に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/battery.svg",
+      dpDisplay: null,
     },
   ],
   shippingMethods: [
@@ -183,7 +180,7 @@ export const trial10Data: Trial10Data = {
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 250,
       shortDescription: "プレゼント用に包装します",
     },
   ],

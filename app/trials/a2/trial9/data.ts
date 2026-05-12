@@ -1,13 +1,14 @@
 export type Trial9Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     emphasizedVolumeText?: string;
     actualVolumeText?: string;
@@ -31,7 +32,7 @@ export type AddonOption = {
 
 export const trial9Data = {
   purchaseConditions: {
-    budgetYen: 1800,
+    budgetYen: 1900,
     quantityCondition: "24本入りであること",
     specificCondition: "1本あたり500ml以上であること",
   },
@@ -40,91 +41,95 @@ export const trial9Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "緑茶 500ml×24本 上質ブレンド",
+      name: "緑茶 レギュラー",
       priceYen: 1980,
-      description: "500ml×24本で条件を満たしますが、予算1,800円を超える商品です。",
+      description: "毎日の飲用に使いやすい緑茶です。",
       specsAndNotes: [
         "内容量：500ml×24本",
         "種類：緑茶",
         "容器：ペットボトル",
       ],
       prePurchaseCheck: [
-        "予算内に収まるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: null,
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "緑茶 350ml×24本 すっきり仕立て",
-      priceYen: 1460,
-      description: "24本入りですが、1本あたり350mlのため容量条件を満たしません。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "緑茶 通常タイプ",
+      priceYen: 1680,
+      description: "自宅用のストックに使いやすい緑茶です。",
       specsAndNotes: [
-        "内容量：350ml×24本",
+        "内容量：500ml×24本",
         "種類：緑茶",
         "容器：ペットボトル",
       ],
       prePurchaseCheck: [
-        "本数だけでなく、1本あたりの容量も確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "緑茶 500ml×24本 スタンダード",
-      priceYen: 1680,
-      description: "500ml×24本で条件を満たしており、条件を満たす中で最も安い商品です。",
+      name: "緑茶 ベーシック",
+      priceYen: 1620,
+      description: "日常使いしやすい緑茶です。",
       specsAndNotes: [
         "内容量：500ml×24本",
         "種類：緑茶",
         "容器：ペットボトル",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "dp_target",
       failReason: "quantity_condition",
-      name: "緑茶 お買い得パック",
+      name: "緑茶 標準タイプ",
       priceYen: 1580,
-      description: "一見お得に見える商品ですが、内容量と本数を確認する必要があります。",
+      description: "すっきり飲みやすい緑茶です。",
       specsAndNotes: [
         "内容量：350ml×12本",
         "種類：緑茶",
         "容器：ペットボトル",
       ],
       prePurchaseCheck: [
-        "本数と1本あたり容量を必ず確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/petbottle.png",
       dpDisplay: {
-        emphasizedVolumeText: "500ml×12本",
-        actualVolumeText: "実際の内容量：350ml×12本",
+        emphasizedVolumeText: "500mlクラスの使いやすさ",
+        actualVolumeText: "内容量：350ml×12本",
         isDpTarget: true,
       },
     },
@@ -133,19 +138,19 @@ export const trial9Data = {
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 0,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 300,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "日時指定便",
-      priceYen: 250,
+      priceYen: 800,
       shortDescription: "受け取り日時を指定できます",
     },
   ] satisfies ShippingMethod[],
@@ -160,17 +165,23 @@ export const trial9Data = {
       id: "gift",
       name: "ギフト包装",
       priceYen: 150,
-      shortDescription: "簡易ギフト包装を追加します",
+      shortDescription: "プレゼント用に包装します",
     },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial9Data.products.find((product) => product.id === productId) ?? trial9Data.products[0];
+  return (
+    trial9Data.products.find((product) => product.id === productId) ??
+    trial9Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial9Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial9Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {

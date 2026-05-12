@@ -35,7 +35,7 @@ export default function ProductPageA1Trial6() {
   const set = searchParams.get("set");
   const trial = searchParams.get("trial");
 
-  const [secondsLeft, setSecondsLeft] = useState(300);
+  const [secondsLeft, setSecondsLeft] = useState(163);
 
   const didTrack = useRef(false);
 

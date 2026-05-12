@@ -1,7 +1,12 @@
 export type Trial1_3Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,18 +53,17 @@ export const trial1_3Data: Trial1_3Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "モバイルバッテリー 12000mAh 急速充電対応",
+      name: "モバイルバッテリー レギュラー",
       priceYen: 4380,
-      description:
-        "外出先で使いやすい大容量モバイルバッテリーです。急速充電対応モデルです。",
+      description: "外出先で使いやすいモバイルバッテリーです。",
       specsAndNotes: [
         "容量：12000mAh",
         "充電端子：USB-C",
         "出力：急速充電対応",
       ],
       prePurchaseCheck: [
-        "必要な容量と充電端子を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -72,18 +76,17 @@ export const trial1_3Data: Trial1_3Data = {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "モバイルバッテリー 10000mAh Micro USB対応",
-      priceYen: 2680,
-      description:
-        "日常使いしやすいモバイルバッテリーです。容量条件は満たしますがUSB-C充電ではありません。",
+      name: "モバイルバッテリー 通常タイプ",
+      priceYen: 2910,
+      description: "日常使いしやすいモバイルバッテリーです。",
       specsAndNotes: [
         "容量：10000mAh",
         "充電端子：Micro USB",
         "出力：標準充電",
       ],
       prePurchaseCheck: [
-        "USB-Cで充電できるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -96,18 +99,17 @@ export const trial1_3Data: Trial1_3Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "モバイルバッテリー 10000mAh USB-C ベーシック",
-      priceYen: 2980,
-      description:
-        "必要十分な容量を備えたUSB-C充電対応のモバイルバッテリーです。条件を満たす中で最も安い商品です。",
+      name: "モバイルバッテリー ベーシック",
+      priceYen: 3120,
+      description: "持ち運びしやすいモバイルバッテリーです。",
       specsAndNotes: [
         "容量：10000mAh",
         "充電端子：USB-C",
         "出力：標準充電",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -118,20 +120,19 @@ export const trial1_3Data: Trial1_3Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "モバイルバッテリー 12000mAh USB-C スリムモデル",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "モバイルバッテリー シンプル",
       priceYen: 3380,
-      description:
-        "持ち運びしやすいスリムタイプのモバイルバッテリーです。条件を満たす中ではやや高めの商品です。",
+      description: "充電用に備えやすいモバイルバッテリーです。",
       specsAndNotes: [
         "容量：12000mAh",
         "充電端子：USB-C",
-        "出力：急速充電対応",
+        "出力：標準充電",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用場面に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -139,7 +140,7 @@ export const trial1_3Data: Trial1_3Data = {
       ],
       imageSrc: "/images/products/mobile-battery.png",
       dpDisplay: null,
-    },
+    }
   ],
   shippingMethods: [
     {
@@ -165,15 +166,15 @@ export const trial1_3Data: Trial1_3Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 1000,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 900,
       shortDescription: "プレゼント用に包装します",
-    },
+    }
   ],
 };
 

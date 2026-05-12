@@ -1,7 +1,12 @@
 export type Trial8Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -37,18 +42,17 @@ export const trial8Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "黒烏龍茶 350ml×24本 プレミアムケース",
-      priceYen: 3680,
-      description:
-        "毎日の飲用に使いやすい黒烏龍茶のケース商品です。まとめ買い向けの定番モデルです。",
+      name: "黒烏龍茶 レギュラー",
+      priceYen: 3480,
+      description: "毎日の飲用に使いやすい黒烏龍茶です。",
       specsAndNotes: [
         "内容量：350ml×24本",
         "販売単位：1ケース",
         "茶種：黒烏龍茶",
       ],
       prePurchaseCheck: [
-        "必要な本数とケース販売かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -59,20 +63,19 @@ export const trial8Data = {
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "quantity_condition",
-      name: "黒烏龍茶 350ml×12本 ハーフケース",
-      priceYen: 1780,
-      description:
-        "飲み切りやすい本数で購入できる黒烏龍茶です。少量購入向けの商品です。",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "黒烏龍茶 標準タイプ",
+      priceYen: 2880,
+      description: "食事と合わせやすい黒烏龍茶です。",
       specsAndNotes: [
-        "内容量：350ml×12本",
+        "内容量：350ml×24本",
         "販売単位：1ケース",
         "茶種：黒烏龍茶",
       ],
       prePurchaseCheck: [
-        "24本以上入っているかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -85,18 +88,17 @@ export const trial8Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "黒烏龍茶 350ml×24本 スタンダードケース",
-      priceYen: 2980,
-      description:
-        "日常使いしやすい黒烏龍茶の1ケース商品です。条件を満たす中で最も安い商品です。",
+      name: "黒烏龍茶 ベーシック",
+      priceYen: 2680,
+      description: "日常使いしやすい黒烏龍茶です。",
       specsAndNotes: [
         "内容量：350ml×24本",
         "販売単位：1ケース",
         "茶種：黒烏龍茶",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -107,20 +109,19 @@ export const trial8Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "黒烏龍茶 350ml×24本 人気ケース",
-      priceYen: 3180,
-      description:
-        "黒烏龍茶をまとめて購入できる人気の1ケース商品です。条件を満たす中ではやや高めです。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "黒烏龍茶 通常タイプ",
+      priceYen: 2980,
+      description: "まとめ買いに使いやすい黒烏龍茶です。",
       specsAndNotes: [
         "内容量：350ml×24本",
         "販売単位：1ケース",
         "茶種：黒烏龍茶",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "保管場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -134,19 +135,19 @@ export const trial8Data = {
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 500,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 800,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "当日便",
-      priceYen: 700,
+      priceYen: 800,
       shortDescription: "本日中のお届けが可能です",
     },
   ] satisfies ShippingMethod[],
@@ -154,13 +155,13 @@ export const trial8Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 700,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 650,
       shortDescription: "プレゼント用に包装します",
     },
   ] satisfies AddonOption[],

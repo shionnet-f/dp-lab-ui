@@ -11,6 +11,7 @@ type CountdownCard = {
     id: string;
     productName: string;
     price: string;
+    imageSrc: string;
     hasDpTimer: boolean;
 };
 
@@ -19,18 +20,21 @@ const cards: CountdownCard[] = [
         id: "A",
         productName: "ワイヤレスイヤホン Pro",
         price: "¥7,980",
+        imageSrc: "/images/products/earphones.png",
         hasDpTimer: false,
     },
     {
         id: "B",
         productName: "ワイヤレスイヤホン Pro",
         price: "¥7,980",
+        imageSrc: "/images/products/earphones.png",
         hasDpTimer: true,
     },
     {
         id: "C",
         productName: "ワイヤレスイヤホン Pro",
         price: "¥7,980",
+        imageSrc: "/images/products/earphones.png",
         hasDpTimer: false,
     },
 ];
@@ -76,7 +80,7 @@ export default function QuizCountdownOptions({
     onSelect,
 }: QuizCountdownOptionsProps) {
     return (
-        <div className="grid grid-cols-3 gap-[16px]">
+        <div className="grid grid-cols-3 gap-[60px]">
             {cards.map((card) => {
                 const isSelected = selectedId === card.id;
 
@@ -106,8 +110,12 @@ export default function QuizCountdownOptions({
 
                         <article className="rounded-xl border border-gray-200 bg-white p-3 pt-8">
                             <div className="grid gap-3">
-                                <div className="flex h-28 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-                                    画像エリア
+                                <div className="flex h-28 w-full items-center justify-center rounded-lg bg-gray-100 p-3">
+                                    <img
+                                        src={card.imageSrc}
+                                        alt=""
+                                        className="max-h-20 max-w-24 object-contain"
+                                    />
                                 </div>
 
                                 <div className="min-h-[48px]">

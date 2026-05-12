@@ -9,6 +9,7 @@ export type practice1_1Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   dpDisplay?: null;
+  imageSrc: string;
 };
 
 export type ShippingMethod = {
@@ -44,7 +45,7 @@ export const practice1_1Data: practice1_1Data = {
   },
   products: [
     {
-      id: "a1-t1-5-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "コーラ 500ml 8本セット",
@@ -54,9 +55,10 @@ export const practice1_1Data: practice1_1Data = {
       prePurchaseCheck: ["本数と内容量を確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/can.svg",
     },
     {
-      id: "a1-t1-5-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "コーラ 350ml 6本セット",
@@ -66,9 +68,10 @@ export const practice1_1Data: practice1_1Data = {
       prePurchaseCheck: ["500ml以上か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/can.svg",
     },
     {
-      id: "a1-t1-5-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "コーラ 500ml 6本セット",
@@ -78,9 +81,10 @@ export const practice1_1Data: practice1_1Data = {
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/can.svg",
     },
     {
-      id: "a1-t1-5-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "コーラ 500ml 7本セット",
@@ -90,6 +94,7 @@ export const practice1_1Data: practice1_1Data = {
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
       dpDisplay: null,
+      imageSrc: "/images/products/can.svg",
     },
   ],
   shippingMethods: [

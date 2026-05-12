@@ -148,16 +148,19 @@ function RelativeShippingMethodSection({
                 }}
               />
 
-              <div className="min-w-0 leading-tight">
-                <div className="truncate font-medium text-gray-900">
-                  {method.name}
+              <div className="flex min-w-0 flex-1 items-center justify-between gap-4">
+                <div className="min-w-0 leading-tight">
+                  <div className="truncate text-[18px] font-bold text-gray-900">
+                    {method.name}
+                  </div>
+                  <div className="mt-1 truncate text-[15px] font-semibold text-gray-600">
+                    {method.shortDescription}
+                  </div>
                 </div>
 
-                <div className="truncate text-gray-600">
-                  {method.shortDescription}
+                <div className="shrink-0 text-right text-[22px] font-bold text-gray-900">
+                  {relativePriceLabel}
                 </div>
-
-                <div className="text-gray-700">{relativePriceLabel}</div>
               </div>
             </label>
 

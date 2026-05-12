@@ -1,7 +1,12 @@
 export type Trial7Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -49,20 +54,19 @@ export const trial7Data: Trial7Data = {
   products: [
     {
       id: "p1",
-      role: "budget_over",
-      failReason: "budget",
-      name: "母の日 カーネーション鉢植え 5号 プレミアム",
-      priceYen: 3980,
-      description:
-        "母の日向けの定番ギフトです。カーネーションを中心にした5号鉢のフラワーギフトです。",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "母の日 フラワーギフト ブルーム",
+      priceYen: 2980,
+      description: "母の日の贈り物に使いやすいフラワーギフトです。",
       specsAndNotes: [
         "サイズ：5号鉢",
         "花材：カーネーション入り",
         "用途：母の日向け",
       ],
       prePurchaseCheck: [
-        "必要なサイズと花材を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "飾る場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -71,25 +75,24 @@ export const trial7Data: Trial7Data = {
       imageSrc: "/images/products/flower.svg",
       dpDisplay: {
         rankingLabel: "売れ筋ランキング 1位",
-        awardLabel: "母の日ギフト特集 受賞",
+        awardLabel: "ギフト特集 スタッフ推薦",
       },
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "母の日 フラワーギフト 5号 ピンクアレンジ",
-      priceYen: 2980,
-      description:
-        "華やかな色合いの母の日向けフラワーギフトです。見た目のボリューム感がある商品です。",
+      role: "budget_over",
+      failReason: "budget",
+      name: "母の日 フラワーギフト ルーチェ",
+      priceYen: 3580,
+      description: "華やかな印象のある母の日向けフラワーギフトです。",
       specsAndNotes: [
         "サイズ：5号鉢",
-        "花材：バラ・ガーベラ中心",
+        "花材：カーネーション入り",
         "用途：母の日向け",
       ],
       prePurchaseCheck: [
-        "カーネーションを含むか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "飾る場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -104,42 +107,17 @@ export const trial7Data: Trial7Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "母の日 カーネーション鉢植え 5号 ベーシック",
+      name: "母の日 フラワーギフト リアン",
       priceYen: 2680,
-      description:
-        "母の日の贈り物として選びやすい、カーネーション入りのベーシックな5号鉢です。",
+      description: "母の日の贈り物として選びやすいフラワーギフトです。",
       specsAndNotes: [
         "サイズ：5号鉢",
         "花材：カーネーション入り",
         "用途：母の日向け",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      imageSrc: "/images/products/flower.svg",
-      dpDisplay: null,
-    },
-    {
-      id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "母の日 カーネーション鉢植え 5号 人気セット",
-      priceYen: 2980,
-      description:
-        "カーネーションを含む5号鉢の母の日向け人気セットです。条件を満たす中ではやや高めの商品です。",
-      specsAndNotes: [
-        "サイズ：5号鉢",
-        "花材：カーネーション入り",
-        "用途：母の日向け",
-      ],
-      prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "飾る場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -148,7 +126,31 @@ export const trial7Data: Trial7Data = {
       imageSrc: "/images/products/flower.svg",
       dpDisplay: {
         rankingLabel: "売れ筋ランキング 3位",
-        awardLabel: "ギフト特集 スタッフ推薦",
+      },
+    },
+    {
+      id: "p4",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "母の日 フラワーギフト エクラ",
+      priceYen: 3180,
+      description: "落ち着いた雰囲気の母の日向けフラワーギフトです。",
+      specsAndNotes: [
+        "サイズ：5号鉢",
+        "花材：カーネーション入り",
+        "用途：母の日向け",
+      ],
+      prePurchaseCheck: [
+        "飾る場所に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/flower.svg",
+      dpDisplay: {
+        rankingLabel: "売れ筋ランキング 4位",
       },
     },
   ],
@@ -156,19 +158,19 @@ export const trial7Data: Trial7Data = {
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 500,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 800,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "日時指定便",
-      priceYen: 700,
+      priceYen: 800,
       shortDescription: "受け取り日時を指定できます",
     },
   ],
@@ -176,13 +178,13 @@ export const trial7Data: Trial7Data = {
     {
       id: "message",
       name: "メッセージカード",
-      priceYen: 200,
+      priceYen: 700,
       shortDescription: "メッセージカードを追加します",
     },
     {
       id: "giftwrap",
       name: "ギフト包装",
-      priceYen: 300,
+      priceYen: 800,
       shortDescription: "プレゼント用に包装します",
     },
   ],

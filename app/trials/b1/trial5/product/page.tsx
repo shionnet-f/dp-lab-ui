@@ -42,7 +42,7 @@ function ProductDetailModalB1Trial5({
     <>
       <button
         type="button"
-        className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+        className="flex items-center justify-center border border-gray-300 rounded-md text-[18px] font-bold text-black"
         onClick={() => {
           trackAction({
             ...createLogBase(),
@@ -68,13 +68,13 @@ function ProductDetailModalB1Trial5({
       >
         <div className="h-full w-full overflow-hidden bg-white">
           <div className="flex h-[70px] items-center justify-between border-b border-gray-300 px-[60px]">
-            <h2 className="text-[24px] font-semibold text-gray-900">
+            <h2 className="text-[28px] font-bold text-gray-900">
               商品詳細
             </h2>
 
             <button
               type="button"
-              className="h-[40px] w-[100px] border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
+              className="h-[40px] w-[100px] rounded-md border border-gray-300 bg-white text-[17px] font-bold text-gray-700"
               onClick={() => {
                 trackAction({
                   ...createLogBase(),
@@ -101,14 +101,18 @@ function ProductDetailModalB1Trial5({
 
             {/* 上段：左に画像、右に商品名・価格 */}
             <div className="flex h-[220px] w-[860px] overflow-hidden">
-              <section className="flex h-[220px] w-[400px] items-center justify-center border border-gray-300 bg-gray-100 text-[14px] text-gray-400">
-                画像エリア
+              <section className="flex h-[220px] w-[400px] items-center justify-center border border-gray-300 bg-gray-50 text-[14px] text-gray-400">
+                <img
+                  src={product.imageSrc}
+                  alt=""
+                  className="max-h-[80px] max-w-[110px] object-contain"
+                />
               </section>
 
               <div className="w-[60px]" />
 
               <section className="h-[220px] w-[400px] overflow-hidden border border-gray-300 p-[20px]">
-                <h3 className="h-[70px] overflow-hidden text-[20px] font-bold leading-[35px] text-gray-900">
+                <h3 className="h-[70px] overflow-hidden text-[22px] font-bold leading-[35px] text-gray-900">
                   {product.name}
                 </h3>
 
@@ -130,7 +134,7 @@ function ProductDetailModalB1Trial5({
 
               <div className="h-[30px]" />
 
-              <div className="h-[180px] overflow-y-auto text-[14px] leading-[24px] text-gray-600">
+              <div className="h-[180px] overflow-y-auto text-[15px] font-medium leading-[24px] text-gray-600">
                 <div className="space-y-[12px]">
                   {product.detailParagraphs.map((line, index) => (
                     <p key={`${product.id}-${index}`}>{line}</p>
@@ -145,7 +149,7 @@ function ProductDetailModalB1Trial5({
             <div className="flex h-[50px] w-[860px] justify-end">
               <button
                 type="button"
-                className="flex h-[50px] w-[200px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                className="flex h-[50px] w-[200px] items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
                 onClick={async () => {
                   await trackAction({
                     ...createLogBase(),
@@ -195,13 +199,13 @@ function ProductCardB1Trial5({ product, set, trial }: ProductCardB1Trial5Props) 
       <div className="flex h-full flex-col px-[60px]">
         <div className="h-[15px]" />
 
-        <h2 className="h-[42px] overflow-hidden text-[20px] font-semibold leading-[42px] text-gray-900">
+        <h2 className="h-[42px] overflow-hidden text-[22px] font-bold leading-[42px] text-gray-900">
           {product.name}
         </h2>
 
         <div className="h-[60px]" />
 
-        <p className="h-[42px] overflow-hidden text-[22px] font-semibold leading-[42px] text-gray-900">
+        <p className="h-[42px] overflow-hidden text-[28px] font-bold leading-[42px] text-gray-900">
           ¥{yen(product.priceYen)}
         </p>
 
@@ -217,7 +221,7 @@ function ProductCardB1Trial5({ product, set, trial }: ProductCardB1Trial5Props) 
           <ProductDetailModalB1Trial5 product={product} set={set} trial={trial} />
 
           <button
-            className="flex items-center justify-center bg-gray-500 text-[16px] text-white"
+            className="flex items-center justify-center rounded-md bg-black text-[18px] font-bold text-white"
             onClick={async () => {
               await trackAction({
                 ...createLogBase(),

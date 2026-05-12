@@ -1,13 +1,24 @@
 export type Trial6Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role:
+  | "budget_over"
+  | "condition_ng"
+  | "correct"
+  | "valid_but_expensive"
+  | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { subscriptionPriceYen: number } | null;
 };
 
@@ -51,143 +62,145 @@ export const trial6Data: Trial6Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "なめらかボールペン 0.7mm 黒 5本セット プレミアム",
+      name: "ボールペン BP-740X",
       priceYen: 2280,
-      description:
-        "黒インクのボールペン5本セットです。必要本数は満たしますが、予算を超える商品です。",
+      description: "日常の筆記に使いやすいボールペンです。",
       specsAndNotes: [
-        "本数：5本セット",
+        "本数：5本",
         "インク色：黒",
         "ペン先：0.7mm",
-        "ノック式",
-        "筆記距離の目安：約800m",
+        "軸色：クリア",
+        "用途：事務作業・学習向け",
+        "保管方法：高温多湿を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "予算内に収まるか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
       dpDisplay: null,
     },
     {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "さらさらボールペン 0.5mm 青 4本セット",
-      priceYen: 1280,
-      description:
-        "4本セットで本数条件は満たしますが、黒インクではなく青インクの商品です。",
+      name: "ボールペン BP-520A",
+      priceYen: 1580,
+      description: "まとめて使いやすいボールペンです。",
       specsAndNotes: [
-        "本数：4本セット",
+        "本数：4本",
         "インク色：青",
         "ペン先：0.5mm",
-        "ノック式",
-        "細字タイプ",
+        "軸色：ホワイト",
+        "用途：事務作業・学習向け",
+        "保管方法：高温多湿を避けて保管してください",
       ],
       prePurchaseCheck: [
-        "インク色が条件に合っているか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
       dpDisplay: null,
     },
     {
       id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "スタンダードボールペン 0.5mm 黒 3本セット",
-      priceYen: 1480,
-      description: "黒インクの3本セットで、条件を満たす中で最も安い商品です。",
-      specsAndNotes: [
-        "本数：3本セット",
-        "インク色：黒",
-        "ペン先：0.5mm",
-        "ノック式",
-        "一般的な事務用途向け",
-      ],
-      prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
-      ],
-      deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます",
-        "地域によりお届け日が異なる場合があります",
-      ],
-      dpDisplay: null,
-    },
-    {
-      id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "書きやすいボールペン 0.5mm 黒 4本セット",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "ボールペン BP-680R",
       priceYen: 1760,
-      description:
-        "黒インクの4本セットで、一見すると条件に合う価格の商品です。",
+      description: "書きやすいボールペンです。",
       specsAndNotes: [
-        "本数：4本セット",
+        "本数：4本",
         "インク色：黒",
         "ペン先：0.5mm",
-        "ノック式",
-        "低粘度インク採用",
-        "滑らかな書き味です",
-        "オフィスや学習用途向けの定番仕様です",
-        "パッケージデザインは変更される場合があります",
-        "在庫状況により発送時期が前後する場合があります",
+        "軸色：ブラック",
+        "用途：事務作業・学習向け",
+        "保管方法：高温多湿を避けて保管してください",
         "表示価格は定期お届けコースを利用した場合の価格です",
-        "定期お届けコースは毎月1回、同一商品を自動で発送します",
         "通常購入価格は1,760円です",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: { subscriptionPriceYen: 1360 },
+      imageSrc: "/images/products/ballpoint-pen.svg",
+      dpDisplay: {
+        subscriptionPriceYen: 1360,
+      },
     },
-  ] satisfies Trial6Product[],
+    {
+      id: "p4",
+      role: "correct",
+      failReason: null,
+      name: "ボールペン BP-310B",
+      priceYen: 1480,
+      description: "学習や作業に使いやすいボールペンです。",
+      specsAndNotes: [
+        "本数：3本",
+        "インク色：黒",
+        "ペン先：0.5mm",
+        "軸色：ネイビー",
+        "用途：事務作業・学習向け",
+        "保管方法：高温多湿を避けて保管してください",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/ballpoint-pen.svg",
+      dpDisplay: null,
+    },
+  ],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 220,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 480,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
-      name: "日時指定便",
-      priceYen: 320,
-      shortDescription: "受け取り日時を指定できます",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
     },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 400,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 180,
-      shortDescription: "簡易ギフト包装を追加します",
+      priceYen: 350,
+      shortDescription: "プレゼント用に包装します",
     },
-    {
-      id: "bag",
-      name: "手提げ袋を追加",
-      priceYen: 80,
-      shortDescription: "持ち運び用の手提げ袋を追加します",
-    },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {

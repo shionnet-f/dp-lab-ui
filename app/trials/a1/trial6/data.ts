@@ -1,7 +1,12 @@
 export type Trial6Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -48,74 +53,88 @@ export const trial6Data: Trial6Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "大容量 洗濯洗剤 詰め替え 2.2kg",
+      name: "洗濯洗剤 レギュラー",
       priceYen: 1680,
-      description:
-        "毎日の洗濯に使いやすい大容量タイプの洗濯洗剤です。詰め替え向けの定番商品です。",
-      specsAndNotes: ["内容量：2.2kg", "香り：無香料", "タイプ：液体洗剤"],
+      description: "毎日の洗濯に使いやすい液体洗剤です。",
+      specsAndNotes: [
+        "内容量：2.2kg",
+        "香り：無香料",
+        "タイプ：液体洗剤",
+      ],
       prePurchaseCheck: [
-        "必要な容量と香りの有無を確認してから選択してください",
-        "使用方法を確認したうえで購入してください",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/laundry-detergent.svg",
-      dpDisplay: { showCountdown: true },
+      dpDisplay: null,
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "洗濯洗剤 詰め替え 2.0kg フローラル",
-      priceYen: 1180,
-      description:
-        "たっぷり使える詰め替え用の洗濯洗剤です。日常使いに向いた標準的なモデルです。",
-      specsAndNotes: ["内容量：2.0kg", "香り：フローラル", "タイプ：液体洗剤"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "洗濯洗剤 通常タイプ",
+      priceYen: 1260,
+      description: "日常使いしやすい詰め替え用の洗濯洗剤です。",
+      specsAndNotes: [
+        "内容量：2.1kg",
+        "香り：無香料",
+        "タイプ：濃縮液体洗剤",
+      ],
       prePurchaseCheck: [
-        "無香料かどうかを確認してから選択してください",
-        "使用方法を確認したうえで購入してください",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/laundry-detergent.svg",
-      dpDisplay: { showCountdown: true },
+      dpDisplay: null,
     },
     {
       id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "無香料 洗濯洗剤 詰め替え 2.0kg",
-      priceYen: 1080,
-      description:
-        "無香料で使いやすい詰め替え用の洗濯洗剤です。容量条件を満たすベーシックなモデルです。",
-      specsAndNotes: ["内容量：2.0kg", "香り：無香料", "タイプ：液体洗剤"],
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "洗濯洗剤 標準タイプ",
+      priceYen: 1180,
+      description: "使いやすい詰め替え用の洗濯洗剤です。",
+      specsAndNotes: [
+        "内容量：2.0kg",
+        "香り：無香料",
+        "タイプ：液体洗剤",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "使用方法を確認したうえで購入してください",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/laundry-detergent.svg",
-      dpDisplay: { showCountdown: true },
+      dpDisplay: {
+        showCountdown: true,
+      },
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "correct",
       failReason: null,
-      name: "無香料 洗濯洗剤 濃縮タイプ 2.1kg",
-      priceYen: 1260,
-      description:
-        "無香料で使いやすい濃縮タイプの洗濯洗剤です。条件を満たす中ではやや高めのモデルです。",
-      specsAndNotes: ["内容量：2.1kg", "香り：無香料", "タイプ：濃縮液体洗剤"],
+      name: "洗濯洗剤 ベーシック",
+      priceYen: 1080,
+      description: "家庭で使いやすい詰め替え用の洗濯洗剤です。",
+      specsAndNotes: [
+        "内容量：2.0kg",
+        "香り：無香料",
+        "タイプ：液体洗剤",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "使用方法を確認したうえで購入してください",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -149,13 +168,13 @@ export const trial6Data: Trial6Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 400,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 300,
       shortDescription: "プレゼント用に包装します",
     },
   ],

@@ -8,6 +8,7 @@ export type practice1_3Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 export type ShippingMethod = {
@@ -41,7 +42,7 @@ export const practice1_3Data: practice1_3Data = {
   },
   products: [
     {
-      id: "a1-t1-7-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "加湿器 3L 自動停止機能付き",
@@ -50,10 +51,11 @@ export const practice1_3Data: practice1_3Data = {
       specsAndNotes: ["タンク容量：3L", "自動停止機能：あり"],
       prePurchaseCheck: ["タンク容量と機能を確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/humidifier.png",
       dpDisplay: null,
     },
     {
-      id: "a1-t1-7-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "加湿器 2L シンプルモデル",
@@ -62,10 +64,11 @@ export const practice1_3Data: practice1_3Data = {
       specsAndNotes: ["タンク容量：2L", "自動停止機能：なし"],
       prePurchaseCheck: ["自動停止機能があるか確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/humidifier.png",
       dpDisplay: null,
     },
     {
-      id: "a1-t1-7-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "加湿器 2L 自動停止機能付き",
@@ -74,10 +77,11 @@ export const practice1_3Data: practice1_3Data = {
       specsAndNotes: ["タンク容量：2L", "自動停止機能：あり"],
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/humidifier.png",
       dpDisplay: null,
     },
     {
-      id: "a1-t1-7-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "加湿器 2.5L 自動停止機能付き",
@@ -86,6 +90,7 @@ export const practice1_3Data: practice1_3Data = {
       specsAndNotes: ["タンク容量：2.5L", "自動停止機能：あり"],
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/humidifier.png",
       dpDisplay: null,
     },
   ],

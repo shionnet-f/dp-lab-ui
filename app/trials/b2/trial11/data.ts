@@ -8,6 +8,7 @@ export type Trial11Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: { label: string } | null;
 };
 
@@ -53,6 +54,7 @@ export const trial11Data = {
         "配送方法は購入手続き画面で選択できます",
         "折り曲げ防止の簡易梱包で発送されます",
       ],
+      imageSrc: "/images/products/calendar.svg",
       dpDisplay: null,
     },
     {
@@ -76,6 +78,7 @@ export const trial11Data = {
         "配送方法は購入手続き画面で選択できます",
         "通常梱包で発送されます",
       ],
+      imageSrc: "/images/products/calendar.svg",
       dpDisplay: null,
     },
     {
@@ -99,6 +102,7 @@ export const trial11Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/calendar.svg",
       dpDisplay: null,
     },
     {
@@ -122,6 +126,7 @@ export const trial11Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/calendar.svg",
       dpDisplay: null,
     },
   ] satisfies Trial11Product[],

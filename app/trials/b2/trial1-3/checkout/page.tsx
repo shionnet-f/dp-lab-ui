@@ -88,8 +88,8 @@ export default function CheckoutPageB2Trial13({ searchParams }: Props) {
           </section>
           <div className="h-[60px]" />
           <div className="flex h-[60px] w-[1160px] items-center gap-[60px]">
-            <button type="button" onClick={async () => { const baseLog = createLogBase(); await trackAction({ ...baseLog, phase: "main", page: "checkout", type: "checkout_back", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id } }); router.push(`${productPath}?set=${set}&trial=${trial}`); }} className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700">商品一覧へ戻る</button>
-            <button type="submit" className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[16px] font-semibold text-white">次へ進む</button>
+            <button type="button" onClick={async () => { const baseLog = createLogBase(); await trackAction({ ...baseLog, phase: "main", page: "checkout", type: "checkout_back", meta: { implTrialId: getImplTrialId() }, payload: { productId: selectedProduct.id } }); router.push(`${productPath}?set=${set}&trial=${trial}`); }} className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[18px] font-bold text-gray-700">商品一覧へ戻る</button>
+            <button type="submit" className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[18px] font-bold text-white">次へ進む</button>
           </div>
           <div className="h-[137px]" />
         </form>

@@ -14,7 +14,7 @@ export default function SlideShell({
   children,
 }: SlideShellProps) {
   return (
-    <div className="mx-auto flex h-screen w-[1280px] flex-col pt-[40px]">
+    <div className="mx-auto flex h-screen w-[1440px] flex-col pt-[40px]">
       <div className="mb-[16px] flex h-[24px] items-center justify-between text-[14px] leading-none text-gray-500">
         <span>教育フェーズ</span>
         <span>
@@ -22,11 +22,11 @@ export default function SlideShell({
         </span>
       </div>
 
-      <section className="h-[800px] rounded-3xl border border-gray-200 bg-white px-[56px] py-[44px] shadow-sm">
-        <h1 className="mb-[28px] flex h-[72px] items-center text-[34px] font-bold leading-[1.35] text-gray-900">
+      <section className="h-[820px] rounded-3xl border border-gray-200 bg-white px-[48px] py-[44px] shadow-sm">
+        <h1 className="mb-[28px] flex h-[72px] items-center whitespace-nowrap text-[38px] font-bold leading-[1.35] text-gray-900">
           {title}
         </h1>
-        <div className="h-[600px] overflow-hidden">{children}</div>
+        <div className="h-[620px] overflow-hidden">{children}</div>
       </section>
     </div>
   );

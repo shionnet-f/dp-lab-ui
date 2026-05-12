@@ -8,6 +8,7 @@ export type Trial5Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   detailParagraphs: string[];
   dpDisplay?: { label: string } | null;
 };
@@ -64,6 +65,7 @@ export const trial5Data: Trial5Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/energy-drink.svg",
       detailParagraphs: [
         "・容量：350ml × 24本入りのケース商品で、まとめ買いを前提とした内容量になっています。",
         "・種類：炭酸タイプのエナジードリンクで、強めの刺激と爽快感があり、作業前の気分転換にも向いています。",
@@ -92,6 +94,7 @@ export const trial5Data: Trial5Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/energy-drink.svg",
       detailParagraphs: [
         "・容量：350ml × 24本入りで、ケース単位でまとめて購入できる商品です。",
         "・種類：すっきり飲みやすいエナジードリンクですが、こちらは非炭酸タイプです。",
@@ -120,6 +123,7 @@ export const trial5Data: Trial5Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/energy-drink.svg",
       detailParagraphs: [
         "・容量：350ml × 24本入りのケース商品で、日常的なストックにも使いやすい内容量です。",
         "・種類：炭酸タイプで、適度な刺激と飲みやすさを兼ね備えた標準的な仕様です。",
@@ -148,6 +152,7 @@ export const trial5Data: Trial5Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/energy-drink.svg",
       detailParagraphs: [
         "・容量：350ml × 30本入りで、24本以上という条件は満たしているケース商品です。",
         "・種類：炭酸タイプで、しっかりとした刺激と爽快感があるエナジードリンクです。",

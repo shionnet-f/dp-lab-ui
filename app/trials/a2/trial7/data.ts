@@ -1,13 +1,14 @@
 export type Trial7Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: {
     label?: string;
     subscriptionPriceYen?: number;
@@ -41,98 +42,104 @@ export const trial7Data = {
   },
   products: [
     {
-      id: "p1",
+      id: "p2",
       role: "budget_over",
       failReason: "budget",
-      name: "敬老の日 生花アレンジメント 華やかオレンジ",
+      name: "敬老の日 フラワーギフト ルーチェ",
       priceYen: 4380,
-      description:
-        "生花のアレンジメントですが、予算4,000円を超える商品です。",
+      description: "贈り物として使いやすいフラワーギフトです。",
       specsAndNotes: [
         "点数：1点",
         "種類：生花アレンジメント",
         "サイズ：高さ約28cm",
       ],
       prePurchaseCheck: [
-        "予算内に収まるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
-      dpDisplay: null,
+      imageSrc: "/images/products/flower.svg",
+      dpDisplay: {
+        rankingLabel: "売れ筋ランキング 2位",
+      },
     },
     {
-      id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "敬老の日 プリザーブドフラワーアレンジ ピンク",
-      priceYen: 3280,
-      description:
-        "1点の商品ですが、プリザーブドフラワーのため生花アレンジメント条件を満たしません。",
-      specsAndNotes: [
-        "点数：1点",
-        "種類：プリザーブドフラワーアレンジ",
-        "サイズ：高さ約20cm",
-      ],
-      prePurchaseCheck: [
-        "生花のアレンジメントかどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
-      ],
-      dpDisplay: null,
-    },
-    {
-      id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "敬老の日 生花アレンジメント やさしい彩り",
-      priceYen: 3480,
-      description:
-        "生花のアレンジメントで条件を満たしており、条件を満たす中で最も安い商品です。",
-      specsAndNotes: [
-        "点数：1点",
-        "種類：生花アレンジメント",
-        "サイズ：高さ約24cm",
-      ],
-      prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
-      ],
-      dpDisplay: null,
-    },
-    {
-      id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "敬老の日 生花アレンジメント 感謝の華",
-      priceYen: 3920,
-      description:
-        "生花のアレンジメントで条件を満たす商品です。条件は満たしますが、正解商品より高い商品です。",
+      id: "p1",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "敬老の日 フラワーギフト ブルーム",
+      priceYen: 3720,
+      description: "敬老の日の贈り物に使いやすいフラワーギフトです。",
       specsAndNotes: [
         "点数：1点",
         "種類：生花アレンジメント",
         "サイズ：高さ約26cm",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
+      imageSrc: "/images/products/flower.svg",
       dpDisplay: {
-        rankingLabel: "人気ランキング 1位",
-        awardLabel: "フラワーギフト大賞 受賞",
+        rankingLabel: "売れ筋ランキング 1位",
+        awardLabel: "ギフト特集 スタッフ推薦",
+      },
+    },
+    {
+      id: "p3",
+      role: "correct",
+      failReason: null,
+      name: "敬老の日 フラワーギフト リアン",
+      priceYen: 3480,
+      description: "落ち着いた印象のフラワーギフトです。",
+      specsAndNotes: [
+        "点数：1点",
+        "種類：生花アレンジメント",
+        "サイズ：高さ約24cm",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/flower.svg",
+      dpDisplay: {
+        rankingLabel: "売れ筋ランキング 4位",
+      },
+    },
+    {
+      id: "p4",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "敬老の日 フラワーギフト エクラ",
+      priceYen: 3920,
+      description: "華やかな印象のフラワーギフトです。",
+      specsAndNotes: [
+        "点数：1点",
+        "種類：生花アレンジメント",
+        "サイズ：高さ約28cm",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/flower.svg",
+      dpDisplay: {
+        rankingLabel: "売れ筋ランキング 3位",
       },
     },
   ] satisfies Trial7Product[],
@@ -140,19 +147,19 @@ export const trial7Data = {
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 500,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 800,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "日時指定便",
-      priceYen: 700,
+      priceYen: 800,
       shortDescription: "受け取り日時を指定できます",
     },
   ] satisfies ShippingMethod[],
@@ -160,24 +167,30 @@ export const trial7Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 300,
+      priceYen: 600,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 500,
       shortDescription: "プレゼント用に包装します",
     },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial7Data.products.find((product) => product.id === productId) ?? trial7Data.products[0];
+  return (
+    trial7Data.products.find((product) => product.id === productId) ??
+    trial7Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial7Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial7Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {

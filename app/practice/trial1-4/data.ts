@@ -8,6 +8,7 @@ export type practice1_4Product = {
   specsAndNotes: string[];
   prePurchaseCheck: string[];
   deliveryInfo: string[];
+  imageSrc: string;
   dpDisplay?: null;
 };
 export type ShippingMethod = {
@@ -41,7 +42,7 @@ export const practice1_4Data: practice1_4Data = {
   },
   products: [
     {
-      id: "a1-t1-8-p1",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
       name: "無香料石鹸 6個セット",
@@ -50,10 +51,11 @@ export const practice1_4Data: practice1_4Data = {
       specsAndNotes: ["個数：6個", "香り：無香料"],
       prePurchaseCheck: ["個数と香りを確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/soap.png",
       dpDisplay: null,
     },
     {
-      id: "a1-t1-8-p2",
+      id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
       name: "石鹸 4個セット フローラルの香り",
@@ -62,10 +64,11 @@ export const practice1_4Data: practice1_4Data = {
       specsAndNotes: ["個数：4個", "香り：フローラル"],
       prePurchaseCheck: ["無香料か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/soap.png",
       dpDisplay: null,
     },
     {
-      id: "a1-t1-8-p3",
+      id: "p3",
       role: "correct",
       failReason: null,
       name: "無香料石鹸 4個セット",
@@ -74,10 +77,11 @@ export const practice1_4Data: practice1_4Data = {
       specsAndNotes: ["個数：4個", "香り：無香料"],
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/soap.png",
       dpDisplay: null,
     },
     {
-      id: "a1-t1-8-p4",
+      id: "p4",
       role: "dp_candidate",
       failReason: null,
       name: "無香料石鹸 5個セット",
@@ -86,6 +90,7 @@ export const practice1_4Data: practice1_4Data = {
       specsAndNotes: ["個数：5個", "香り：無香料"],
       prePurchaseCheck: ["条件に合う商品か確認してください"],
       deliveryInfo: ["配送方法は購入手続き画面で選択できます"],
+      imageSrc: "/images/products/soap.png",
       dpDisplay: null,
     },
   ],

@@ -6,6 +6,7 @@ type ProductForOrderSummary = {
   id: string;
   name: string;
   description: string;
+  imageSrc?: string;
 };
 
 type OrderSummaryPanelProps = {
@@ -26,22 +27,30 @@ export function OrderSummaryPanel({
       <div className="h-[15px]" />
 
       <div className="flex h-[60px] items-center">
-        <h2 className="text-base font-semibold text-gray-900">ご注文商品</h2>
+        <h2 className="text-[20px] font-bold text-gray-900">ご注文商品</h2>
       </div>
 
-      <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400">
-        画像エリア
+      <div className="flex h-[120px] w-full items-center justify-center rounded-lg bg-gray-100">
+        {product.imageSrc ? (
+          <img
+            src={product.imageSrc}
+            alt=""
+            className="h-[90px] w-[120px] object-contain"
+          />
+        ) : (
+          <span className="text-[15px] font-medium text-gray-400">画像エリア</span>
+        )}
       </div>
 
       <div className="h-[60px]" />
 
-      <div className="h-[44px] overflow-hidden text-base font-semibold leading-6 text-gray-900">
+      <div className="h-[44px] overflow-hidden text-[20px] font-bold leading-[24px] text-gray-900">
         {product.name}
       </div>
 
       <div className="h-[60px]" />
 
-      <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-sm leading-6 text-gray-600">
+      <div className="h-[96px] overflow-hidden rounded-md border border-gray-200 p-3 text-[16px] font-medium leading-[24px] text-gray-700">
         {product.description}
       </div>
 
@@ -49,7 +58,7 @@ export function OrderSummaryPanel({
 
       <button
         type="submit"
-        className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-sm font-medium text-white"
+        className="h-[50px] w-full cursor-pointer rounded-md bg-black px-4 text-[18px] font-bold text-white"
       >
         次へ進む
       </button>
@@ -61,7 +70,7 @@ export function OrderSummaryPanel({
         onClick={() => {
           router.push(`${backPath}?set=${set}`);
         }}
-        className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+        className="flex h-[50px] w-full items-center justify-center rounded-md border border-gray-300 px-4 text-center text-[18px] font-bold text-gray-700 hover:bg-gray-50"
       >
         商品一覧へ戻る
       </button>
