@@ -21,7 +21,7 @@ type ProductDpDisplay = {
     label?: string;
     subLabel?: string;
     highlight?: string;
-    rating?: string;
+    rating?: number;
     reviewCount?: number;
     rankingLabel?: string;
     awardLabel?: string;

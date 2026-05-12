@@ -1,7 +1,7 @@
 export type Trial3Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
@@ -9,20 +9,23 @@ export type Trial3Product = {
   prePurchaseCheck: string[];
   deliveryInfo: string[];
   imageSrc: string;
-  dpDisplay?: { label: string; subLabel?: string } | null;
+  dpDisplay?: { rating: number; reviewCount?: number } | null;
 };
+
 export type ShippingMethod = {
   id: string;
   name: string;
   priceYen: number;
   shortDescription: string;
 };
+
 export type AddonOption = {
   id: string;
   name: string;
   priceYen: number;
   shortDescription: string;
 };
+
 export const trial3Data = {
   purchaseConditions: {
     budgetYen: 10000,
@@ -31,99 +34,158 @@ export const trial3Data = {
   },
   products: [
     {
-      id: "p1",
+      id: "p2",
       role: "budget_over",
       failReason: "budget",
-      name: "ワイヤレスイヤホン ノイズキャンセリング Pro",
+      name: "ワイヤレスイヤホン スタンダード",
       priceYen: 11400,
-      description: "Bluetooth対応のワイヤレスイヤホンです。条件は満たしますが予算を超える商品です。",
+      description: "日常利用に向いたワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個", "接続：Bluetooth", "機能：ノイズキャンセリング"
+        "個数：1個",
+        "接続：Bluetooth",
+        "機能：ノイズキャンセリング",
       ],
       prePurchaseCheck: [
-        "予算内に収まるか確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/earphones.png",
-      dpDisplay: { label: "★4.7", subLabel: "(421)" },
+      dpDisplay: {
+        rating: 4.7,
+        reviewCount: 421,
+      },
     },
     {
-      id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "完全ワイヤレスイヤホン 有線充電限定モデル",
-      priceYen: 6480,
-      description: "ワイヤレスイヤホンですが、Bluetooth接続には対応していない商品です。",
+      id: "p1",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "ワイヤレスイヤホン レギュラー",
+      priceYen: 8480,
+      description: "音楽や通話に使いやすいワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個", "接続：専用無線", "機能：マイク付き"
+        "個数：1個",
+        "接続：Bluetooth",
+        "機能：外音取り込み",
       ],
       prePurchaseCheck: [
-        "Bluetooth接続対応かどうかを確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/earphones.png",
-      dpDisplay: { label: "★4.1", subLabel: "(88)" },
+      dpDisplay: {
+        rating: 4.8,
+        reviewCount: 512,
+      },
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "ワイヤレスイヤホン Bluetooth対応 ベーシック",
+      name: "ワイヤレスイヤホン ベーシック",
       priceYen: 7580,
-      description: "条件を満たす中で最も安いワイヤレスイヤホンです。",
+      description: "持ち運びしやすいワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個", "接続：Bluetooth", "機能：マイク付き"
+        "個数：1個",
+        "接続：Bluetooth",
+        "機能：マイク付き",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/earphones.png",
-      dpDisplay: { label: "★3.9", subLabel: "(64)" },
+      dpDisplay: {
+        rating: 3.9,
+        reviewCount: 64,
+      },
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "ワイヤレスイヤホン Bluetooth対応 高評価モデル",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "ワイヤレスイヤホン シンプル",
       priceYen: 8980,
-      description: "条件を満たすワイヤレスイヤホンです。正解商品より高いですが、高評価レビューが表示されています。",
+      description: "幅広い場面で使いやすいワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個", "接続：Bluetooth", "機能：外音取り込み"
+        "個数：1個",
+        "接続：Bluetooth",
+        "機能：外音取り込み",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください", "購入手続き画面で配送方法や金額を最終確認できます"
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "配送方法は購入手続き画面で選択できます", "地域によりお届け日が異なる場合があります"
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/earphones.png",
-      dpDisplay: { label: "★4.8", subLabel: "(512)" },
+      dpDisplay: {
+        rating: 4.3,
+        reviewCount: 128,
+      },
     },
   ] satisfies Trial3Product[],
   shippingMethods: [
-    { id: "standard", name: "通常配送", priceYen: 0, shortDescription: "3〜5日でお届け" },
-    { id: "express", name: "お急ぎ便", priceYen: 300, shortDescription: "最短で翌日にお届け" },
-    { id: "scheduled", name: "日時指定便", priceYen: 200, shortDescription: "受け取り日時を指定できます" },
+    {
+      id: "standard",
+      name: "通常配送",
+      priceYen: 200,
+      shortDescription: "3〜5日でお届け",
+    },
+    {
+      id: "express",
+      name: "お急ぎ便",
+      priceYen: 500,
+      shortDescription: "最短で翌日にお届け",
+    },
+    {
+      id: "scheduled",
+      name: "日時指定便",
+      priceYen: 800,
+      shortDescription: "受け取り日時を指定できます",
+    },
   ] satisfies ShippingMethod[],
   options: [
-    { id: "insurance", name: "配送補償オプション", priceYen: 150, shortDescription: "破損・紛失時の補償を追加します" },
-    { id: "gift", name: "ギフト包装", priceYen: 100, shortDescription: "プレゼント用に包装します" },
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 2300,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
+    {
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 2200,
+      shortDescription: "プレゼント用に包装します",
+    },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial3Data.products.find((product) => product.id === productId) ?? trial3Data.products[0];
+  return (
+    trial3Data.products.find((product) => product.id === productId) ??
+    trial3Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial3Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial3Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {

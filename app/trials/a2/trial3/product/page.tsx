@@ -76,10 +76,30 @@ export default function ProductPageA2Trial3() {
               checkoutPath={checkoutPath}
               dpArea={
                 product.dpDisplay ? (
-                  <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold text-orange-700">
-                    <p className="truncate">{product.dpDisplay.label}</p>
+                  <div className="flex h-full items-center justify-center border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold leading-[42px] text-orange-700">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                            key={star}
+                            className={
+                              star <= Math.floor(product.dpDisplay!.rating)
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            }
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+
+                      <p className="truncate">
+                        {product.dpDisplay.rating}（
+                        {product.dpDisplay.reviewCount}件）
+                      </p>
+                    </div>
                   </div>
-                ) : undefined
+                ) : null
               }
             />
           ))}

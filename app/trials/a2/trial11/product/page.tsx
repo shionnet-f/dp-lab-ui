@@ -76,7 +76,7 @@ export default function ProductPageA2Trial11() {
               checkoutPath={checkoutPath}
               dpArea={
                 product.dpDisplay?.showFreeShipping ? (
-                  <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden px-3 text-[16px] font-bold text-red-600">
+                  <div className="flex h-full items-center justify-start px-3 text-[22px] font-bold leading-[42px] text-red-600">
                     <p className="truncate">送料無料</p>
                   </div>
                 ) : undefined

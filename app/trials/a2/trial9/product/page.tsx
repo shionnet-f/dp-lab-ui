@@ -383,11 +383,11 @@ function renderDescriptionArea(product: Trial9Product) {
 
   return (
     <>
-      <p className="truncate">一見お得に見える商品です。</p>
-      <p className="truncate text-[16px] font-bold text-gray-900">
+      <p className="truncate">まとめ買い向けの商品です。</p>
+      <p className="truncate text-[18px] font-extrabold text-gray-900">
         {product.dpDisplay.emphasizedVolumeText}
       </p>
-      <p className="truncate">内容量と本数を確認してください。</p>
+      <p className="truncate">日常のストック用にも使いやすい内容です。</p>
     </>
   );
 }

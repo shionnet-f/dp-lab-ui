@@ -1,7 +1,7 @@
 export type Trial10Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
@@ -38,119 +38,119 @@ export const trial10Data = {
   },
   products: [
     {
+      id: "p3",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "コピー用紙 標準タイプ",
+      priceYen: 3020,
+      description: "日常業務に使いやすいコピー用紙です。",
+      specsAndNotes: [
+        "サイズ：A4",
+        "枚数：500枚×5冊（合計2500枚）",
+        "用紙種類：普通紙",
+      ],
+      prePurchaseCheck: [
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
+      ],
+      deliveryInfo: [
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
+      ],
+      imageSrc: "/images/products/copy-paper.png",
+      dpDisplay: {
+        originalPriceYen: 3580,
+        displayPriceYen: 3020,
+        isDiscountTarget: true,
+      },
+    },
+    {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "A4コピー用紙 500枚×6冊 高白色",
+      name: "コピー用紙 レギュラー",
       priceYen: 3980,
-      description: "A4で合計3000枚の普通紙ですが、予算3,400円を超える商品です。",
+      description: "事務作業に使いやすいコピー用紙です。",
       specsAndNotes: [
         "サイズ：A4",
         "枚数：500枚×6冊（合計3000枚）",
         "用紙種類：普通紙",
       ],
       prePurchaseCheck: [
-        "予算内に収まるかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/copy-paper.png",
       dpDisplay: null,
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "A4コピー用紙 500枚×6冊 マット紙",
-      priceYen: 3180,
-      description: "合計3000枚ですが、普通紙ではなくマット紙のため条件を満たしません。",
-      specsAndNotes: [
-        "サイズ：A4",
-        "枚数：500枚×6冊（合計3000枚）",
-        "用紙種類：マット紙",
-      ],
-      prePurchaseCheck: [
-        "サイズや枚数だけでなく、用紙種類も確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
-      ],
-      deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
-      ],
-      imageSrc: "/images/products/copy-paper.png",
-      dpDisplay: null,
-    },
-    {
-      id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "A4コピー用紙 500枚×5冊 スタンダード",
-      priceYen: 2980,
-      description: "A4で合計2500枚の普通紙で、条件を満たす中で最も安い商品です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "コピー用紙 通常タイプ",
+      priceYen: 3100,
+      description: "まとめて使いやすいコピー用紙です。",
       specsAndNotes: [
         "サイズ：A4",
         "枚数：500枚×5冊（合計2500枚）",
         "用紙種類：普通紙",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/copy-paper.png",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "correct",
       failReason: null,
-      name: "A4コピー用紙 500枚×5冊 おすすめパック",
-      priceYen: 3280,
-      description: "A4で合計2500枚の普通紙です。価格表示が強調されている商品です。",
+      name: "コピー用紙 ベーシック",
+      priceYen: 2880,
+      description: "普段使いしやすいコピー用紙です。",
       specsAndNotes: [
         "サイズ：A4",
         "枚数：500枚×5冊（合計2500枚）",
         "用紙種類：普通紙",
       ],
       prePurchaseCheck: [
-        "最終的な価格を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
-        "通常配送は3〜5日でお届けします",
-        "地域や天候により到着が前後する場合があります",
+        "配送方法は購入手続き画面で選択できます",
+        "地域によりお届け日が異なる場合があります",
       ],
       imageSrc: "/images/products/copy-paper.png",
-      dpDisplay: {
-        originalPriceYen: 3980,
-        displayPriceYen: 3250,
-        isDiscountTarget: true
-      },
+      dpDisplay: null,
     },
   ] satisfies Trial10Product[],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 0,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 300,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
       name: "日時指定便",
-      priceYen: 250,
+      priceYen: 800,
       shortDescription: "受け取り日時を指定できます",
     },
   ] satisfies ShippingMethod[],
@@ -158,24 +158,30 @@ export const trial10Data = {
     {
       id: "insurance",
       name: "配送補償オプション",
-      priceYen: 200,
+      priceYen: 350,
       shortDescription: "破損・紛失時の補償を追加します",
     },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 150,
-      shortDescription: "簡易ギフト包装を追加します",
+      priceYen: 350,
+      shortDescription: "プレゼント用に包装します",
     },
   ] satisfies AddonOption[],
 };
 
 export function getProductById(productId?: string) {
-  return trial10Data.products.find((product) => product.id === productId) ?? trial10Data.products[0];
+  return (
+    trial10Data.products.find((product) => product.id === productId) ??
+    trial10Data.products[0]
+  );
 }
 
 export function getShippingById(shippingId?: string) {
-  return trial10Data.shippingMethods.find((method) => method.id === shippingId) ?? null;
+  return (
+    trial10Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
+  );
 }
 
 export function getOptionsByIds(optionIds: string[]) {

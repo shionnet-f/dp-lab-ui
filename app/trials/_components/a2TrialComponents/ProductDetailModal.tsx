@@ -6,15 +6,15 @@ import { useRouter } from "next/navigation";
 import { trackAction } from "@/app/actions/track";
 import { getClientLogBase } from "@/lib/log/clientLogBase";
 function getImplTrialId() {
-  const segments = window.location.pathname.split("/").filter(Boolean);
-  const trialsIndex = segments.indexOf("trials");
+    const segments = window.location.pathname.split("/").filter(Boolean);
+    const trialsIndex = segments.indexOf("trials");
 
-  if (trialsIndex >= 0) {
-    return segments[trialsIndex + 2] ?? null;
-  }
+    if (trialsIndex >= 0) {
+        return segments[trialsIndex + 2] ?? null;
+    }
 
-  const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
-  return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
+    const setIdIndex = segments.findIndex((segment) => ["a1", "a2", "b1", "b2"].includes(segment));
+    return setIdIndex >= 0 ? segments[setIdIndex + 1] ?? null : null;
 }
 
 
@@ -22,7 +22,7 @@ type ProductDpDisplay = {
     label?: string;
     subLabel?: string;
     highlight?: string;
-    rating?: string;
+    rating?: number;
     reviewCount?: number;
     rankingLabel?: string;
     awardLabel?: string;
@@ -350,8 +350,8 @@ export function ProductDetailModal({
                                 });
 
                                 router.push(
-                    `${nextPath}?set=${set}&trial=${trial}&productId=${product.id}`,
-                  );
+                                    `${nextPath}?set=${set}&trial=${trial}&productId=${product.id}`,
+                                );
                             }}
                         >
                             この商品を選ぶ
