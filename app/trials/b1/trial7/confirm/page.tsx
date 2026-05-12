@@ -27,16 +27,6 @@ export default function ConfirmPageB1Trial7() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-
-  function createLogBase() {
-    const logParams = new URLSearchParams();
-
-    if (set) logParams.set("set", set);
-    if (trial) logParams.set("trial", trial);
-
-    return getClientLogBase({ searchParams: logParams });
-  }
-
   const [error, setError] = useState(false);
   const didTrack = useRef(false);
 
@@ -52,28 +42,42 @@ export default function ConfirmPageB1Trial7() {
 
   /*
     trial7のDP：
-    - 商品ページではサブスク価格を提示
-    - confirmで「サブスク価格であること」を提示
-    - 購入金額は通常価格 priceYen で計算
+    - 商品ページでは priceYen を表示価格として提示
+    - priceYen は定期お届けコース適用時の価格
+    - confirmで actualPriceYen を通常購入価格として提示
+    - 合計金額は actualPriceYen で計算する
   */
-  const subscriptionPriceYen =
+  const displayedPriceYen = selectedProduct.priceYen;
+
+  const productPriceYen =
     selectedProduct.actualPriceYen ?? selectedProduct.priceYen;
 
-  const productPriceYen = selectedProduct.priceYen;
+  const isSubscriptionDisplay =
+    selectedProduct.actualPriceYen !== undefined;
+
   const shippingPriceYen = selectedShipping?.priceYen ?? 0;
+
   const optionTotalYen = selectedOptions.reduce(
     (sum, option) => sum + option.priceYen,
     0,
   );
+
   const totalYen = productPriceYen + shippingPriceYen + optionTotalYen;
 
-  const isSubscriptionDisplay = selectedProduct.actualPriceYen !== undefined;
+  function createLogBase() {
+    const logParams = new URLSearchParams();
+
+    if (set) logParams.set("set", set);
+    if (trial) logParams.set("trial", trial);
+
+    return getClientLogBase({ searchParams: logParams });
+  }
 
   useEffect(() => {
     if (didTrack.current) return;
     didTrack.current = true;
 
-    trackAction({
+    void trackAction({
       ...createLogBase(),
       phase: "main",
       page: "confirm",
@@ -83,7 +87,7 @@ export default function ConfirmPageB1Trial7() {
         productId,
         shippingId,
         optionIds,
-        subscriptionPriceYen,
+        displayedPriceYen,
         productPriceYen,
         shippingPriceYen,
         optionTotalYen,
@@ -95,7 +99,7 @@ export default function ConfirmPageB1Trial7() {
     productId,
     shippingId,
     optionIds,
-    subscriptionPriceYen,
+    displayedPriceYen,
     productPriceYen,
     shippingPriceYen,
     optionTotalYen,
@@ -116,7 +120,7 @@ export default function ConfirmPageB1Trial7() {
   const backParams = new URLSearchParams();
   backParams.set("productId", selectedProduct.id);
   backParams.set("set", set);
-  if (trial) backParams.set("trial", trial);
+  backParams.set("trial", trial);
   backParams.set("shipping", shippingId ?? "");
 
   optionIds.forEach((optionId) => {
@@ -126,7 +130,7 @@ export default function ConfirmPageB1Trial7() {
   const completeParams = new URLSearchParams();
   completeParams.set("productId", selectedProduct.id);
   completeParams.set("set", set);
-  if (trial) completeParams.set("trial", trial);
+  completeParams.set("trial", trial);
   completeParams.set("shipping", shippingId ?? "");
 
   optionIds.forEach((optionId) => {
@@ -147,7 +151,7 @@ export default function ConfirmPageB1Trial7() {
           productId,
           shippingId,
           optionIds,
-          subscriptionPriceYen,
+          displayedPriceYen,
           productPriceYen,
           shippingPriceYen,
           optionTotalYen,
@@ -173,7 +177,7 @@ export default function ConfirmPageB1Trial7() {
         productId,
         shippingId,
         optionIds,
-        subscriptionPriceYen,
+        displayedPriceYen,
         productPriceYen,
         shippingPriceYen,
         optionTotalYen,
@@ -196,7 +200,7 @@ export default function ConfirmPageB1Trial7() {
         productId,
         shippingId,
         optionIds,
-        subscriptionPriceYen,
+        displayedPriceYen,
         productPriceYen,
         shippingPriceYen,
         optionTotalYen,
@@ -227,7 +231,12 @@ export default function ConfirmPageB1Trial7() {
           {/* 左側 */}
           <div className="h-[805px] w-[620px]">
             {/* ご注文商品：275px */}
-            <OrderItemPanel product={selectedProduct} />
+            <OrderItemPanel
+              product={{
+                ...selectedProduct,
+                priceYen: productPriceYen,
+              }}
+            />
 
             {/* 60pxの空間 */}
             <div className="h-[60px]" />
@@ -288,10 +297,11 @@ export default function ConfirmPageB1Trial7() {
                   <div className="h-[120px] overflow-hidden rounded-md border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-700">
                     <p>
                       商品ページで表示されていた価格 ¥
-                      {yen(subscriptionPriceYen)} は、定期お届けコースを
-                      利用した場合の価格です。
+                      {yen(displayedPriceYen)} は、定期お届けコースを利用した場合の価格です。
                     </p>
-                    <p>今回の通常購入価格は ¥{yen(productPriceYen)} です。</p>
+                    <p>
+                      今回の通常購入価格は ¥{yen(productPriceYen)} です。
+                    </p>
                   </div>
                 </>
               )}

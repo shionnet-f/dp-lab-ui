@@ -1,7 +1,17 @@
 export type Trial3Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
+  role:
+  | "budget_over"
+  | "condition_ng"
+  | "correct"
+  | "valid_but_expensive"
+  | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -29,21 +39,21 @@ export type AddonOption = {
 export const trial3Data = {
   purchaseConditions: {
     budgetYen: 10000,
-    quantityCondition: "1個であること",
-    specificCondition: "Bluetooth接続対応であること",
+    quantityCondition: "連続再生時間が6時間以上であること",
+    specificCondition: "ノイズキャンセリング機能があること",
   },
   products: [
     {
-      id: "p2",
+      id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "ワイヤレスイヤホン スタンダード",
+      name: "ワイヤレスイヤホン EA-740X",
       priceYen: 11400,
       description: "日常利用に向いたワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個",
+        "連続再生時間：8時間",
+        "ノイズキャンセリング：あり",
         "接続：Bluetooth",
-        "機能：ノイズキャンセリング",
       ],
       prePurchaseCheck: [
         "使用環境に合うか確認してください",
@@ -60,16 +70,16 @@ export const trial3Data = {
       },
     },
     {
-      id: "p1",
+      id: "p2",
       role: "dp_target",
       failReason: "not_lowest",
-      name: "ワイヤレスイヤホン レギュラー",
+      name: "ワイヤレスイヤホン EW-620R",
       priceYen: 8480,
       description: "音楽や通話に使いやすいワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個",
+        "連続再生時間：7時間",
+        "ノイズキャンセリング：あり",
         "接続：Bluetooth",
-        "機能：外音取り込み",
       ],
       prePurchaseCheck: [
         "使用環境に合うか確認してください",
@@ -89,13 +99,13 @@ export const trial3Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "ワイヤレスイヤホン ベーシック",
+      name: "ワイヤレスイヤホン EC-310B",
       priceYen: 7580,
       description: "持ち運びしやすいワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個",
+        "連続再生時間：6時間",
+        "ノイズキャンセリング：あり",
         "接続：Bluetooth",
-        "機能：マイク付き",
       ],
       prePurchaseCheck: [
         "使用環境に合うか確認してください",
@@ -115,13 +125,13 @@ export const trial3Data = {
       id: "p4",
       role: "valid_but_expensive",
       failReason: "not_lowest",
-      name: "ワイヤレスイヤホン シンプル",
+      name: "ワイヤレスイヤホン EP-580S",
       priceYen: 8980,
       description: "幅広い場面で使いやすいワイヤレスイヤホンです。",
       specsAndNotes: [
-        "個数：1個",
+        "連続再生時間：8時間",
+        "ノイズキャンセリング：あり",
         "接続：Bluetooth",
-        "機能：外音取り込み",
       ],
       prePurchaseCheck: [
         "使用環境に合うか確認してください",

@@ -126,7 +126,7 @@ export const trial11Data = {
         "通常配送は送料無料です",
         "地域や天候により到着が前後する場合があります",
       ],
-      imageSrc: "/images/products/shampoo.svg",
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
   ] satisfies Trial11Product[],

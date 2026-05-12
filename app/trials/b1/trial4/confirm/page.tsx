@@ -6,6 +6,7 @@ import {
   getOptionsByIds,
   getProductById,
   getShippingById,
+  getShippingPrice,
   trial4Data,
 } from "../data";
 import { trackAction } from "@/app/actions/track";
@@ -71,7 +72,11 @@ export default function ConfirmPageB1Trial4() {
   const selectedShipping = getShippingById(shipping);
   const selectedOptions = getOptionsByIds(optionKeys);
 
-  const shippingPrice = selectedShipping?.priceYen ?? 0;
+  const shippingPrice = getShippingPrice(selectedProduct.id, shipping);
+  const selectedShippingForDisplay = selectedShipping
+    ? { ...selectedShipping, priceYen: shippingPrice }
+    : null;
+
   const optionTotal = selectedOptions.reduce(
     (sum, option) => sum + option.priceYen,
     0,
@@ -162,7 +167,7 @@ export default function ConfirmPageB1Trial4() {
             <div className="h-[60px]" />
 
             {/* 配送方法 */}
-            <ConfirmShippingSection shippingMethod={selectedShipping} />
+            <ConfirmShippingSection shippingMethod={selectedShippingForDisplay} />
 
             <div className="h-[60px]" />
 

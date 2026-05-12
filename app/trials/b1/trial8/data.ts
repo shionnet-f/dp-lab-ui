@@ -1,7 +1,17 @@
 export type Trial8Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role:
+  | "budget_over"
+  | "condition_ng"
+  | "correct"
+  | "valid_but_expensive"
+  | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -26,155 +36,155 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial8Data = {
+export type Trial8Data = {
+  trialId?: string;
+  dpType?: string;
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial8Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial8Data: Trial8Data = {
   trialId: "b1-trial8",
   dpType: "商品名は購入条件に近く見えるが商品詳細を見ると実は条件とずれる",
   purchaseConditions: {
-    budgetYen: 1500,
-    quantityCondition: "500ml×24本以上であること",
-    specificCondition: "無糖であること",
+    budgetYen: 12000,
+    quantityCondition: "256GB以上であること",
+    specificCondition: "microSDカードであること",
   },
   products: [
     {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "炭酸水 500ml×24本 無糖 プレミアム",
-      priceYen: 1780,
-      description:
-        "500ml×24本の無糖炭酸水です。購入条件は満たしますが、予算を超える商品です。",
+      name: "SDカード MC-512R",
+      priceYen: 12800,
+      description: "日常使いしやすいメモリーカードです。",
       specsAndNotes: [
-        "内容量：500ml×24本",
-        "種類：炭酸水",
-        "味：無糖・プレーン",
-        "ケース販売商品です",
-        "高温・直射日光を避けて保管してください",
+        "容量：512GB",
+        "種類：microSDカード",
+        "速度規格：UHS-I",
       ],
       prePurchaseCheck: [
-        "容量・本数・味の条件が合っているか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/water.png",
+      imageSrc: "/images/products/microsd-card.svg",
       dpDisplay: null,
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "quantity_condition",
-      name: "炭酸水 500ml×20本 無糖",
-      priceYen: 1180,
-      description:
-        "無糖の炭酸水ですが、20本入りのため購入条件の本数を満たさない商品です。",
+      role: "dp_target",
+      failReason: "specific_condition",
+      name: "SDカード MC-256N",
+      priceYen: 9800,
+      description: "扱いやすい標準的なメモリーカードです。",
       specsAndNotes: [
-        "内容量：500ml×20本",
-        "種類：炭酸水",
-        "味：無糖・プレーン",
-        "ケース販売商品です",
-        "高温・直射日光を避けて保管してください",
+        "容量：256GB",
+        "種類：SDカード",
+        "速度規格：UHS-I",
       ],
       prePurchaseCheck: [
-        "容量・本数・味の条件が合っているか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/water.png",
+      imageSrc: "/images/products/microsd-card.svg",
       dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "炭酸水 500ml×24本 無糖",
-      priceYen: 1280,
-      description:
-        "500ml×24本の無糖炭酸水で、購入条件を満たす中で最も安い商品です。",
+      name: "SDカード MC-256B",
+      priceYen: 10800,
+      description: "毎日の使用に適したメモリーカードです。",
       specsAndNotes: [
-        "内容量：500ml×24本",
-        "種類：炭酸水",
-        "味：無糖・プレーン",
-        "ケース販売商品です",
-        "日常使いしやすい標準的な商品です",
+        "容量：256GB",
+        "種類：microSDカード",
+        "速度規格：UHS-I",
       ],
       prePurchaseCheck: [
-        "容量・本数・味の条件が合っているか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/water.png",
+      imageSrc: "/images/products/microsd-card.svg",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: "specific_condition",
-      name: "炭酸水 500ml×24本 クリアテイスト",
-      priceYen: 1380,
-      description:
-        "商品名だけ見ると条件に近く見えますが、詳細を見ると無糖ではない商品です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "SDカード MC-512S",
+      priceYen: 11600,
+      description: "幅広い場面で使いやすいメモリーカードです。",
       specsAndNotes: [
-        "内容量：500ml×24本",
-        "種類：炭酸飲料",
-        "味：レモン風味・微糖",
-        "甘さを少し加えた飲みやすい仕上がりです",
-        "ケース販売商品です",
-        "高温・直射日光を避けて保管してください",
+        "容量：512GB",
+        "種類：microSDカード",
+        "速度規格：UHS-I",
       ],
       prePurchaseCheck: [
-        "商品名だけで判断せず、仕様や味の表記を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/water.png",
+      imageSrc: "/images/products/microsd-card.svg",
       dpDisplay: null,
     },
-  ] satisfies Trial8Product[],
+  ],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 220,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 480,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
-      name: "日時指定便",
-      priceYen: 320,
-      shortDescription: "受け取り日時を指定できます",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
     },
-  ] satisfies ShippingMethod[],
+  ],
   options: [
+    {
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 1200,
+      shortDescription: "破損・紛失時の補償を追加します",
+    },
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 180,
-      shortDescription: "簡易ギフト包装を追加します",
+      priceYen: 1100,
+      shortDescription: "プレゼント用に包装します",
     },
-    {
-      id: "bag",
-      name: "手提げ袋を追加",
-      priceYen: 80,
-      shortDescription: "持ち運び用の手提げ袋を追加します",
-    },
-  ] satisfies AddonOption[],
+  ],
 };
 
 export function getProductById(productId?: string) {
@@ -186,7 +196,8 @@ export function getProductById(productId?: string) {
 
 export function getShippingById(shippingId?: string) {
   return (
-    trial8Data.shippingMethods.find((method) => method.id === shippingId) ?? null
+    trial8Data.shippingMethods.find((method) => method.id === shippingId) ??
+    null
   );
 }
 

@@ -1,7 +1,17 @@
 export type Trial4Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role:
+  | "budget_over"
+  | "condition_ng"
+  | "correct"
+  | "valid_but_expensive"
+  | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -37,6 +47,29 @@ export type Trial4Data = {
   options: AddonOption[];
 };
 
+export const SHIPPING_PRICE_TABLE: Record<string, Record<string, number>> = {
+  p1: {
+    standard: 200,
+    express: 500,
+    scheduled: 800,
+  },
+  p2: {
+    standard: 500,
+    express: 800,
+    scheduled: 1100,
+  },
+  p3: {
+    standard: 200,
+    express: 500,
+    scheduled: 800,
+  },
+  p4: {
+    standard: 200,
+    express: 500,
+    scheduled: 800,
+  },
+};
+
 export const trial4Data: Trial4Data = {
   purchaseConditions: {
     budgetYen: 2000,
@@ -48,19 +81,17 @@ export const trial4Data: Trial4Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "A4 横罫ノート 10冊パック プレミアム",
+      name: "ノート レギュラー",
       priceYen: 2280,
-      description:
-        "A4サイズの横罫ノート10冊セットです。条件は満たしますが、予算を超える商品です。",
+      description: "学習や作業に使いやすいノートです。",
       specsAndNotes: [
         "サイズ：A4",
         "罫線：横罫",
         "入数：10冊",
-        "1冊あたり40枚",
       ],
       prePurchaseCheck: [
-        "予算内に収まるか確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -71,21 +102,19 @@ export const trial4Data: Trial4Data = {
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "A4 無地ノート 10冊パック",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "ノート 標準タイプ",
       priceYen: 1280,
-      description:
-        "A4サイズで10冊入りのノートです。入数は満たしますが、横罫ではなく無地です。",
+      description: "まとめて使いやすいノートです。",
       specsAndNotes: [
         "サイズ：A4",
-        "罫線：無地",
-        "入数：10冊",
-        "1冊あたり30枚",
+        "罫線：横罫",
+        "入数：12冊",
       ],
       prePurchaseCheck: [
-        "横罫かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -98,19 +127,17 @@ export const trial4Data: Trial4Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "A4 横罫ノート 10冊パック ベーシック",
+      name: "ノート ベーシック",
       priceYen: 1380,
-      description:
-        "A4サイズ・横罫・10冊入りの条件を満たす中で最も安い商品です。",
+      description: "日常使いしやすいノートです。",
       specsAndNotes: [
         "サイズ：A4",
         "罫線：横罫",
         "入数：10冊",
-        "1冊あたり30枚",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -121,21 +148,19 @@ export const trial4Data: Trial4Data = {
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "A4 横罫ノート 12冊パック しっかり製本",
-      priceYen: 1560,
-      description:
-        "A4サイズ・横罫・12冊入りの条件を満たす商品です。正解より少し高い設定です。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "ノート シンプル",
+      priceYen: 1680,
+      description: "幅広い用途で使いやすいノートです。",
       specsAndNotes: [
         "サイズ：A4",
         "罫線：横罫",
-        "入数：12冊",
-        "1冊あたり30枚",
+        "入数：10冊",
       ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
@@ -149,34 +174,34 @@ export const trial4Data: Trial4Data = {
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 220,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 520,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
-      name: "日時指定便",
-      priceYen: 380,
-      shortDescription: "受け取り日時を指定できます",
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
     },
   ],
   options: [
     {
-      id: "cover",
-      name: "透明カバー追加",
-      priceYen: 180,
-      shortDescription: "ノート表紙を保護する透明カバーを付けます",
+      id: "insurance",
+      name: "配送補償オプション",
+      priceYen: 600,
+      shortDescription: "破損・紛失時の補償を追加します",
     },
     {
-      id: "divider",
-      name: "見出しインデックス追加",
-      priceYen: 120,
-      shortDescription: "ノート整理用の見出しインデックスを追加します",
+      id: "gift",
+      name: "ギフト包装",
+      priceYen: 500,
+      shortDescription: "プレゼント用に包装します",
     },
   ],
 };
@@ -192,6 +217,16 @@ export function getShippingById(shippingId?: string) {
   return (
     trial4Data.shippingMethods.find((method) => method.id === shippingId) ??
     null
+  );
+}
+
+export function getShippingPrice(productId?: string, shippingId?: string) {
+  if (!productId || !shippingId) return 0;
+
+  return (
+    SHIPPING_PRICE_TABLE[productId]?.[shippingId] ??
+    getShippingById(shippingId)?.priceYen ??
+    0
   );
 }
 

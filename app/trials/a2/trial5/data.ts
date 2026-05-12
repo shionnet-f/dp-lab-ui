@@ -76,7 +76,7 @@ export const trial5Data = {
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/shampoo.svg",
+      imageSrc: "/images/products/fabric-softener.png",
       dpDisplay: null,
     },
     {

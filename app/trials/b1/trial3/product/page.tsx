@@ -73,8 +73,8 @@ export default function ProductPageB1Trial3() {
               checkoutPath={checkoutPath}
               dpArea={
                 product.dpDisplay ? (
-                  <div className="flex h-full items-center justify-center border border-orange-400 bg-orange-100 px-3 text-[16px] font-semibold leading-[42px] text-orange-700">
-                    <p className="truncate">{product.dpDisplay.label}</p>
+                  <div className="flex h-full items-center justify-center px-3 text-[16px] font-semibold leading-[42px] text-orange-700">
+                    <p className="truncate"></p>
                   </div>
                 ) : undefined
               }

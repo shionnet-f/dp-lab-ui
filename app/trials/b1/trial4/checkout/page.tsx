@@ -2,7 +2,7 @@
 
 import { use, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getProductById, trial4Data } from "../data";
+import { getProductById, getShippingPrice, trial4Data } from "../data";
 import { trackAction } from "@/app/actions/track";
 import { getClientLogBase } from "@/lib/log/clientLogBase";
 import { TrialPageHeader } from "@/app/trials/_components/TrialPageHeader";
@@ -149,6 +149,7 @@ type ShippingMethodSectionHiddenDetailProps = {
   shippingMethods: ShippingMethod[];
   selectedShipping: string | null;
   onChangeShipping: (id: string) => void;
+  productId: string;
   set: string;
   trial: string;
 };
@@ -157,6 +158,7 @@ function ShippingMethodSectionHiddenDetail({
   shippingMethods,
   selectedShipping,
   onChangeShipping,
+  productId,
   set,
   trial,
 }: ShippingMethodSectionHiddenDetailProps) {
@@ -170,7 +172,7 @@ function ShippingMethodSectionHiddenDetail({
 
   const shippingDetailRows = shippingMethods.map((method) => ({
     label: method.name,
-    value: `¥${yen(method.priceYen)}`,
+    value: `¥${yen(getShippingPrice(productId, method.id))}`,
   }));
 
   return (
@@ -208,7 +210,9 @@ function ShippingMethodSectionHiddenDetail({
                   type: "shipping_select",
                   meta: { implTrialId: "trial4" },
                   payload: {
+                    productId,
                     shippingId: method.id,
+                    shippingPriceYen: getShippingPrice(productId, method.id),
                   },
                 });
               }}
@@ -445,6 +449,7 @@ export default function CheckoutPageB1Trial4({ searchParams }: Props) {
               shippingMethods={trial4Data.shippingMethods}
               selectedShipping={shipping}
               onChangeShipping={setShipping}
+              productId={selectedProduct.id}
               set={set}
               trial={trial}
             />

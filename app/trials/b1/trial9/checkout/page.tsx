@@ -187,16 +187,18 @@ export default function CheckoutPageB1Trial9({ searchParams }: Props) {
                         }}
                       />
 
-                      <div className="leading-tight">
-                        <div className="font-medium text-gray-900">
-                          {method.name}
+
+                      <div className="flex min-w-0 flex-1 items-center justify-between gap-6">
+                        <div className="min-w-0">
+                          <div className="truncate text-[18px] font-bold leading-[24px] text-gray-900">
+                            {method.name}
+                          </div>
+                          <div className="truncate text-[15px] font-semibold leading-[22px] text-gray-600">
+                            {method.shortDescription}
+                          </div>
                         </div>
 
-                        <div className="text-gray-600">
-                          {method.shortDescription}
-                        </div>
-
-                        <div className="text-gray-700">
+                        <div className="shrink-0 text-[22px] font-bold text-gray-900">
                           +¥{yen(shippingPriceYen)}
                         </div>
                       </div>

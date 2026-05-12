@@ -1,7 +1,7 @@
 export type Trial10Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role: "budget_over" | "condition_ng" | "correct" | "valid_but_expensive" | "dp_target";
+  failReason: "budget" | "quantity_condition" | "specific_condition" | "not_lowest" | null;
   name: string;
   priceYen: number;
   description: string;
@@ -10,6 +10,7 @@ export type Trial10Product = {
   deliveryInfo: string[];
   imageSrc: string;
   dpDisplay?: null;
+
 };
 
 export type ShippingMethod = {
@@ -26,10 +27,22 @@ export type AddonOption = {
   shortDescription: string;
 };
 
-export const trial10Data = {
+export type Trial10Data = {
+  trialId?: string;
+  dpType?: string;
+  purchaseConditions: {
+    budgetYen: number;
+    quantityCondition: string;
+    specificCondition: string;
+  };
+  products: Trial10Product[];
+  shippingMethods: ShippingMethod[];
+  options: AddonOption[];
+};
+
+export const trial10Data: Trial10Data = {
   trialId: "b1-trial10",
-  dpType:
-    "商品詳細dialogの仕様・補足に、購入条件情報を改行や箇条書きなしの連続した文章で埋め込む",
+  dpType: "商品詳細dialogの仕様・補足に、購入条件情報を改行や箇条書きなしの連続した文章で埋め込む",
   purchaseConditions: {
     budgetYen: 2000,
     quantityCondition: "5枚以上であること",
@@ -40,107 +53,99 @@ export const trial10Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "フェイスタオル 5枚セット 綿100% プレミアム",
+      name: "フェイスタオル レギュラー",
       priceYen: 2280,
-      description:
-        "綿100%のフェイスタオル5枚セットです。条件は満たしますが、価格が予算を超えています。",
-      specsAndNotes:
-        "毎日の洗面や入浴後に使いやすい標準サイズのフェイスタオルで、今回は綿100%の生地を使った5枚セットとして案内されています。吸水性を重視した仕様で、家庭内のまとめ使いにも向いていますが、価格はやや高めに設定されています。洗濯後は形を整えて干してください。",
+      description: "日常使いしやすいフェイスタオルです。",
+      specsAndNotes: "標準サイズのフェイスタオルで、綿100%の生地を使った5枚セットとして案内されています。吸水性を重視した仕様で、家庭内のまとめ使いにも向いています。",
       prePurchaseCheck: [
-        "枚数と素材は仕様・補足の記載をよく確認して判断してください。",
-        "配送方法と追加オプションは購入手続き画面で選択できます。",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "通常配送・お急ぎ便・日時指定便から選択できます。",
-        "送料は配送方法に応じて変わります。",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
       imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
     {
       id: "p2",
-      role: "condition_ng",
-      failReason: "specific_condition",
-      name: "フェイスタオル 5枚セット やわらか仕上げ",
-      priceYen: 1580,
-      description:
-        "5枚セットのフェイスタオルですが、素材条件を満たしていない商品です。",
-      specsAndNotes:
-        "日常使いしやすいフェイスタオル5枚セットとして案内されていますが、生地は綿80%とポリエステル20%の混紡素材で作られており、乾きやすさを重視した仕様です。手触りはやわらかめですが、綿100%条件は満たしません。洗濯ネットの使用が推奨されています。",
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "フェイスタオル 通常タイプ",
+      priceYen: 1760,
+      description: "扱いやすいフェイスタオルです。",
+      specsAndNotes: "日常使いしやすいフェイスタオルで、綿100%の生地を使った5枚セットです。洗面所や浴室での使用を想定した標準的な仕様です。",
       prePurchaseCheck: [
-        "枚数だけでなく、素材が綿100%かどうかも仕様・補足で確認してください。",
-        "配送方法と追加オプションは購入手続き画面で選択できます。",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "通常配送・お急ぎ便・日時指定便から選択できます。",
-        "送料は配送方法に応じて変わります。",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
       imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
     {
       id: "p3",
-      role: "correct",
-      failReason: null,
-      name: "フェイスタオル 5枚セット 綿100% ベーシック",
-      priceYen: 1680,
-      description:
-        "綿100%のフェイスタオル5枚セットで、条件を満たす中で最も安い商品です。",
-      specsAndNotes:
-        "家庭用として使いやすいフェイスタオルで、今回は綿100%の生地を用いた5枚セットとして案内されています。標準的な厚みで扱いやすく、洗面所や入浴後の使用に向いています。乾燥機の使用は縮みの原因になる場合があるため注意してください。",
+      role: "dp_target",
+      failReason: "not_lowest",
+      name: "フェイスタオル 標準タイプ",
+      priceYen: 1620,
+      description: "家庭で使いやすいフェイスタオルです。",
+      specsAndNotes: "家庭内で使いやすいフェイスタオルのおまとめセットとして案内されており、今回の構成は綿100%の生地を使用した5枚セットで、洗面所や入浴後などの日常使いを想定した標準サイズです。吸水性を重視した仕様ですが、パッケージ表面では素材や枚数が強く強調されていません。",
       prePurchaseCheck: [
-        "枚数と素材は仕様・補足の記載をよく確認して判断してください。",
-        "配送方法と追加オプションは購入手続き画面で選択できます。",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "通常配送・お急ぎ便・日時指定便から選択できます。",
-        "送料は配送方法に応じて変わります。",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
       imageSrc: "/images/products/towel.png",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
+      role: "correct",
       failReason: null,
-      name: "フェイスタオル 家庭用おまとめセット",
-      priceYen: 1860,
-      description:
-        "家庭用のまとめ買い向けフェイスタオルです。必要な条件は仕様・補足の文章内にまとまって記載されています。",
-      specsAndNotes:
-        "家庭内で使いやすいフェイスタオルのおまとめセットとして案内されており、今回の構成は綿100%の生地を使用した5枚セットで、洗面所や入浴後などの日常使いを想定した標準サイズです。吸水性を重視した仕様ですが、パッケージ表面では素材や枚数が強く強調されていません。洗濯後は風通しのよい場所で干してください。",
+      name: "フェイスタオル ベーシック",
+      priceYen: 1480,
+      description: "毎日の使用に適したフェイスタオルです。",
+      specsAndNotes: "綿100%のフェイスタオル5枚セットです。標準サイズで、洗面所や浴室での使用に向いています。",
       prePurchaseCheck: [
-        "商品名だけで判断せず、仕様・補足の文章全体を確認してから選んでください。",
-        "配送方法と追加オプションは購入手続き画面で選択できます。",
-      ],
+          "使用環境に合うか確認してください",
+          "商品仕様は購入前にご確認ください"
+        ],
       deliveryInfo: [
-        "通常配送・お急ぎ便・日時指定便から選択できます。",
-        "送料は配送方法に応じて変わります。",
-      ],
+          "配送方法は購入手続き画面で選択できます",
+          "地域によりお届け日が異なる場合があります"
+        ],
       imageSrc: "/images/products/towel.png",
       dpDisplay: null,
-    },
-  ] satisfies Trial10Product[],
+    }
+  ],
   shippingMethods: [
     {
       id: "standard",
       name: "通常配送",
-      priceYen: 480,
+      priceYen: 200,
       shortDescription: "3〜5日でお届け",
     },
     {
       id: "express",
       name: "お急ぎ便",
-      priceYen: 820,
+      priceYen: 500,
       shortDescription: "最短で翌日にお届け",
     },
     {
       id: "scheduled",
-      name: "日時指定便",
-      priceYen: 760,
-      shortDescription: "受け取り日時を指定できます",
-    },
-  ] satisfies ShippingMethod[],
+      name: "当日便",
+      priceYen: 800,
+      shortDescription: "本日中のお届けが可能です",
+    }
+  ],
   options: [
     {
       id: "insurance",
@@ -151,11 +156,11 @@ export const trial10Data = {
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 250,
       shortDescription: "プレゼント用に包装します",
-    },
-  ] satisfies AddonOption[],
-} as const;
+    }
+  ],
+};
 
 export function getProductById(productId?: string) {
   return (

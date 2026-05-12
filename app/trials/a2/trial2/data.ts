@@ -37,7 +37,7 @@ export const trial2Data = {
       id: "p4",
       role: "dp_target",
       failReason: "not_lowest",
-      name: "HDMIケーブル 標準タイプ",
+      name: "HDMIケーブル HC-25A4K",
       priceYen: 740,
       description: "幅広い機器に使いやすいHDMIケーブルです。",
       specsAndNotes: [
@@ -62,7 +62,7 @@ export const trial2Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "HDMIケーブル レギュラー",
+      name: "HDMIケーブル HC-30R4K",
       priceYen: 1180,
       description: "映像機器の接続に使いやすいHDMIケーブルです。",
       specsAndNotes: [
@@ -85,7 +85,7 @@ export const trial2Data = {
       id: "p2",
       role: "valid_but_expensive",
       failReason: "not_lowest",
-      name: "HDMIケーブル 通常タイプ",
+      name: "HDMIケーブル HC-20N4K",
       priceYen: 780,
       description: "家庭用機器の接続に使いやすいHDMIケーブルです。",
       specsAndNotes: [
@@ -108,7 +108,7 @@ export const trial2Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "HDMIケーブル ベーシック",
+      name: "HDMIケーブル HC-20B4K",
       priceYen: 680,
       description: "日常使いしやすいHDMIケーブルです。",
       specsAndNotes: [

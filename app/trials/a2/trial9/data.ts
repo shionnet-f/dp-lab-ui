@@ -88,7 +88,7 @@ export const trial9Data = {
       role: "correct",
       failReason: null,
       name: "緑茶 ベーシック",
-      priceYen: 1580,
+      priceYen: 1620,
       description: "日常使いしやすい緑茶です。",
       specsAndNotes: [
         "内容量：500ml×24本",
@@ -111,7 +111,7 @@ export const trial9Data = {
       role: "dp_target",
       failReason: "quantity_condition",
       name: "緑茶 標準タイプ",
-      priceYen: 1620,
+      priceYen: 1580,
       description: "すっきり飲みやすい緑茶です。",
       specsAndNotes: [
         "内容量：350ml×12本",

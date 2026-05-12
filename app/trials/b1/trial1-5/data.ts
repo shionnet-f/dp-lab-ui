@@ -1,7 +1,17 @@
 export type Trial1_5Product = {
   id: string;
-  role: "budget_over" | "condition_ng" | "correct" | "dp_candidate";
-  failReason: "budget" | "quantity_condition" | "specific_condition" | null;
+  role:
+  | "budget_over"
+  | "condition_ng"
+  | "correct"
+  | "valid_but_expensive"
+  | "dp_target";
+  failReason:
+  | "budget"
+  | "quantity_condition"
+  | "specific_condition"
+  | "not_lowest"
+  | null;
   name: string;
   priceYen: number;
   description: string;
@@ -39,93 +49,101 @@ export type Trial1_5Data = {
 
 export const trial1_5Data: Trial1_5Data = {
   purchaseConditions: {
-    budgetYen: 12000,
-    quantityCondition: "256GB以上であること",
-    specificCondition: "microSDXC対応であること",
+    budgetYen: 1500,
+    quantityCondition: "500ml×24本以上であること",
+    specificCondition: "無糖であること",
   },
   products: [
     {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "microSDXCカード 256GB 高速版",
-      priceYen: 12800,
-      description:
-        "大容量のmicroSDXCカードです。条件は満たしますが予算を超えています。",
-      specsAndNotes: ["容量：256GB", "規格：microSDXC", "速度：UHS-I"],
+      name: "炭酸水 SW-740R",
+      priceYen: 1780,
+      description: "まとめ買い向けの炭酸水です。",
+      specsAndNotes: [
+        "内容量：500ml×24本",
+        "種類：炭酸水",
+        "味：無糖・プレーン",
+      ],
       prePurchaseCheck: [
-        "必要な容量と規格を確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/microsd-card.svg",
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
     {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "microSDHCカード 256GB相当モデル",
-      priceYen: 9800,
-      description:
-        "容量表記は条件に近いですが、規格がmicroSDXCではなく条件を満たしません。",
+      name: "炭酸水 SW-256N",
+      priceYen: 980,
+      description: "すっきり飲みやすい炭酸飲料です。",
       specsAndNotes: [
-        "容量：256GB相当表記",
-        "規格：microSDHC",
-        "速度：Class 10",
+        "内容量：500ml×24本",
+        "種類：炭酸飲料",
+        "味：レモン風味・微糖",
       ],
       prePurchaseCheck: [
-        "microSDXC対応かどうかを確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/microsd-card.svg",
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
     {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "microSDXCカード 256GB",
-      priceYen: 10800,
-      description:
-        "保存容量をしっかり確保できるmicroSDXCカードです。条件を満たす中で最も安い商品です。",
-      specsAndNotes: ["容量：256GB", "規格：microSDXC", "速度：UHS-I"],
+      name: "炭酸水 SW-210B",
+      priceYen: 1080,
+      description: "日常使いしやすい炭酸水です。",
+      specsAndNotes: [
+        "内容量：500ml×24本",
+        "種類：炭酸水",
+        "味：無糖・プレーン",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/microsd-card.svg",
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
     {
       id: "p4",
-      role: "dp_candidate",
-      failReason: null,
-      name: "microSDXCカード 512GB",
-      priceYen: 11800,
-      description:
-        "大容量のmicroSDXCカードです。条件は満たしますが、正解商品より少し高い商品です。",
-      specsAndNotes: ["容量：512GB", "規格：microSDXC", "速度：UHS-I"],
+      role: "valid_but_expensive",
+      failReason: "not_lowest",
+      name: "炭酸水 SW-520S",
+      priceYen: 1280,
+      description: "ストックしやすい炭酸水です。",
+      specsAndNotes: [
+        "内容量：500ml×24本",
+        "種類：炭酸水",
+        "味：無糖・プレーン",
+      ],
       prePurchaseCheck: [
-        "条件に合う商品か確認してから選択してください",
-        "購入手続き画面で配送方法や金額を最終確認できます",
+        "使用環境に合うか確認してください",
+        "商品仕様は購入前にご確認ください",
       ],
       deliveryInfo: [
         "配送方法は購入手続き画面で選択できます",
         "地域によりお届け日が異なる場合があります",
       ],
-      imageSrc: "/images/products/microsd-card.svg",
+      imageSrc: "/images/products/water.png",
       dpDisplay: null,
     },
   ],
@@ -159,7 +177,7 @@ export const trial1_5Data: Trial1_5Data = {
     {
       id: "gift",
       name: "ギフト包装",
-      priceYen: 200,
+      priceYen: 250,
       shortDescription: "プレゼント用に包装します",
     },
   ],

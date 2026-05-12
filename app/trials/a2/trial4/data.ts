@@ -37,7 +37,7 @@ export const trial4Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "洗濯機 レギュラー",
+      name: "洗濯機 WM-08D30",
       priceYen: 32800,
       description: "家庭用に使いやすい洗濯機です。",
       specsAndNotes: [
@@ -60,7 +60,7 @@ export const trial4Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "洗濯機 ベーシック",
+      name: "洗濯機 WM-06D26",
       priceYen: 26800,
       description: "日常使いしやすい洗濯機です。",
       specsAndNotes: [
@@ -83,7 +83,7 @@ export const trial4Data = {
       id: "p2",
       role: "dp_target",
       failReason: "not_lowest",
-      name: "洗濯機 標準タイプ",
+      name: "洗濯機 WM-07D27",
       priceYen: 27400,
       description: "毎日の洗濯に使いやすい洗濯機です。",
       specsAndNotes: [
@@ -108,7 +108,7 @@ export const trial4Data = {
       id: "p4",
       role: "valid_but_expensive",
       failReason: "not_lowest",
-      name: "洗濯機 通常タイプ",
+      name: "洗濯機 WM-07D28",
       priceYen: 28900,
       description: "まとめ洗いにも使いやすい洗濯機です。",
       specsAndNotes: [

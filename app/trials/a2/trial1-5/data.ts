@@ -37,7 +37,7 @@ export const trial1_5Data = {
       id: "p1",
       role: "budget_over",
       failReason: "budget",
-      name: "花粉対策薬 レギュラー",
+      name: "花粉対策薬 AG-X12",
       priceYen: 2480,
       description: "花粉の季節に使いやすい錠剤タイプの商品です。",
       specsAndNotes: [
@@ -60,7 +60,7 @@ export const trial1_5Data = {
       id: "p2",
       role: "condition_ng",
       failReason: "specific_condition",
-      name: "花粉対策薬 通常タイプ",
+      name: "花粉対策薬 AC-N27",
       priceYen: 1760,
       description: "日常的に使いやすい錠剤タイプの商品です。",
       specsAndNotes: [
@@ -83,7 +83,7 @@ export const trial1_5Data = {
       id: "p3",
       role: "correct",
       failReason: null,
-      name: "花粉対策薬 ベーシック",
+      name: "花粉対策薬 AL-E18",
       priceYen: 1880,
       description: "季節の備えに使いやすい錠剤タイプの商品です。",
       specsAndNotes: [
@@ -106,7 +106,7 @@ export const trial1_5Data = {
       id: "p4",
       role: "valid_but_expensive",
       failReason: "not_lowest",
-      name: "花粉対策薬 シンプル",
+      name: "花粉対策薬 AL-E32",
       priceYen: 1980,
       description: "継続利用しやすい錠剤タイプの商品です。",
       specsAndNotes: [
