@@ -70,7 +70,6 @@ function SummaryBox({ card }: { card: Card }) {
     <div className="rounded-md border border-gray-200 bg-white p-2">
       <div className="mb-2 flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-700">
         <span>注文内容の詳細</span>
-        <span>－</span>
       </div>
       <div className="space-y-1 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs leading-5 text-gray-700">
         {card.summaryRows.map((row) => (

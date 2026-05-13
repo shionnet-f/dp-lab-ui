@@ -10,265 +10,265 @@ import { ConfirmShippingSection } from "@/app/trials/_components/a2TrialComponen
 import { ConfirmOptionSection } from "@/app/trials/_components/a2TrialComponents/ConfirmOptionSection";
 import { ConfirmSummaryPanel } from "@/app/trials/_components/a2TrialComponents/ConfirmSummaryPanel";
 import {
-  getOptionsByIds,
-  getProductById,
-  getShippingById,
-  trial3Data,
+    getOptionsByIds,
+    getProductById,
+    getShippingById,
+    trial3Data,
 } from "../data";
 import { getClientLogBase } from "@/lib/log/clientLogBase";
 
 function getImplTrialId() {
-  const segments = window.location.pathname.split("/").filter(Boolean);
-  const trialsIndex = segments.indexOf("trials");
+    const segments = window.location.pathname.split("/").filter(Boolean);
+    const trialsIndex = segments.indexOf("trials");
 
-  if (trialsIndex >= 0) {
-    return segments[trialsIndex + 2] ?? null;
-  }
+    if (trialsIndex >= 0) {
+        return segments[trialsIndex + 2] ?? null;
+    }
 
-  const a2Index = segments.indexOf("a2");
-  return a2Index >= 0 ? segments[a2Index + 1] ?? null : null;
+    const a2Index = segments.indexOf("a2");
+    return a2Index >= 0 ? segments[a2Index + 1] ?? null : null;
 }
 
 const completePath = getTrialPath("a2", "trial3", "complete");
 const checkoutPath = getTrialPath("a2", "trial3", "checkout");
 
 type Props = {
-  searchParams: Promise<{
-    productId?: string;
-    shipping?: string;
-    options?: string | string[];
-    set?: string;
-    trial?: string;
-  }>;
+    searchParams: Promise<{
+        productId?: string;
+        shipping?: string;
+        options?: string | string[];
+        set?: string;
+        trial?: string;
+    }>;
 };
 
 function normalizeOptions(options?: string | string[]) {
-  if (!options) return [];
-  return Array.isArray(options) ? options : [options];
+    if (!options) return [];
+    return Array.isArray(options) ? options : [options];
 }
 
 export default function ConfirmPageA2Trial3({ searchParams }: Props) {
-  const sp = use(searchParams);
-  const router = useRouter();
+    const sp = use(searchParams);
+    const router = useRouter();
 
-  const didTrack = useRef(false);
-  const [error, setError] = useState(false);
+    const didTrack = useRef(false);
+    const [error, setError] = useState(false);
 
-  const productId = sp?.productId;
-  const shippingId = sp?.shipping;
-  const optionIds = normalizeOptions(sp?.options);
-  const set = sp?.set;
-  const trial = sp?.trial;
+    const productId = sp?.productId;
+    const shippingId = sp?.shipping;
+    const optionIds = normalizeOptions(sp?.options);
+    const set = sp?.set;
+    const trial = sp?.trial;
 
-  function createLogBase() {
-    const logParams = new URLSearchParams();
+    function createLogBase() {
+        const logParams = new URLSearchParams();
 
-    if (set) logParams.set("set", set);
-    if (trial) logParams.set("trial", trial);
+        if (set) logParams.set("set", set);
+        if (trial) logParams.set("trial", trial);
 
-    return getClientLogBase({ searchParams: logParams });
-  }
-
-  useEffect(() => {
-    if (didTrack.current) return;
-    didTrack.current = true;
-
-    const baseLog = createLogBase();
-
-    void trackAction({
-      ...baseLog,
-      phase: "main",
-      page: "confirm",
-      type: "page_view",
-      meta: { implTrialId: getImplTrialId() },
-      payload: {},
-    });
-  }, []);
-
-  if (!set || !trial) {
-    return (
-      <main className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
-          URLに set または trial がありません。
-        </div>
-      </main>
-    );
-  }
-
-  const selectedProduct = getProductById(productId);
-  const shippingInfo = getShippingById(shippingId);
-  const selectedOptions = getOptionsByIds(optionIds);
-
-  const productPriceYen = selectedProduct.priceYen;
-  const shippingPriceYen = shippingInfo?.priceYen ?? 0;
-  const optionTotalYen = selectedOptions.reduce(
-    (sum, option) => sum + option.priceYen,
-    0,
-  );
-  const totalYen = productPriceYen + shippingPriceYen + optionTotalYen;
-
-  const backParams = new URLSearchParams();
-  backParams.set("productId", selectedProduct.id);
-  backParams.set("set", set);
-  if (trial) backParams.set("trial", trial);
-  backParams.set("shipping", shippingId ?? "");
-  optionIds.forEach((id) => {
-    backParams.append("options", id);
-  });
-
-  const completeParams = new URLSearchParams();
-  completeParams.set("productId", selectedProduct.id);
-  completeParams.set("set", set);
-  if (trial) completeParams.set("trial", trial);
-  completeParams.set("shipping", shippingId ?? "");
-  optionIds.forEach((id) => {
-    completeParams.append("options", id);
-  });
-
-  async function handleConfirmSubmit() {
-    if (!shippingInfo) {
-      setError(true);
-
-      const baseLog = createLogBase();
-
-      void trackAction({
-        ...baseLog,
-        phase: "main",
-        page: "confirm",
-        type: "confirm_submit_missing_shipping",
-        meta: { implTrialId: getImplTrialId() },
-        payload: {
-          productId: selectedProduct.id,
-          shippingId,
-          optionIds,
-          productPriceYen,
-          shippingPriceYen,
-          optionTotalYen,
-          totalYen,
-        },
-      });
-
-      window.setTimeout(() => {
-        setError(false);
-      }, 2500);
-
-      return;
+        return getClientLogBase({ searchParams: logParams });
     }
 
-    const baseLog = createLogBase();
+    useEffect(() => {
+        if (didTrack.current) return;
+        didTrack.current = true;
 
-    await trackAction({
-      ...baseLog,
-      phase: "main",
-      page: "confirm",
-      type: "confirm_submit",
-      meta: { implTrialId: getImplTrialId() },
-      payload: {
-        productId: selectedProduct.id,
-        shippingId,
-        optionIds,
-        productPriceYen,
-        shippingPriceYen,
-        optionTotalYen,
-        totalYen,
-      },
+        const baseLog = createLogBase();
+
+        void trackAction({
+            ...baseLog,
+            phase: "main",
+            page: "confirm",
+            type: "page_view",
+            meta: { implTrialId: getImplTrialId() },
+            payload: {},
+        });
+    }, []);
+
+    if (!set || !trial) {
+        return (
+            <main className="flex h-screen items-center justify-center bg-gray-50">
+                <div className="rounded-xl border border-red-200 bg-white p-6 text-red-700">
+                    URLに set または trial がありません。
+                </div>
+            </main>
+        );
+    }
+
+    const selectedProduct = getProductById(productId);
+    const shippingInfo = getShippingById(shippingId);
+    const selectedOptions = getOptionsByIds(optionIds);
+
+    const productPriceYen = selectedProduct.priceYen;
+    const shippingPriceYen = shippingInfo?.priceYen ?? 0;
+    const optionTotalYen = selectedOptions.reduce(
+        (sum, option) => sum + option.priceYen,
+        0,
+    );
+    const totalYen = productPriceYen + shippingPriceYen + optionTotalYen;
+
+    const backParams = new URLSearchParams();
+    backParams.set("productId", selectedProduct.id);
+    backParams.set("set", set);
+    if (trial) backParams.set("trial", trial);
+    backParams.set("shipping", shippingId ?? "");
+    optionIds.forEach((id) => {
+        backParams.append("options", id);
     });
 
-    router.push(`${completePath}?${completeParams.toString()}`);
-  }
-
-  async function handleBack() {
-    const baseLog = createLogBase();
-
-    await trackAction({
-      ...baseLog,
-      phase: "main",
-      page: "confirm",
-      type: "confirm_back",
-      meta: { implTrialId: getImplTrialId() },
-      payload: {
-        productId: selectedProduct.id,
-        shippingId,
-        optionIds,
-        productPriceYen,
-        shippingPriceYen,
-        optionTotalYen,
-        totalYen,
-      },
+    const completeParams = new URLSearchParams();
+    completeParams.set("productId", selectedProduct.id);
+    completeParams.set("set", set);
+    if (trial) completeParams.set("trial", trial);
+    completeParams.set("shipping", shippingId ?? "");
+    optionIds.forEach((id) => {
+        completeParams.append("options", id);
     });
 
-    router.push(`${checkoutPath}?${backParams.toString()}`);
-  }
+    async function handleConfirmSubmit() {
+        if (!shippingInfo) {
+            setError(true);
 
-  return (
-    <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
-      <div className="h-full w-full">
-        <TrialPageHeader
-          purchaseConditions={trial3Data.purchaseConditions}
-          title="最終確認"
-        />
+            const baseLog = createLogBase();
 
-        {error && (
-          <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
-            配送方法を選択してください
-          </div>
-        )}
+            void trackAction({
+                ...baseLog,
+                phase: "main",
+                page: "confirm",
+                type: "confirm_submit_missing_shipping",
+                meta: { implTrialId: getImplTrialId() },
+                payload: {
+                    productId: selectedProduct.id,
+                    shippingId,
+                    optionIds,
+                    productPriceYen,
+                    shippingPriceYen,
+                    optionTotalYen,
+                    totalYen,
+                },
+            });
 
-        {/* 810px メイン領域 */}
-        <div className="mx-auto h-[810px] w-[1160px] overflow-hidden">
-          {/* 160px：ご注文商品 */}
-          <ConfirmOrderItemPanel product={selectedProduct} />
+            window.setTimeout(() => {
+                setError(false);
+            }, 2500);
 
-          {/* 60px 空間 */}
-          <div className="h-[60px]" />
+            return;
+        }
 
-          {/* 145px：配送方法・オプション */}
-          <section className="grid h-[145px] w-[1160px] grid-cols-[550px_550px] gap-[60px] overflow-hidden">
-            <ConfirmShippingSection shippingInfo={shippingInfo} />
+        const baseLog = createLogBase();
 
-            <ConfirmOptionSection
-              selectedOptions={selectedOptions}
-              optionTotalYen={optionTotalYen}
-            />
-          </section>
+        await trackAction({
+            ...baseLog,
+            phase: "main",
+            page: "confirm",
+            type: "confirm_submit",
+            meta: { implTrialId: getImplTrialId() },
+            payload: {
+                productId: selectedProduct.id,
+                shippingId,
+                optionIds,
+                productPriceYen,
+                shippingPriceYen,
+                optionTotalYen,
+                totalYen,
+            },
+        });
 
-          {/* 60px 空間 */}
-          <div className="h-[60px]" />
+        router.push(`${completePath}?${completeParams.toString()}`);
+    }
 
-          {/* 250px：お支払い金額 */}
-          <ConfirmSummaryPanel
-            productPriceYen={productPriceYen}
-            shippingPriceYen={shippingPriceYen}
-            optionTotalYen={optionTotalYen}
-            totalYen={totalYen}
-          />
+    async function handleBack() {
+        const baseLog = createLogBase();
 
-          {/* 60px 空間 */}
-          <div className="h-[60px]" />
+        await trackAction({
+            ...baseLog,
+            phase: "main",
+            page: "confirm",
+            type: "confirm_back",
+            meta: { implTrialId: getImplTrialId() },
+            payload: {
+                productId: selectedProduct.id,
+                shippingId,
+                optionIds,
+                productPriceYen,
+                shippingPriceYen,
+                optionTotalYen,
+                totalYen,
+            },
+        });
 
-          {/* 60px：ボタン */}
-          <div className="flex h-[60px] w-[1160px] items-center gap-[60px]">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
-            >
-              戻る
-            </button>
+        router.push(`${checkoutPath}?${backParams.toString()}`);
+    }
 
-            <button
-              type="button"
-              onClick={handleConfirmSubmit}
-              className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[16px] font-semibold text-white"
-            >
-              購入を確定する
-            </button>
-          </div>
-        </div>
+    return (
+        <main className="h-[1080px] w-[1920px] overflow-hidden bg-gray-50">
+            <div className="h-full w-full">
+                <TrialPageHeader
+                    purchaseConditions={trial3Data.purchaseConditions}
+                    title="最終確認"
+                />
 
-        {/* 105px 下余白 */}
-        <div className="h-[105px]" />
-      </div>
-    </main>
-  );
+                {error && (
+                    <div className="fixed left-1/2 top-6 z-50 w-[420px] -translate-x-1/2 rounded-lg border border-red-300 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-lg">
+                        配送方法を選択してください
+                    </div>
+                )}
+
+                {/* 810px メイン領域 */}
+                <div className="mx-auto h-[810px] w-[1160px] overflow-hidden">
+                    {/* 160px：ご注文商品 */}
+                    <ConfirmOrderItemPanel product={selectedProduct} />
+
+                    {/* 60px 空間 */}
+                    <div className="h-[60px]" />
+
+                    {/* 145px：配送方法・オプション */}
+                    <section className="grid h-[145px] w-[1160px] grid-cols-[550px_550px] gap-[60px] overflow-hidden">
+                        <ConfirmShippingSection shippingInfo={shippingInfo} />
+
+                        <ConfirmOptionSection
+                            selectedOptions={selectedOptions}
+                            optionTotalYen={optionTotalYen}
+                        />
+                    </section>
+
+                    {/* 60px 空間 */}
+                    <div className="h-[60px]" />
+
+                    {/* 250px：お支払い金額 */}
+                    <ConfirmSummaryPanel
+                        productPriceYen={productPriceYen}
+                        shippingPriceYen={shippingPriceYen}
+                        optionTotalYen={optionTotalYen}
+                        totalYen={totalYen}
+                    />
+
+                    {/* 60px 空間 */}
+                    <div className="h-[60px]" />
+
+                    {/* 60px：ボタン */}
+                    <div className="flex h-[60px] w-[1160px] items-center gap-[60px]">
+                        <button
+                            type="button"
+                            onClick={handleBack}
+                            className="flex h-[50px] w-[550px] items-center justify-center border border-gray-300 bg-white text-[16px] font-semibold text-gray-700"
+                        >
+                            戻る
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleConfirmSubmit}
+                            className="flex h-[50px] w-[550px] items-center justify-center bg-black text-[16px] font-semibold text-white"
+                        >
+                            購入を確定する
+                        </button>
+                    </div>
+                </div>
+
+                {/* 105px 下余白 */}
+                <div className="h-[105px]" />
+            </div>
+        </main>
+    );
 }

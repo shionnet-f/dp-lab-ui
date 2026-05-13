@@ -6,10 +6,10 @@ const nextPath = getTrialPath("a2", "trial3", "product")
 
 export default function StartPageA2Trial3() {
 
-  return (
-    <TrialStartPage
-      purchaseConditions={trial3Data.purchaseConditions}
-      nextPath={nextPath}
-    />
-  );
+    return (
+        <TrialStartPage
+            purchaseConditions={trial3Data.purchaseConditions}
+            nextPath={nextPath}
+        />
+    );
 }
