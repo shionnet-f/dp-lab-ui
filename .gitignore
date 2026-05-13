@@ -43,3 +43,5 @@ dev.db
 generated/
 
 /generated/prisma
+
+exported_csv/
